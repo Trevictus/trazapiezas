@@ -20,4 +20,10 @@ router.get("/movements/vehicle/:plate", checkToken, MovementController.getByPlat
 router.post("/auth/register", AuthController.register);
 router.post("/auth/login", AuthController.login);
 
+// EDITAR piezas (PUT): SOLO ADMIN (Nueva restricción)
+router.put("/parts/:id", checkToken, checkRole(["ADMIN"]), PartController.update);
+
+// BORRAR piezas (DELETE): SOLO ADMIN [cite: 15]
+router.delete("/parts/:id", checkToken, checkRole(["ADMIN"]), PartController.delete);
+
 export default router;
