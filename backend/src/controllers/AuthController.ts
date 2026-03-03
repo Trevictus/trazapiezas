@@ -36,7 +36,7 @@ export class AuthController {
             // Creamos el Token que dura 24 horas
             const token = jwt.sign(
                 { userId: user.id, role: user.role },
-                "TU_CLAVE_SECRETA_SUPER_SEGURA", // En producción esto va en el .env
+                process.env.JWT_SECRET || "clave_de_emergencia",
                 { expiresIn: "24h" }
             );
 

@@ -7,9 +7,9 @@ export const checkToken = (req: Request, res: Response, next: NextFunction) => {
     if (!token) return res.status(403).json({ message: "No se proporcionó token" });
 
     try {
-        const decoded = jwt.verify(token, "TU_CLAVE_SECRETA_SUPER_SEGURA");
-        (req as any).user = decoded; // Guardamos los datos del usuario en la petición
-        next(); // ¡Pasa adelante!
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || "clave_de_emergencia");
+        (req as any).user = decoded; // Se guardan los datos del usuario en la petición
+        next();
     } catch (error) {
         return res.status(401).json({ message: "Token inválido" });
     }
