@@ -7,7 +7,7 @@ import { checkToken, checkRole } from "./middleware/authMiddleware";
 
 const router = Router();
 
-// Rutas para PIEZAS 
+//  Rutas para PIEZAS 
 // Cualquiera puede ver las piezas y movimientos
 router.get("/parts", checkToken, PartController.getAll);// Solo ADMIN puede crear piezas
 router.post("/parts", checkToken, checkRole(["ADMIN"]), PartController.create);
