@@ -13,7 +13,6 @@ export class MovementController {
         const part = await partRepository.findOneBy({ id: partId });
         if (!part) return res.status(404).json({ message: "Pieza no encontrada" });
 
-        // --- EL NUEVO FRENO DE SEGURIDAD ---
         // Si el estado es USED (montado en coche), comprobamos si hay stock
         if (status === "USED" && part.stock < quantity) {
             return res.status(400).json({ 
