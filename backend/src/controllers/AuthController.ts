@@ -12,7 +12,7 @@ export class AuthController {
         try {
             const user = new User();
             user.username = username;
-            user.password = password; // Se encriptará sola gracias al @BeforeInsert
+            user.password = password; 
             user.role = role;
 
             await userRepository.save(user);
@@ -22,27 +22,6 @@ export class AuthController {
         }
     }
 
-    /**
-     * @openapi
-     * /auth/login:
-     * post:
-     * summary: Iniciar sesión
-     * tags: [Auth]
-     * requestBody:
-     * required: true
-     * content:
-     * application/json:
-     * schema:
-     * type: object
-     * properties:
-     * username:
-     * type: string
-     * password:
-     * type: string
-     * responses:
-     * 200:
-     * description: Login exitoso, devuelve el token.
-     */
     static async login(req: Request, res: Response) {
         const { username, password } = req.body;
         const userRepository = AppDataSource.getRepository(User);
@@ -54,7 +33,6 @@ export class AuthController {
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) return res.status(401).json({ message: "Contraseña incorrecta" });
 
-            // Creamos el Token que dura 24 horas
             const token = jwt.sign(
                 { userId: user.id, role: user.role },
                 process.env.JWT_SECRET || "clave_de_emergencia",
