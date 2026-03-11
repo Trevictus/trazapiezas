@@ -22,6 +22,27 @@ export class AuthController {
         }
     }
 
+    /**
+     * @openapi
+     * /auth/login:
+     * post:
+     * summary: Iniciar sesión
+     * tags: [Auth]
+     * requestBody:
+     * required: true
+     * content:
+     * application/json:
+     * schema:
+     * type: object
+     * properties:
+     * username:
+     * type: string
+     * password:
+     * type: string
+     * responses:
+     * 200:
+     * description: Login exitoso, devuelve el token.
+     */
     static async login(req: Request, res: Response) {
         const { username, password } = req.body;
         const userRepository = AppDataSource.getRepository(User);

@@ -3,6 +3,8 @@ import express from "express";
 import cors from "cors";
 import { AppDataSource } from "./data-source";
 import routes from "./routes";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./swagger";
 
 const app = express();
 
@@ -17,6 +19,7 @@ app.get("/test", (req, res) => {
 
 // 3. Tus rutas de la API
 app.use("/api", routes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // 4. Inicializar DB y luego arrancar el servidor
 AppDataSource.initialize()
