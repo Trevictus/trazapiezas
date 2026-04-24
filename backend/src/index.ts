@@ -5,11 +5,13 @@ import { AppDataSource } from "./data-source";
 import routes from "./routes";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./swagger";
+import { globalErrorHandler } from "./middleware/errorMiddleware";
 
 const app = express();
 
 // 1. Middlewares (Siempre primero)
 app.use(cors());
+app.use(globalErrorHandler);
 app.use(express.json());
 
 // 2. Ruta de prueba directa (Para descartar errores)

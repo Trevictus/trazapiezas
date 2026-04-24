@@ -108,7 +108,7 @@ Una PWA es el tipo de proyecto más adecuado para resolver la necesidad identifi
 
 ### 3.3. Arquitectura propuesta
 
-El sistema sigue una arquitectura **cliente-servidor REST** con separación estricta de responsabilidades:
+El sistema sigue una arquitectura **cliente-servidor REST** con separación estricta de responsabilidades, permitiendo que un cliente se comunique con un servidor mediante HTTP:
 
 ```
 ┌──────────────────────────────┐
@@ -219,7 +219,7 @@ El sistema actuará como un cliente de la API de TallerGP, permitiendo la sincro
 
 - **Entidad Part ->Piezas**: Representa el catálogo maestro de artículos. Cada registro incluye una reference única del código del fabricante, brand, category, description y el purchasePrice unitario. Además, mantiene un contador de stock que se actualiza automáticamente con cada movimiento.  
 
-- **Entidad Movement -> Trazabilidad**: Es la tabla que registra el historial de entradas y salidas. Se conecta con la pieza mediante una relación ManyToOne. Captura la quantity movida, el purchasePrice real de ese albarán concreto y la vehiclePlate (matrícula) en caso de que la pieza se haya usado en un coche. El campo status (Enum: STOCK, USED, etc.) permite filtrar el flujo de la pieza.
+- **Entidad Movement -> Trazabilidad**: Es la tabla que registra el historial de entradas y salidas. Se conecta con la pieza mediante una relación ManyToOne. Captura la quantity movida, el purchasePrice real de ese albarán concreto y la vehiclePlate en caso de que la pieza se haya usado en un coche. El campo status STOCK, USED, etc. permite filtrar el flujo de la pieza.
 
 #### 4.3.2. Tecnologías e integraciones
 
