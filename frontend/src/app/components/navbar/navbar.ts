@@ -1,18 +1,16 @@
 import { Component } from '@angular/core';
-import { NavbarComponent } from '../../components/navbar/navbar';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-navbar',
   standalone: true,
-  imports: [NavbarComponent],
-  templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss'
+  imports: [],
+  templateUrl: './navbar.html',
+  styleUrl: './navbar.scss'
 })
-export class DashboardComponent {
+export class NavbarComponent {
   constructor(private router: Router) {}
 
-  // Lógica para salir
   logout() {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
