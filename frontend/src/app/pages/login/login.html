@@ -1,0 +1,49 @@
+<div class="flex min-h-screen items-center justify-center bg-zinc-950 px-4">
+  <div class="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900 p-10 shadow-2xl">
+    
+    <!-- Logo/Nombre del Proyecto -->
+    <div class="mb-8 text-center">
+      <h1 class="text-4xl font-black tracking-tighter text-industrial-blue">
+        TRAZA<span class="text-white">PIEZAS</span>
+      </h1>
+      <p class="mt-2 text-sm uppercase tracking-widest text-zinc-500">Gestión de Stock · Cazapiezas</p>
+    </div>
+
+    <form (ngSubmit)="onLogin()" class="space-y-6">
+      <!-- Usuario -->
+      <div>
+        <label class="mb-2 block text-xs font-semibold uppercase text-zinc-400">ID Mecánico</label>
+        <input 
+          type="text" 
+          name="username"
+          [(ngModel)]="loginData.username"
+          class="w-full rounded-lg border border-zinc-700 bg-zinc-800 p-4 text-white outline-none focus:border-industrial-blue focus:ring-1 focus:ring-industrial-blue"
+          placeholder="Ej: victor_cp"
+          required>
+      </div>
+
+      <!-- Contraseña -->
+      <div>
+        <label class="mb-2 block text-xs font-semibold uppercase text-zinc-400">Contraseña técnica</label>
+        <input 
+          type="password" 
+          name="password"
+          [(ngModel)]="loginData.password"
+          class="w-full rounded-lg border border-zinc-700 bg-zinc-800 p-4 text-white outline-none focus:border-industrial-blue focus:ring-1 focus:ring-industrial-blue"
+          placeholder="••••••••"
+          required>
+      </div>
+
+      <!-- Botón de Acceso -->
+      <button 
+        type="submit"
+        class="w-full rounded-lg bg-industrial-blue py-4 font-bold uppercase text-white transition-all hover:bg-blue-600 active:scale-[0.98]">
+        Entrar al Sistema
+      </button>
+    </form>
+
+    <p class="mt-8 text-center text-xs text-zinc-600">
+      Sistema de trazabilidad v1.0 | Acceso restringido
+    </p>
+  </div>
+</div>
