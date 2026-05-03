@@ -1,0 +1,72 @@
+<app-navbar></app-navbar>
+
+<main class="min-h-screen bg-zinc-950 p-6">
+  <div class="max-w-2xl mx-auto">
+    <header class="mb-8">
+      <h2 class="text-2xl font-bold text-white uppercase tracking-tight">Nueva Referencia</h2>
+      <p class="text-zinc-500 text-sm">Introduce los datos técnicos de la pieza</p>
+    </header>
+
+    <form (ngSubmit)="onSubmit()" class="space-y-6 bg-zinc-900 p-8 rounded-2xl border border-zinc-800 shadow-xl">
+      
+      <!-- Referencia y Marca (Fila 1) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs font-bold text-zinc-400 uppercase mb-2">Referencia</label>
+          <input type="text" [(ngModel)]="newPart.reference" name="ref" required
+            class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-white focus:border-industrial-blue outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-zinc-400 uppercase mb-2">Marca</label>
+          <input type="text" [(ngModel)]="newPart.brand" name="brand" required
+            class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-white focus:border-industrial-blue outline-none">
+        </div>
+      </div>
+
+      <!-- Categoría -->
+      <div>
+        <label class="block text-xs font-bold text-zinc-400 uppercase mb-2">Categoría</label>
+        <select [(ngModel)]="newPart.category" name="cat"
+          class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-white focus:border-industrial-blue outline-none">
+          <option value="Filtros">Filtros</option>
+          <option value="Frenos">Frenos</option>
+          <option value="Motor">Motor</option>
+          <option value="Suspensión">Suspensión</option>
+        </select>
+      </div>
+
+      <!-- Descripción -->
+      <div>
+        <label class="block text-xs font-bold text-zinc-400 uppercase mb-2">Descripción</label>
+        <textarea [(ngModel)]="newPart.description" name="desc" rows="3"
+          class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-white focus:border-industrial-blue outline-none"></textarea>
+      </div>
+
+      <!-- Stock y Precio -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs font-bold text-zinc-400 uppercase mb-2">Stock Inicial</label>
+          <input type="number" [(ngModel)]="newPart.stock" name="stock"
+            class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-white focus:border-industrial-blue outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-zinc-400 uppercase mb-2">Precio (€)</label>
+          <input type="number" [(ngModel)]="newPart.price" name="price" step="0.01"
+            class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-white focus:border-industrial-blue outline-none">
+        </div>
+      </div>
+
+      <!-- Botón de acción -->
+      <div class="pt-4 flex gap-4">
+        <button type="submit" 
+          class="flex-1 bg-industrial-blue hover:bg-blue-600 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-industrial-blue/20">
+          GUARDAR EN INVENTARIO
+        </button>
+        <button type="button" (click)="router.navigate(['/inventory'])"
+          class="px-6 bg-zinc-800 text-zinc-400 font-bold rounded-xl hover:bg-zinc-700">
+          CANCELAR
+        </button>
+      </div>
+    </form>
+  </div>
+</main>

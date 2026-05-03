@@ -17,4 +17,12 @@ export class PartsService {
     
     return this.http.get<any[]>(this.apiUrl, { headers });
   }
+
+  createPart(partData: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    // Enviamos el objeto de la pieza al endpoint POST
+    return this.http.post(this.apiUrl, partData, { headers });
+  }
 }
