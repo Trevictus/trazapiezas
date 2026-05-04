@@ -44,4 +44,44 @@ export class PartsListComponent implements OnInit {
       part.category.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
+
+  adjustStock(part: any, amount: number): void {
+    const newStock = part.stock + amount;
+    if (newStock < 0) return;
+
+    // Creamos una copia de la pieza con el stock nuevo
+    const updatedPart = { ...part, stock: newStock };
+
+    this.partsService.updatePart(part.id, updatedPart).subscribe({
+      next: () => {
+        part.stock = newStock;
+        this.cdr.detectChanges();
+        console.log('Servidor actualizó correctamente');
+      },
+      error: (err) => console.error('El servidor rechazó el cambio:', err)
+    });
+  }
+
+  deletePart(part: any): void {
+    const confirmacion = confirm(`¿Estás seguro de eliminar ${part.brand}?`);
+    
+    if (confirmacion) {
+      this.partsService.deletePart(part.id).subscribe({
+        next: () => {
+          // 1. CREAMOS UN NUEVO ARRAY: 
+          // Filtramos y envolvemos para que Angular detecte el cambio de referencia
+          this.parts = [...this.parts.filter(p => p.id !== part.id)];
+          
+          console.log('✅ Pieza borrada y array local actualizado');
+
+          // 2. FORZAMOS EL REDIBUJADO:
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('❌ El servidor no pudo borrar la pieza:', err);
+          alert('Error al eliminar: Verifica que la pieza no tenga dependencias.');
+        }
+      });
+    }
+  }
 }

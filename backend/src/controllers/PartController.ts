@@ -32,7 +32,7 @@ export class PartController {
 
     static async update(req: Request, res: Response) {
         const { id } = req.params;
-        const { reference, brand, category, description, purchasePrice } = req.body;
+        const { reference, brand, category, description, purchasePrice, stock } = req.body;
         const partRepository = AppDataSource.getRepository(Part);
 
         try {
@@ -45,7 +45,15 @@ export class PartController {
             part.description = description || part.description;
             part.purchasePrice = purchasePrice || part.purchasePrice;
 
+            // Usamos !== undefined porque si el stock es 0, el operador || fallaría
+            if (stock !== undefined) {
+                part.stock = stock;
+            }
+
             await partRepository.save(part);
+            
+            console.log(`📦 Pieza ${id} actualizada. Nuevo stock: ${part.stock}`);
+
             return res.json({ message: "Pieza actualizada", part });
         } catch (error) {
             return res.status(500).json({ message: "Error al actualizar", error });

@@ -25,4 +25,19 @@ export class PartsService {
     // Enviamos el objeto de la pieza al endpoint POST
     return this.http.post(this.apiUrl, partData, { headers });
   }
+
+  updatePart(id: number, partData: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    // Usamos el método PUT
+    return this.http.put(`${this.apiUrl}/${id}`, partData, { headers });
+  }
+
+  deletePart(id: number): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers });
+  }
 }
