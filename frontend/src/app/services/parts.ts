@@ -7,12 +7,16 @@ import { Observable } from 'rxjs';
 })
 export class PartsService {
   private apiUrl = 'http://localhost:3000/api/parts';
+  private movementsUrl = 'http://localhost:3000/api/movements'; 
 
   constructor(private http: HttpClient) { }
 
-  //El interceptor se encarga del Token
   getParts(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
+  }
+
+  getPartById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
   createPart(partData: any): Observable<any> {
@@ -29,5 +33,14 @@ export class PartsService {
 
   getStats(): Observable<any> {
     return this.http.get(`${this.apiUrl}/stats`);
+  }
+
+  getMovementsByPlate(plate: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.movementsUrl}/vehicle/${plate}`);
+  }
+
+  // 🚀 Registrar un nuevo movimiento (STOCK o USED)
+  createMovement(movementData: any): Observable<any> {
+    return this.http.post(this.movementsUrl, movementData);
   }
 }

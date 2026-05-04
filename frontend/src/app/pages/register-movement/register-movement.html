@@ -1,0 +1,49 @@
+<app-navbar></app-navbar>
+
+<main class="min-h-screen bg-zinc-950 p-6">
+  <!-- 1. Pantalla de carga (se oculta cuando loading es false) -->
+  <div *ngIf="loading" class="flex flex-col items-center justify-center py-20">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-industrial-blue mb-4"></div>
+    <p class="text-zinc-500 italic">Cargando datos de la pieza...</p>
+  </div>
+
+  <!-- 2. Formulario Principal (se muestra cuando loading es false y hay pieza) -->
+  <div class="max-w-xl mx-auto" *ngIf="!loading && part">
+    <header class="mb-8">
+      <h2 class="text-2xl font-bold text-white uppercase tracking-tight">Registrar Montaje</h2>
+      <p class="text-zinc-500 text-sm">Asignando: {{ part.brand }} - {{ part.reference }}</p>
+    </header>
+
+    <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl shadow-xl">
+      <div class="mb-6 p-4 bg-zinc-950 rounded-lg border border-zinc-800">
+        <p class="text-xs text-zinc-500 uppercase font-bold">Stock en taller</p>
+        <p class="text-2xl font-black text-industrial-blue">{{ part.stock }} uds</p>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" class="space-y-6">
+        <div>
+          <label class="block text-xs font-bold text-zinc-400 uppercase mb-2">Cantidad a utilizar</label>
+          <input type="number" [(ngModel)]="movement.quantity" name="qty" required
+            class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-4 text-white text-xl focus:border-industrial-blue outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-zinc-400 uppercase mb-2">Matrícula del Vehículo</label>
+          <input type="text" [(ngModel)]="movement.vehiclePlate" name="plate" placeholder="Ej: 1234ABC" required
+            class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-4 text-white text-xl uppercase focus:border-industrial-blue outline-none">
+        </div>
+
+        <div class="pt-4 flex gap-4">
+          <button type="submit" 
+            class="flex-1 bg-industrial-blue text-white font-bold py-4 rounded-xl hover:bg-blue-600 transition-all shadow-lg">
+            REGISTRAR SALIDA
+          </button>
+          <button type="button" (click)="router.navigate(['/inventory'])"
+            class="px-6 bg-zinc-800 text-zinc-400 font-bold rounded-xl hover:bg-zinc-700">
+            CANCELAR
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>

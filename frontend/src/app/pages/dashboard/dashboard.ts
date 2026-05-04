@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar';
 import { PartsService } from '../../services/parts';
-import { Router } from '@angular/router';
+import { Router } from '@angular/router'; // Inyección del router[cite: 3]
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,11 +12,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './dashboard.scss'
 })
 export class DashboardComponent implements OnInit {
-  stats = { 
-    totalParts: 0, 
-    lowStock: 0, 
-    movementsToday: 0 
-  };
+  stats = { totalParts: 0, lowStock: 0, movementsToday: 0 };
 
   constructor(
     private partsService: PartsService,
@@ -25,20 +21,18 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadStats();
-  }
-
-  loadStats() {
     this.partsService.getStats().subscribe({
       next: (data) => {
-        console.log('Datos recibidos del servidor:', data);
         this.stats = data;
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('Error al cargar estadísticas:', err);
-      }
+      error: (err) => console.error('Error stats', err)
     });
+  }
+
+ 
+  goToHistory() {
+    this.router.navigate(['/history']);
   }
 
   goToInventory() {

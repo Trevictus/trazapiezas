@@ -9,22 +9,23 @@ import { globalErrorHandler } from "./middleware/errorMiddleware";
 
 const app = express();
 
-// 1. Middlewares (Siempre primero)
+// 1. Middlewares de configuración (Siempre al principio)
 app.use(cors());
 app.use(express.json());
 
-// 2. Ruta de prueba directa (Para descartar errores)
+// 2. Ruta de prueba
 app.get("/test", (req, res) => {
     res.send("Servidor vivo y escuchando");
 });
 
-// 3. Tus rutas de la API
+// 3. Rutas de la API
 app.use("/api", routes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use(globalErrorHandler);
+// 4. Gestión global de errores (Siempre al FINAL)
+app.use(globalErrorHandler); 
 
-// 4. Inicializar DB y luego arrancar el servidor
+// 5. Inicializar DB y arrancar
 AppDataSource.initialize()
     .then(() => {
         console.log("✅ Conexión exitosa a PostgreSQL");

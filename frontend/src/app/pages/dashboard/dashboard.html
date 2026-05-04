@@ -6,7 +6,8 @@
     <p class="text-zinc-400 text-sm">Resumen de inventario en tiempo real</p>
   </header>
 
-  <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+  <!-- Rejilla de estadísticas y acciones rápidas -->
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
     
     <!-- Alertas de Stock Bajo -->
     <div class="rounded-xl border border-zinc-800 bg-zinc-900 p-5 shadow-lg">
@@ -14,7 +15,7 @@
       <h3 class="mt-2 text-3xl font-black text-safety-orange">
         {{ stats.lowStock }}
       </h3>
-      <p class="mt-1 text-xs text-zinc-400 italic">Piezas por debajo del mínimo</p>
+      <p class="mt-1 text-xs text-zinc-400 italic">Piezas por debajo del mínimo (5)</p>
     </div>
 
     <!-- Movimientos del Día -->
@@ -35,11 +36,21 @@
       <p class="mt-1 text-xs text-zinc-400 italic">Piezas en el catálogo</p>
     </div>
 
+    <!-- Trazabilidad por Matrícula (Acceso rápido) -->
+    <div (click)="goToHistory()" 
+      class="rounded-xl border-2 border-dashed border-zinc-800 bg-transparent p-5 hover:bg-zinc-900 cursor-pointer transition-all group flex flex-col justify-center items-center shadow-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-zinc-600 group-hover:text-industrial-blue mb-2 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <span class="text-xs font-bold uppercase text-zinc-500 group-hover:text-white transition-colors">Trazabilidad Matrícula</span>
+    </div>
+
   </div>
 
+  <!-- Botón de Gestión de Inventario -->
   <div class="mt-8 flex justify-center">
     <button (click)="goToInventory()"
-      class="flex items-center gap-3 rounded-xl border-2 border-dashed border-zinc-800 px-10 py-6 text-zinc-500 hover:bg-zinc-900 hover:text-white transition-all group">
+      class="flex items-center gap-3 rounded-xl border-2 border-dashed border-zinc-800 px-10 py-6 text-zinc-500 hover:bg-zinc-900 hover:text-white transition-all group shadow-lg">
       <span class="text-2xl group-hover:scale-125 transition-transform">+</span>
       <span class="font-bold uppercase tracking-widest">Gestionar Inventario</span>
     </button>

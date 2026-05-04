@@ -24,7 +24,8 @@ export class MovementController {
             movement.part = part;
             movement.quantity = quantity;
             movement.purchasePrice = purchasePrice;
-            movement.vehiclePlate = vehiclePlate;
+            // Forzamos mayúsculas al guardar para evitar fallos de búsqueda
+            movement.vehiclePlate = vehiclePlate ? vehiclePlate.toUpperCase().trim() : null;
             movement.status = status || "STOCK";
 
             await movementRepository.save(movement);
@@ -44,12 +45,14 @@ export class MovementController {
     }
 
     static async getByPlate(req: Request, res: Response) {
-        const { plate } = req.params as { plate: string };
+        // Corregimos el error de TypeScript asegurando que plate sea un string
+        const plate = req.params.plate as string; 
         const movementRepository = AppDataSource.getRepository(Movement);
 
         try {
             const movements = await movementRepository.find({
-                where: { vehiclePlate: plate },
+                // Buscamos específicamente por la columna de matrícula
+                where: { vehiclePlate: plate.toUpperCase().trim() },
                 relations: ["part"]
             });
             return res.json(movements);
