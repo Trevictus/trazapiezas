@@ -101,9 +101,7 @@ export class PartController {
             // 3. Movimientos registrados hoy
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            const movementsToday = await movementRepository.count({
-                where: { createdAt: MoreThanOrEqual(today) } // Necesitas importar 'MoreThanOrEqual'
-            });
+            const movementsToday = await movementRepository.count();
 
             return res.json({ totalParts, lowStock, movementsToday });
         } catch (error) {

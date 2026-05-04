@@ -11,7 +11,6 @@ const app = express();
 
 // 1. Middlewares (Siempre primero)
 app.use(cors());
-app.use(globalErrorHandler);
 app.use(express.json());
 
 // 2. Ruta de prueba directa (Para descartar errores)
@@ -22,6 +21,8 @@ app.get("/test", (req, res) => {
 // 3. Tus rutas de la API
 app.use("/api", routes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use(globalErrorHandler);
 
 // 4. Inicializar DB y luego arrancar el servidor
 AppDataSource.initialize()
