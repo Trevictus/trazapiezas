@@ -2,11 +2,12 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar';
 import { PartsService } from '../../services/parts';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NavbarComponent],
+  imports: [NavbarComponent, CommonModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
@@ -24,12 +25,19 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadStats();
+  }
+
+  loadStats() {
     this.partsService.getStats().subscribe({
       next: (data) => {
+        console.log('Datos recibidos del servidor:', data);
         this.stats = data;
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error cargando stats', err)
+      error: (err) => {
+        console.error('Error al cargar estadísticas:', err);
+      }
     });
   }
 

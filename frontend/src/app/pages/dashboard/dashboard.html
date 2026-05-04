@@ -6,45 +6,42 @@
     <p class="text-zinc-400 text-sm">Resumen de inventario en tiempo real</p>
   </header>
 
-  <!-- Tarjetas de Estadísticas Reales -->
   <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
     
-    <!-- Stock Bajo -->
+    <!-- Alertas de Stock Bajo -->
     <div class="rounded-xl border border-zinc-800 bg-zinc-900 p-5 shadow-lg">
-      <p class="text-xs font-bold uppercase text-zinc-500">Alertas de Stock Bajo</p>
+      <p class="text-xs font-bold uppercase text-zinc-500">Alertas de Stock</p>
       <h3 class="mt-2 text-3xl font-black text-safety-orange">
         {{ stats.lowStock }}
       </h3>
-      <p class="mt-1 text-xs text-zinc-400 italic">Piezas con menos de 5 unidades</p>
+      <p class="mt-1 text-xs text-zinc-400 italic">Piezas por debajo del mínimo</p>
     </div>
 
-    <!-- Movimientos Hoy -->
+    <!-- Movimientos del Día -->
     <div class="rounded-xl border border-zinc-800 bg-zinc-900 p-5 shadow-lg">
       <p class="text-xs font-bold uppercase text-zinc-500">Movimientos Hoy</p>
       <h3 class="mt-2 text-3xl font-black text-industrial-blue">
         {{ stats.movementsToday }}
       </h3>
-      <p class="mt-1 text-xs text-zinc-400 italic">Entradas y salidas registradas hoy</p>
+      <p class="mt-1 text-xs text-zinc-400 italic">Registros en las últimas 24h</p>
     </div>
 
-    <!-- Total Catálogo -->
+    <!-- Total de Referencias -->
     <div class="rounded-xl border border-zinc-800 bg-zinc-900 p-5 shadow-lg">
       <p class="text-xs font-bold uppercase text-zinc-500">Total Referencias</p>
       <h3 class="mt-2 text-3xl font-black text-white">
         {{ stats.totalParts }}
       </h3>
-      <p class="mt-1 text-xs text-zinc-400 italic">Piezas distintas en el inventario</p>
+      <p class="mt-1 text-xs text-zinc-400 italic">Piezas en el catálogo</p>
     </div>
 
   </div>
 
-  <!-- Botón de Acción Rápida -->
-  <!-- Busca el botón al final de tu dashboard.html y cámbialo por esto -->
-    <div class="mt-8 flex justify-center">
-        <button (click)="goToInventory()"
-            class="flex items-center gap-3 rounded-xl border-2 border-dashed border-zinc-800 px-10 py-6 text-zinc-500 hover:bg-zinc-900 hover:text-white transition-all group">
-            <span class="text-2xl group-hover:scale-125 transition-transform">+</span>
-            <span class="font-bold uppercase tracking-widest">Gestionar Inventario</span>
-        </button>
-    </div>
+  <div class="mt-8 flex justify-center">
+    <button (click)="goToInventory()"
+      class="flex items-center gap-3 rounded-xl border-2 border-dashed border-zinc-800 px-10 py-6 text-zinc-500 hover:bg-zinc-900 hover:text-white transition-all group">
+      <span class="text-2xl group-hover:scale-125 transition-transform">+</span>
+      <span class="font-bold uppercase tracking-widest">Gestionar Inventario</span>
+    </button>
+  </div>
 </main>

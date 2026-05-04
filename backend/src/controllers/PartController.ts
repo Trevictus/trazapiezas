@@ -42,7 +42,7 @@ export class PartController {
             let part = await partRepository.findOneBy({ id: Number(id) });
             if (!part) return res.status(404).json({ message: "Pieza no encontrada" });
 
-            const oldStock = part.stock; // Guardamos el valor previo
+            const oldStock = part.stock;
 
             part.reference = reference || part.reference;
             part.brand = brand || part.brand;
@@ -50,7 +50,6 @@ export class PartController {
             part.description = description || part.description;
             part.purchasePrice = purchasePrice || part.purchasePrice;
 
-            //Si cambia el stock, grabamos por qué
             if (stock !== undefined && stock !== oldStock) {
                 const diff = stock - oldStock;
                 part.stock = stock;
@@ -58,7 +57,7 @@ export class PartController {
                 const movement = new Movement();
                 movement.part = part;
                 movement.quantity = Math.abs(diff);
-                movement.status = diff > 0 ? "STOCK" : "USED"; // Detecta si es entrada o salida
+                movement.status = diff > 0 ? "STOCK" : "USED";
                 movement.purchasePrice = part.purchasePrice;
                 movement.vehiclePlate = "AJUSTE-MANUAL";
                 
@@ -66,7 +65,7 @@ export class PartController {
             }
 
             await partRepository.save(part);
-            return res.json({ message: "Pieza y movimiento actualizados", part });
+            return res.json({ message: "Pieza actualizada", part });
         } catch (error) {
             return res.status(500).json({ message: "Error al actualizar", error });
         }
@@ -90,18 +89,17 @@ export class PartController {
         const movementRepository = AppDataSource.getRepository(Movement);
 
         try {
-            // 1. Total de referencias diferentes
             const totalParts = await partRepository.count();
 
-            // 2. Piezas con stock crítico menos de 5 unidades
             const lowStock = await partRepository.count({
-                where: { stock: LessThan(5) } // Necesitas importar 'LessThan' de typeorm
+                where: { stock: LessThan(5) }
             });
 
-            // 3. Movimientos registrados hoy
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            const movementsToday = await movementRepository.count();
+            const movementsToday = await movementRepository.count({
+                where: { createdAt: MoreThanOrEqual(today) }
+            });
 
             return res.json({ totalParts, lowStock, movementsToday });
         } catch (error) {
