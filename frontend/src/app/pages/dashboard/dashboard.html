@@ -10,23 +10,23 @@
   <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
     <!-- Stock Bajo -->
     <div class="rounded-xl border border-zinc-800 bg-zinc-900 p-5">
-      <p class="text-xs font-bold uppercase text-zinc-500">Alertas de Stock</p>
-      <h3 class="mt-2 text-3xl font-black text-safety-orange">12</h3>
-      <p class="mt-1 text-xs text-zinc-400 italic">Piezas por debajo del mínimo</p>
+      <p class="text-xs font-bold uppercase text-zinc-500">Alertas de Stock Bajo</p>
+      <h3 class="mt-2 text-3xl font-black text-safety-orange">{{ stats.lowStock }}</h3>
+      <p class="mt-1 text-xs text-zinc-400 italic">Piezas con menos de 5 unidades</p>
     </div>
 
     <!-- Movimientos Hoy -->
     <div class="rounded-xl border border-zinc-800 bg-zinc-900 p-5">
       <p class="text-xs font-bold uppercase text-zinc-500">Movimientos Hoy</p>
-      <h3 class="mt-2 text-3xl font-black text-industrial-blue">45</h3>
-      <p class="mt-1 text-xs text-zinc-400 italic">Registros en las últimas 24h</p>
+      <h3 class="mt-2 text-3xl font-black text-industrial-blue">{{ stats.movementsToday }}</h3>
+      <p class="mt-1 text-xs text-zinc-400 italic">Entradas y salidas del día</p>
     </div>
 
-    <!-- Botón de Acción Rápida -->
-    <div class="flex items-center justify-center rounded-xl border-2 border-dashed border-zinc-800 bg-transparent p-5 hover:bg-zinc-900 cursor-pointer transition-colors">
-      <button class="flex items-center gap-2 font-bold text-zinc-400">
-        <span class="text-2xl">+</span> Nueva Operación
-      </button>
+    <!-- Total Referencias -->
+    <div class="rounded-xl border border-zinc-800 bg-zinc-900 p-5">
+      <p class="text-xs font-bold uppercase text-zinc-500">Total Referencias</p>
+      <h3 class="mt-2 text-3xl font-black text-white">{{ stats.totalParts }}</h3>
+      <p class="mt-1 text-xs text-zinc-400 italic">Piezas dadas de alta en el catálogo</p>
     </div>
-  </div>
+</div>
 </main>

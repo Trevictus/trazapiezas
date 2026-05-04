@@ -10,6 +10,12 @@ export class AuthController {
         const userRepository = AppDataSource.getRepository(User);
 
         try {
+            // Evitar mecánicos duplicados
+            const existingUser = await userRepository.findOneBy({ username });
+            if (existingUser) {
+                return res.status(400).json({ message: "El nombre de usuario ya existe" });
+            }
+
             const user = new User();
             user.username = username;
             user.password = password; 

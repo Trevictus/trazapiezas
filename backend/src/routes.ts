@@ -10,6 +10,7 @@ router.post("/auth/login", AuthController.login);
 router.post("/auth/register", AuthController.register);
 
 router.get("/parts", checkToken, PartController.getAll);
+router.get("/parts/stats", checkToken, PartController.getStats);
 router.post("/parts", checkToken, checkRole(["ADMIN"]), PartController.create);
 
 router.post("/movements", checkToken, MovementController.create);

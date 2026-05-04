@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar';
-import { Router } from '@angular/router';
+import { PartsService } from '../../services/parts';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,12 +9,15 @@ import { Router } from '@angular/router';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
-export class DashboardComponent {
-  constructor(private router: Router) {}
+export class DashboardComponent implements OnInit {
+  stats = { totalParts: 0, lowStock: 0, movementsToday: 0 };
 
-  // Lógica para salir
-  logout() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+  constructor(private partsService: PartsService) {}
+
+  ngOnInit(): void {
+    this.partsService.getStats().subscribe({
+      next: (data) => this.stats = data,
+      error: (err) => console.error('Error cargando stats', err)
+    });
   }
 }
