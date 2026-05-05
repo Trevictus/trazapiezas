@@ -1,0 +1,46 @@
+<div class="fixed bottom-0 left-0 right-0 bg-[#121212] border-t border-zinc-800 px-6 py-3 z-50">
+  <div class="max-w-md mx-auto flex justify-between items-center">
+    <!-- Dashboard -->
+    <button (click)="router.navigate(['/dashboard'])" 
+      [class.bg-zinc-800]="router.url === '/dashboard'"
+      class="flex flex-col items-center gap-1 px-4 py-1 rounded-lg transition-colors">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-400" [class.text-white]="router.url === '/dashboard'">
+        <rect x="3" y="3" width="7" height="7" />
+        <rect x="14" y="3" width="7" height="7" />
+        <rect x="14" y="14" width="7" height="7" />
+        <rect x="3" y="14" width="7" height="7" />
+      </svg>
+      <span class="text-[10px] font-bold uppercase tracking-tighter text-zinc-400" [class.text-white]="router.url === '/dashboard'">Dashboard</span>
+    </button>
+
+    <!-- Almacén -->
+    <button (click)="router.navigate(['/inventory'])" 
+      [class.bg-zinc-800]="router.url === '/inventory'"
+      class="flex flex-col items-center gap-1 px-4 py-1 rounded-lg">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-400">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <rect x="9" y="14" width="6" height="5" />
+      </svg>
+      <span class="text-[10px] font-bold uppercase tracking-tighter text-zinc-400">Almacén</span>
+    </button>
+
+    <!-- Movimientos -->
+    <button (click)="router.navigate(['/history'])" 
+      class="flex flex-col items-center gap-1 px-4 py-1 rounded-lg">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-400">
+        <path d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+        <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
+      </svg>
+      <span class="text-[10px] font-bold uppercase tracking-tighter text-zinc-400">Movimientos</span>
+    </button>
+
+    <!-- Perfil -->
+    <button class="flex flex-col items-center gap-1 px-4 py-1 rounded-lg">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-400">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+      <span class="text-[10px] font-bold uppercase tracking-tighter text-zinc-400">Perfil</span>
+    </button>
+  </div>
+</div>

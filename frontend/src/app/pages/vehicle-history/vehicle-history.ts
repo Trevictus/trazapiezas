@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router'; // Importado para leer parámetros
 import { NavbarComponent } from '../../components/navbar/navbar';
 import { PartsService } from '../../services/parts';
 
@@ -11,17 +12,29 @@ import { PartsService } from '../../services/parts';
   templateUrl: './vehicle-history.html',
   styleUrl: './vehicle-history.scss'
 })
-export class VehicleHistoryComponent {
+export class VehicleHistoryComponent implements OnInit {
   plate: string = '';
   movements: any[] = [];
   searched: boolean = false;
 
-  constructor(private partsService: PartsService) {}
+  constructor(
+    private partsService: PartsService,
+    private route: ActivatedRoute
+  ) {}
 
-  search() {
+  ngOnInit(): void {
+    // Si venimos del Dashboard con una matrícula, buscamos automáticamente
+    this.route.queryParams.subscribe(params => {
+      if (params['plate']) {
+        this.plate = params['plate'];
+        this.search();
+      }
+    });
+  }
+
+  search(): void {
     if (!this.plate.trim()) return;
     
-    // 🚀 Limpiamos espacios y pasamos a mayúsculas antes de enviar
     const cleanPlate = this.plate.trim().toUpperCase();
 
     this.partsService.getMovementsByPlate(cleanPlate).subscribe({
@@ -29,7 +42,7 @@ export class VehicleHistoryComponent {
         this.movements = data;
         this.searched = true;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al buscar matrícula:', err);
         this.movements = [];
         this.searched = true;

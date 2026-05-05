@@ -1,47 +1,45 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from '../../components/navbar/navbar';
 import { FormsModule } from '@angular/forms';
-import { PartsService } from '../../services/parts';
 import { Router } from '@angular/router';
+import { NavbarComponent } from '../../components/navbar/navbar';
+import { PartsService } from '../../services/parts';
 
 @Component({
   selector: 'app-parts-list',
   standalone: true,
-  imports: [NavbarComponent, CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './parts-list.html',
   styleUrl: './parts-list.scss'
 })
 export class PartsListComponent implements OnInit {
-  // 1. Definimos la variable que el HTML estaba buscando
-  parts: any[] = []; 
+  parts: any[] = [];
   searchTerm: string = '';
 
-  constructor(private partsService: PartsService, private cdr: ChangeDetectorRef, public router: Router) {}
+  constructor(
+    private partsService: PartsService,
+    public router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    // 2. Al cargar la página, pedimos las piezas al backend
     this.loadParts();
   }
 
   loadParts(): void {
     this.partsService.getParts().subscribe({
       next: (data) => {
-        this.parts = data; // Guardamos las piezas reales de PostgreSQL
-        console.log('Piezas cargadas de Cazapiezas:', data);
-        this.cdr.detectChanges(); // Forzamos a Angular a actualizar la vista
+        this.parts = data;
+        this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('Error al traer el inventario:', err);
-      }
+      error: (err: Error) => console.error('Error al cargar piezas', err)
     });
   }
 
   get filteredParts() {
     return this.parts.filter(part => 
       part.brand.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      part.reference.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      part.category.toLowerCase().includes(this.searchTerm.toLowerCase())
+      part.reference.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 
@@ -49,38 +47,22 @@ export class PartsListComponent implements OnInit {
     const newStock = part.stock + amount;
     if (newStock < 0) return;
 
-    // Creamos una copia de la pieza con el stock nuevo
     const updatedPart = { ...part, stock: newStock };
 
     this.partsService.updatePart(part.id, updatedPart).subscribe({
       next: () => {
         part.stock = newStock;
         this.cdr.detectChanges();
-        console.log('Servidor actualizó correctamente');
       },
-      error: (err) => console.error('El servidor rechazó el cambio:', err)
+      error: (err: any) => console.error('El servidor rechazó el cambio:', err) // Tipo corregido
     });
   }
 
   deletePart(part: any): void {
-    const confirmacion = confirm(`¿Estás seguro de eliminar ${part.brand}?`);
-    
-    if (confirmacion) {
+    if (confirm(`¿Estás seguro de eliminar ${part.brand}?`)) {
       this.partsService.deletePart(part.id).subscribe({
-        next: () => {
-          // 1. CREAMOS UN NUEVO ARRAY: 
-          // Filtramos y envolvemos para que Angular detecte el cambio de referencia
-          this.parts = [...this.parts.filter(p => p.id !== part.id)];
-          
-          console.log('✅ Pieza borrada y array local actualizado');
-
-          // 2. FORZAMOS EL REDIBUJADO:
-          this.cdr.detectChanges();
-        },
-        error: (err) => {
-          console.error('❌ El servidor no pudo borrar la pieza:', err);
-          alert('Error al eliminar: Verifica que la pieza no tenga dependencias.');
-        }
+        next: () => this.loadParts(),
+        error: (err: any) => console.error('Error al eliminar', err)
       });
     }
   }

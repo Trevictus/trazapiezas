@@ -11,6 +11,7 @@ export class PartsService {
 
   constructor(private http: HttpClient) { }
 
+  // Gestión de Piezas
   getParts(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
@@ -31,15 +32,19 @@ export class PartsService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
+  // Estadísticas y Movimientos
   getStats(): Observable<any> {
     return this.http.get(`${this.apiUrl}/stats`);
+  }
+
+  getLatestMovements(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.movementsUrl}/latest`);
   }
 
   getMovementsByPlate(plate: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.movementsUrl}/vehicle/${plate}`);
   }
 
-  // 🚀 Registrar un nuevo movimiento (STOCK o USED)
   createMovement(movementData: any): Observable<any> {
     return this.http.post(this.movementsUrl, movementData);
   }

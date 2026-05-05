@@ -4,6 +4,20 @@ import { Movement } from "../entities/Movement";
 import { Part } from "../entities/Part";
 
 export class MovementController {
+    //Obtener los últimos 5 movimientos para el Dashboard
+    static async getLatest(req: Request, res: Response) {
+        const movementRepository = AppDataSource.getRepository(Movement);
+        try {
+            const movements = await movementRepository.find({
+                relations: ["part"],
+                order: { createdAt: "DESC" },
+                take: 5 // Solo los 5 más recientes
+            });
+            return res.json(movements);
+        } catch (error) {
+            return res.status(500).json({ message: "Error al obtener movimientos", error });
+        }
+    }
 
     static async create(req: Request, res: Response) {
         const { partId, quantity, purchasePrice, vehiclePlate, status } = req.body;
@@ -24,7 +38,6 @@ export class MovementController {
             movement.part = part;
             movement.quantity = quantity;
             movement.purchasePrice = purchasePrice;
-            // Forzamos mayúsculas al guardar para evitar fallos de búsqueda
             movement.vehiclePlate = vehiclePlate ? vehiclePlate.toUpperCase().trim() : null;
             movement.status = status || "STOCK";
 
@@ -37,27 +50,23 @@ export class MovementController {
             }
             
             await partRepository.save(part);
-
-            return res.status(201).json({ message: "Movimiento registrado con éxito", movement });
+            return res.status(201).json({ message: "Movimiento registrado", movement });
         } catch (error) {
-            return res.status(500).json({ message: "Error al registrar movimiento", error });
+            return res.status(500).json({ message: "Error al registrar", error });
         }
     }
 
     static async getByPlate(req: Request, res: Response) {
-        // Corregimos el error de TypeScript asegurando que plate sea un string
         const plate = req.params.plate as string; 
         const movementRepository = AppDataSource.getRepository(Movement);
-
         try {
             const movements = await movementRepository.find({
-                // Buscamos específicamente por la columna de matrícula
                 where: { vehiclePlate: plate.toUpperCase().trim() },
                 relations: ["part"]
             });
             return res.json(movements);
         } catch (error) {
-            return res.status(500).json({ message: "Error al buscar la matrícula", error });
+            return res.status(500).json({ message: "Error al buscar matrícula", error });
         }
     }
 }
