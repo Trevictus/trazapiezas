@@ -2,13 +2,13 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NavbarComponent } from '../../components/navbar/navbar';
+import { NavigationComponent } from '../../components/navigation/navigation';
 import { PartsService } from '../../services/parts';
 
 @Component({
   selector: 'app-parts-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent],
+  imports: [CommonModule, FormsModule, NavigationComponent],
   templateUrl: './parts-list.html',
   styleUrl: './parts-list.scss'
 })
@@ -32,7 +32,7 @@ export class PartsListComponent implements OnInit {
         this.parts = data;
         this.cdr.detectChanges();
       },
-      error: (err: Error) => console.error('Error al cargar piezas', err)
+      error: (err: any) => console.error('Error al cargar piezas', err)
     });
   }
 
@@ -54,7 +54,7 @@ export class PartsListComponent implements OnInit {
         part.stock = newStock;
         this.cdr.detectChanges();
       },
-      error: (err: any) => console.error('El servidor rechazó el cambio:', err) // Tipo corregido
+      error: (err: any) => console.error('Error al actualizar stock', err)
     });
   }
 

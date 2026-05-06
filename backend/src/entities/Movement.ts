@@ -1,30 +1,30 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne } from "typeorm";
 import { Part } from "./Part";
+import { User } from "./User";
 
-@Entity("movements")
+@Entity()
 export class Movement {
     @PrimaryGeneratedColumn()
-    id!: number;
-
-    @Column()
-    quantity!: number;
-
-    @Column("decimal", { precision: 10, scale: 2 })
-    purchasePrice!: number; // Precio neto real del albarán
-
-    @Column({ nullable: true })
-    vehiclePlate!: string; // Matrícula del coche
-
-    @Column({
-        type: "enum",
-        enum: ["PENDING", "USED", "STOCK", "RETURNED"],
-        default: "STOCK"
-    })
-    status!: string;
-
-    @CreateDateColumn()
-    createdAt!: Date;
+    id: number;
 
     @ManyToOne(() => Part, (part) => part.movements)
-    part!: Part;
+    part: Part;
+
+    @ManyToOne(() => User) // relación para saber quién hizo el movimiento
+    user: User;
+
+    @Column()
+    quantity: number;
+
+    @Column({ type: "decimal", precision: 10, scale: 2, nullable: true })
+    purchasePrice: number;
+
+    @Column({ nullable: true })
+    vehiclePlate: string;
+
+    @Column() // STOCK (Entrada) o USED (Salida/Instalación)
+    status: string;
+
+    @CreateDateColumn()
+    createdAt: Date;
 }

@@ -1,72 +1,67 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavbarComponent } from '../../components/navbar/navbar';
+import { NavigationComponent } from '../../components/navigation/navigation';
+import { VehicleService, Vehicle } from '../../services/vehicle';
 import { PartsService } from '../../services/parts';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-register-movement',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent],
-  templateUrl: './register-movement.html',
-  styleUrl: './register-movement.scss'
+  imports: [CommonModule, FormsModule, NavigationComponent],
+  templateUrl: './register-movement.html'
 })
 export class RegisterMovementComponent implements OnInit {
+  movementId: string = 'TRX' + Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+  currentUser: any = null;
   part: any = null;
-  loading: boolean = true;
-  movement = {
-    partId: 0,
-    quantity: 1,
-    vehiclePlate: '',
-    status: 'USED',
-    purchasePrice: 0
-  };
+  plate: string = '';
+  
+  vehicleData: Vehicle | null = null;
+  showNotFoundWarning: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
+    private vehicleService: VehicleService,
     private partsService: PartsService,
-    private cdr: ChangeDetectorRef,
-    public router: Router
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    
-    this.partsService.getPartById(id).subscribe({
-      next: (data) => {
-        console.log('--- DATOS RECIBIDOS ---', data);
-        this.part = data;
-        this.movement.partId = data.id;
-        this.movement.purchasePrice = data.purchasePrice;
-        
-        // Forzamos el cambio de estado
-        this.loading = false;
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Error al cargar la pieza:', err);
-        this.loading = false;
-        this.cdr.detectChanges();
-      }
+    this.currentUser = this.authService.getCurrentUser();
+    const partId = this.route.snapshot.params['id'];
+    this.partsService.getPartById(partId).subscribe(p => this.part = p);
+  }
+
+  searchPlate(): void {
+    this.showNotFoundWarning = false;
+    this.vehicleData = null;
+
+    this.vehicleService.checkVehicleInTallerGP(this.plate).subscribe({
+      next: (data: Vehicle) => this.vehicleData = data,
+      error: () => this.showNotFoundWarning = true
     });
   }
 
-  onSubmit() {
-    if (!this.movement.vehiclePlate.trim()) {
-      alert('La matrícula es obligatoria para la trazabilidad.');
-      return;
-    }
-
-    this.partsService.createMovement(this.movement).subscribe({
-      next: () => {
-        alert('Movimiento registrado correctamente.');
-        this.router.navigate(['/inventory']);
-      },
-      error: (err) => {
-        console.error('Error al registrar:', err);
-        alert(err.error?.message || 'Error en el servidor');
-      }
+  quickRegister(): void {
+    this.vehicleService.registerQuickVehicle(this.plate).subscribe((newV: Vehicle) => {
+      this.vehicleData = newV;
+      this.showNotFoundWarning = false;
     });
+  }
+
+  confirmMovement(): void {
+    if (!this.vehicleData) return;
+    const payload = {
+      partId: this.part.id,
+      quantity: 1, // Simplificado: siempre 1 unidad por movimiento
+      vehiclePlate: this.plate.toUpperCase(),
+      status: 'USED',
+      userId: this.currentUser?.id
+    };
+    this.partsService.createMovement(payload).subscribe(() => this.router.navigate(['/dashboard']));
   }
 }

@@ -1,49 +1,63 @@
-<app-navbar></app-navbar>
+<main class="min-h-screen bg-zinc-950 pb-32">
+  <header class="flex justify-between items-center p-6 border-b border-zinc-800 bg-zinc-950 sticky top-0 z-40">
+    <h1 class="text-xl font-black tracking-tighter text-white uppercase italic"><img src="/assets/logo0.2-trans.png" alt="TRAZAPIEZAS" class="h-8 w-auto object-contain">MOVIMIENTOS</h1>
+    <button class="text-zinc-400">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </button>
+  </header>
 
-<main class="min-h-screen bg-zinc-950 p-6">
-  <div class="max-w-4xl mx-auto">
-    <header class="mb-8">
-      <h2 class="text-2xl font-bold text-white uppercase tracking-tight">Historial por Matrícula</h2>
-      <p class="text-zinc-500 text-sm">Trazabilidad de piezas instaladas en vehículos</p>
-    </header>
+  <div class="max-w-2xl mx-auto p-4 space-y-6">
+    <!-- Buscador de Matrícula -->
+    <section class="space-y-3">
+      <h3 class="text-lg font-black text-white uppercase italic">Matrícula</h3>
+      <div class="flex gap-2">
+        <div class="flex-1 bg-[#1a1a1a] rounded-xl flex items-center px-4 border border-zinc-800">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-500 mr-3">
+            <path d="M7 17a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v10z"/><path d="M17 17h.01M7 7h.01"/>
+          </svg>
+          <input type="text" [(ngModel)]="plate" (keyup.enter)="search()" placeholder="1234 ABC" 
+            class="bg-transparent border-none outline-none text-white font-bold w-full uppercase py-4">
+        </div>
+        <button (click)="search()" class="bg-sky-600 text-white font-black px-8 py-4 rounded-xl uppercase italic">Buscar</button>
+      </div>
+    </section>
 
-    <!-- Buscador Principal -->
-    <div class="flex gap-2 mb-8">
-      <input type="text" [(ngModel)]="plate" (keyup.enter)="search()" placeholder="Introduce matrícula..."
-        class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-white font-bold text-xl uppercase outline-none focus:border-industrial-blue transition-all">
-      <button (click)="search()" 
-        class="bg-industrial-blue hover:bg-blue-600 text-white px-8 rounded-xl font-bold transition-colors">
-        BUSCAR
-      </button>
-    </div>
-
-    <!-- Lista de Resultados -->
+    <!-- Resultados (Estilo "Últimos Movimientos") -->
     @if (searched) {
       <div class="space-y-4">
-        @for (mov of movements; track mov.id) {
-          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl flex justify-between items-center shadow-lg border-l-4 border-l-industrial-blue">
-            <div class="flex items-center gap-4">
-              <div class="h-12 w-12 rounded-lg bg-zinc-800 flex items-center justify-center text-industrial-blue">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <h3 class="text-xl font-black text-white uppercase italic">Resultados</h3>
+        
+        <div class="space-y-3">
+          @for (mov of movements; track mov.id) {
+            <div class="bg-[#1a1a1a] border border-zinc-800 rounded-xl p-4 flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div [class]="mov.status === 'STOCK' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-amber-500/20 text-amber-500'" class="p-2 rounded-lg">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <path *ngIf="mov.status === 'STOCK'" d="M12 19V5M5 12l7 7 7-7"/>
+                    <path *ngIf="mov.status === 'USED'" d="M12 5v14M5 12l7-7 7 7"/>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-zinc-300 uppercase leading-tight">{{ mov.part.brand }} - {{ mov.part.reference }}</h4>
+                  <p class="text-[10px] text-zinc-500 uppercase tracking-tighter">Cant: {{ mov.quantity }} • Ref: {{ mov.part.reference }}</p>
+                </div>
               </div>
-              <div>
-                <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Matrícula: {{ mov.vehiclePlate }}</p>
-                <h4 class="text-white font-bold">{{ mov.part.brand }} ({{ mov.part.reference }})</h4>
-                <p class="text-zinc-400 text-xs">{{ mov.part.category }}</p>
+              <div class="text-right">
+                <p class="text-[10px] font-bold text-zinc-400 uppercase italic">{{ mov.createdAt | date:'dd/MM/yy' }}</p>
+                <span [class]="mov.status === 'STOCK' ? 'text-emerald-500' : 'text-amber-500'" class="text-[8px] font-black uppercase bg-black px-2 py-0.5 rounded-full">
+                  {{ mov.status === 'STOCK' ? 'ENTRADA' : 'SALIDA' }}
+                </span>
               </div>
             </div>
-            
-            <div class="text-right">
-              <span class="block text-xl font-black text-industrial-blue">{{ mov.quantity }} uds</span>
-              <span class="text-[10px] text-zinc-600 uppercase">{{ mov.createdAt | date:'dd/MM/yyyy' }}</span>
+          } @empty {
+            <div class="py-20 text-center border-2 border-dashed border-zinc-800 rounded-3xl">
+              <p class="text-zinc-600 italic text-sm">No hay registros para la matrícula: {{ plate }}</p>
             </div>
-          </div>
-        } @empty {
-          <div class="py-20 text-center border-2 border-dashed border-zinc-800 rounded-3xl">
-            <p class="text-zinc-600 italic">No se han encontrado piezas instaladas en la matrícula: {{ plate }}</p>
-          </div>
-        }
+          }
+        </div>
       </div>
     }
   </div>
+
+  <app-navigation></app-navigation>
 </main>

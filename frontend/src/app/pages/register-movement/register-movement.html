@@ -1,49 +1,56 @@
-<app-navbar></app-navbar>
+<main class="min-h-screen bg-[#09090b] text-white pb-32">
+  <header class="p-6 flex justify-between items-center border-b border-zinc-900">
+    <h1 class="text-xl font-black italic uppercase tracking-tighter">Trazapiezas</h1>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  </header>
 
-<main class="min-h-screen bg-zinc-950 p-6">
-  <!-- 1. Pantalla de carga (se oculta cuando loading es false) -->
-  <div *ngIf="loading" class="flex flex-col items-center justify-center py-20">
-    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-industrial-blue mb-4"></div>
-    <p class="text-zinc-500 italic">Cargando datos de la pieza...</p>
-  </div>
+  <div class="max-w-md mx-auto p-6 space-y-8">
+    <h2 class="text-3xl font-light uppercase leading-tight">Movimiento de<br><b>Piezas</b></h2>
 
-  <!-- 2. Formulario Principal (se muestra cuando loading es false y hay pieza) -->
-  <div class="max-w-xl mx-auto" *ngIf="!loading && part">
-    <header class="mb-8">
-      <h2 class="text-2xl font-bold text-white uppercase tracking-tight">Registrar Montaje</h2>
-      <p class="text-zinc-500 text-sm">Asignando: {{ part.brand }} - {{ part.reference }}</p>
-    </header>
-
-    <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl shadow-xl">
-      <div class="mb-6 p-4 bg-zinc-950 rounded-lg border border-zinc-800">
-        <p class="text-xs text-zinc-500 uppercase font-bold">Stock en taller</p>
-        <p class="text-2xl font-black text-industrial-blue">{{ part.stock }} uds</p>
+    <!-- Header Info Figma -->
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-zinc-900/50 p-4 rounded-xl border border-zinc-800">
+        <p class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">ID Movimiento</p>
+        <p class="text-sm font-mono text-zinc-300">{{ movementId }}</p>
       </div>
-
-      <form (ngSubmit)="onSubmit()" class="space-y-6">
-        <div>
-          <label class="block text-xs font-bold text-zinc-400 uppercase mb-2">Cantidad a utilizar</label>
-          <input type="number" [(ngModel)]="movement.quantity" name="qty" required
-            class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-4 text-white text-xl focus:border-industrial-blue outline-none">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-zinc-400 uppercase mb-2">Matrícula del Vehículo</label>
-          <input type="text" [(ngModel)]="movement.vehiclePlate" name="plate" placeholder="Ej: 1234ABC" required
-            class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-4 text-white text-xl uppercase focus:border-industrial-blue outline-none">
-        </div>
-
-        <div class="pt-4 flex gap-4">
-          <button type="submit" 
-            class="flex-1 bg-industrial-blue text-white font-bold py-4 rounded-xl hover:bg-blue-600 transition-all shadow-lg">
-            REGISTRAR SALIDA
-          </button>
-          <button type="button" (click)="router.navigate(['/inventory'])"
-            class="px-6 bg-zinc-800 text-zinc-400 font-bold rounded-xl hover:bg-zinc-700">
-            CANCELAR
-          </button>
-        </div>
-      </form>
+      <div class="bg-zinc-900/50 p-4 rounded-xl border border-zinc-800">
+        <p class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Usuario</p>
+        <p class="text-sm font-mono text-zinc-300 uppercase">{{ currentUser?.username || 'OG3307' }}</p>
+      </div>
     </div>
+
+    <!-- Buscador de Matrícula -->
+    <div class="space-y-3">
+      <h3 class="text-lg font-black uppercase italic">Matrícula</h3>
+      <div class="flex gap-2">
+        <div class="flex-1 bg-zinc-900 rounded-xl border border-zinc-800 px-4 flex items-center">
+          <input type="text" [(ngModel)]="plate" placeholder="1234 ABC" class="bg-transparent border-none outline-none text-white font-bold py-4 uppercase w-full">
+        </div>
+        <button (click)="searchPlate()" class="bg-sky-600 text-white font-black px-6 rounded-xl uppercase italic">Buscar</button>
+      </div>
+    </div>
+
+    <!-- Warning TallerGP (Basado en segunda captura) -->
+    @if (showNotFoundWarning) {
+      <div class="bg-orange-500/10 border border-orange-500/30 p-5 rounded-2xl flex gap-4">
+        <div class="bg-orange-500 h-6 w-6 rounded-full flex items-center justify-center text-black font-bold">!</div>
+        <div class="text-xs text-orange-200">
+          Matrícula no registrada en TallerGP. Verifícala o crea el vehículo.
+          <button (click)="quickRegister()" class="block mt-2 font-black underline uppercase text-sky-400">+ Dar de alta vehículo</button>
+        </div>
+      </div>
+    }
+
+    <!-- Vehículo Encontrado -->
+    @if (vehicleData) {
+      <div class="bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-xl flex justify-between items-center">
+        <p class="text-white font-black uppercase italic">{{ vehicleData.brand }} {{ vehicleData.model }}</p>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+    }
+
+    <button [disabled]="!vehicleData" (click)="confirmMovement()" class="w-full bg-sky-600 disabled:bg-zinc-800 text-white py-5 rounded-2xl font-black text-xl uppercase italic">Confirmar</button>
   </div>
+
+  <app-navigation></app-navigation>
 </main>

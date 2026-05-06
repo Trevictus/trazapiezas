@@ -1,14 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router'; // Importado para leer parámetros
-import { NavbarComponent } from '../../components/navbar/navbar';
+import { ActivatedRoute } from '@angular/router';
+import { NavigationComponent } from '../../components/navigation/navigation';
 import { PartsService } from '../../services/parts';
 
 @Component({
   selector: 'app-vehicle-history',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    NavigationComponent
+  ],
   templateUrl: './vehicle-history.html',
   styleUrl: './vehicle-history.scss'
 })
@@ -23,7 +27,7 @@ export class VehicleHistoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Si venimos del Dashboard con una matrícula, buscamos automáticamente
+    // Escucha si venimos del Dashboard con una matrícula en la URL
     this.route.queryParams.subscribe(params => {
       if (params['plate']) {
         this.plate = params['plate'];
