@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth';
+import { ToastService } from '../../services/toast';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,20 +14,21 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   loginData = { username: '', password: '' };
 
-  // Inyectamos el servicio y el router
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private toastService: ToastService,
+    private router: Router
+  ) {}
 
   onLogin() {
     this.authService.login(this.loginData).subscribe({
       next: (response) => {
-        console.log('¡Bienvenido a Cazapiezas!', response);
-        // Guardamos el token JWT para futuras peticiones
         localStorage.setItem('token', response.token);
+        this.toastService.success('Sesión iniciada correctamente');
         this.router.navigate(['/dashboard']); 
       },
       error: (err) => {
-        console.error('Error en el acceso:', err);
-        alert('Credenciales incorrectas para el taller.');
+        this.toastService.error('Credenciales incorrectas para el taller');
       }
     });
   }

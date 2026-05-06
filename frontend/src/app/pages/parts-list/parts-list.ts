@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NavigationComponent } from '../../components/navigation/navigation';
 import { PartsService } from '../../services/parts';
 
@@ -15,15 +15,20 @@ import { PartsService } from '../../services/parts';
 export class PartsListComponent implements OnInit {
   parts: any[] = [];
   searchTerm: string = '';
+  filterLowStock: boolean = false;
 
   constructor(
     private partsService: PartsService,
     public router: Router,
+    private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadParts();
+    this.route.queryParams.subscribe(params => {
+      this.filterLowStock = params['filter'] === 'lowstock';
+      this.loadParts();
+    });
   }
 
   loadParts(): void {
@@ -37,10 +42,16 @@ export class PartsListComponent implements OnInit {
   }
 
   get filteredParts() {
-    return this.parts.filter(part => 
+    let filtered = this.parts.filter(part => 
       part.brand.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       part.reference.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
+
+    if (this.filterLowStock) {
+      filtered = filtered.filter(part => part.stock < 5);
+    }
+
+    return filtered;
   }
 
   adjustStock(part: any, amount: number): void {
@@ -65,5 +76,9 @@ export class PartsListComponent implements OnInit {
         error: (err: any) => console.error('Error al eliminar', err)
       });
     }
+  }
+
+  clearFilter(): void {
+    this.router.navigate(['/inventory']);
   }
 }

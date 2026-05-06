@@ -1,6 +1,8 @@
 <main class="min-h-screen bg-[#09090b] text-white pb-32">
   <header class="p-6 flex justify-between items-center border-b border-zinc-900">
-    <h1 class="text-xl font-black italic uppercase tracking-tighter">Trazapiezas</h1>
+    <button (click)="router.navigate(['/dashboard'])" class="cursor-pointer hover:opacity-80 transition-opacity">
+      <h1 class="text-xl font-black italic uppercase tracking-tighter">Trazapiezas</h1>
+    </button>
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
   </header>
 
@@ -22,12 +24,30 @@
     <!-- Buscador de Matrícula -->
     <div class="space-y-3">
       <h3 class="text-lg font-black uppercase italic">Matrícula</h3>
-      <div class="flex gap-2">
-        <div class="flex-1 bg-zinc-900 rounded-xl border border-zinc-800 px-4 flex items-center">
-          <input type="text" [(ngModel)]="plate" placeholder="1234 ABC" class="bg-transparent border-none outline-none text-white font-bold py-4 uppercase w-full">
+      <div class="space-y-2">
+        <div class="flex gap-2">
+          <div class="flex-1 bg-zinc-900 rounded-xl border" [ngClass]="isValidPlate() ? 'border-emerald-500/50' : 'border-zinc-800'" >
+            <input type="text" [(ngModel)]="plate" placeholder="1234 ABC" class="bg-transparent border-none outline-none text-white font-bold py-4 px-4 uppercase w-full">
+          </div>
+          <button (click)="searchPlate()" [disabled]="!isValidPlate()" class="bg-sky-600 disabled:bg-zinc-800 text-white font-black px-6 rounded-xl uppercase italic">Buscar</button>
         </div>
-        <button (click)="searchPlate()" class="bg-sky-600 text-white font-black px-6 rounded-xl uppercase italic">Buscar</button>
+        @if (plate && !isValidPlate()) {
+          <p class="text-[12px] text-red-400 font-bold">Formato: 1234 ABC</p>
+        }
       </div>
+    </div>
+
+    <!-- Campo de Cantidad -->
+    <div class="space-y-3">
+      <h3 class="text-lg font-black uppercase italic">Cantidad</h3>
+      <div class="flex gap-2 items-center">
+        <button (click)="decrementQuantity()" class="bg-zinc-900 rounded-xl border border-zinc-800 p-4 font-bold text-white">-</button>
+        <input type="number" [(ngModel)]="quantity" min="1" class="flex-1 bg-zinc-900 rounded-xl border border-zinc-800 px-4 py-4 text-white font-bold text-center outline-none">
+        <button (click)="incrementQuantity()" class="bg-zinc-900 rounded-xl border border-zinc-800 p-4 font-bold text-white">+</button>
+      </div>
+      @if (!isValidQuantity()) {
+        <p class="text-[12px] text-red-400 font-bold">La cantidad debe ser mayor a 0</p>
+      }
     </div>
 
     <!-- Warning TallerGP (Basado en segunda captura) -->
@@ -49,7 +69,7 @@
       </div>
     }
 
-    <button [disabled]="!vehicleData" (click)="confirmMovement()" class="w-full bg-sky-600 disabled:bg-zinc-800 text-white py-5 rounded-2xl font-black text-xl uppercase italic">Confirmar</button>
+    <button [disabled]="!isFormValid()" (click)="confirmMovement()" class="w-full bg-sky-600 disabled:bg-zinc-800 disabled:cursor-not-allowed text-white py-5 rounded-2xl font-black text-xl uppercase italic transition-all">Confirmar</button>
   </div>
 
   <app-navigation></app-navigation>

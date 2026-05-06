@@ -1,10 +1,10 @@
 <nav class="border-b border-zinc-800 bg-zinc-900 px-4 py-3 shadow-md">
   <div class="flex items-center justify-between">
     <!-- Logo e Identidad -->
-    <div class="flex items-center gap-2">
+    <button (click)="router.navigate(['/dashboard'])" class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
       <div class="h-8 w-8 rounded bg-industrial-blue flex items-center justify-center font-black text-white">T</div>
       <span class="text-lg font-bold tracking-tight text-white uppercase">Trazapiezas</span>
-    </div>
+    </button>
 
     <!-- Menú de Acciones (Mobile Friendly) -->
     <div class="flex items-center gap-4">

@@ -45,9 +45,12 @@ export class DashboardComponent implements OnInit {
 
   searchByPlate(): void {
     if (this.plateSearch.trim()) {
-      // Navegamos al historial pasando la matrícula como parámetro de consulta
       this.router.navigate(['/history'], { queryParams: { plate: this.plateSearch.toUpperCase() } });
     }
+  }
+
+  goToLowStockInventory(): void {
+    this.router.navigate(['/inventory'], { queryParams: { filter: 'lowstock' } });
   }
 
   goToInventory(): void {

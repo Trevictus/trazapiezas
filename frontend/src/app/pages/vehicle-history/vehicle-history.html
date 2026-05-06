@@ -1,6 +1,8 @@
 <main class="min-h-screen bg-zinc-950 pb-32">
   <header class="flex justify-between items-center p-6 border-b border-zinc-800 bg-zinc-950 sticky top-0 z-40">
-    <h1 class="text-xl font-black tracking-tighter text-white uppercase italic"><img src="/assets/logo0.2-trans.png" alt="TRAZAPIEZAS" class="h-8 w-auto object-contain">MOVIMIENTOS</h1>
+    <button (click)="router.navigate(['/dashboard'])" class="cursor-pointer hover:opacity-80 transition-opacity">
+      <h1 class="text-xl font-black tracking-tighter text-white uppercase italic"><img src="/assets/logo0.2-trans.png" alt="TRAZAPIEZAS" class="h-8 w-auto object-contain">MOVIMIENTOS</h1>
+    </button>
     <button class="text-zinc-400">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </button>
@@ -13,9 +15,9 @@
       <div class="flex gap-2">
         <div class="flex-1 bg-[#1a1a1a] rounded-xl flex items-center px-4 border border-zinc-800">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-500 mr-3">
-            <path d="M7 17a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v10z"/><path d="M17 17h.01M7 7h.01"/>
+            <path d="M3 9c0-1 1-2 2-2h3l2-5h2l2 5h3c1 0 2 1 2 2v8c0 1-1 2-2 2H5c-1 0-2-1-2-2V9z"/><circle cx="12" cy="14" r="1.5" fill="currentColor"/>
           </svg>
-          <input type="text" [(ngModel)]="plate" (keyup.enter)="search()" placeholder="1234 ABC" 
+          <input type="text" [(ngModel)]="plate" (keyup)="onPlateChange(plate)" (keyup.enter)="search()" placeholder="1234 ABC" 
             class="bg-transparent border-none outline-none text-white font-bold w-full uppercase py-4">
         </div>
         <button (click)="search()" class="bg-sky-600 text-white font-black px-8 py-4 rounded-xl uppercase italic">Buscar</button>
@@ -23,40 +25,40 @@
     </section>
 
     <!-- Resultados (Estilo "Últimos Movimientos") -->
-    @if (searched) {
-      <div class="space-y-4">
-        <h3 class="text-xl font-black text-white uppercase italic">Resultados</h3>
-        
-        <div class="space-y-3">
-          @for (mov of movements; track mov.id) {
-            <div class="bg-[#1a1a1a] border border-zinc-800 rounded-xl p-4 flex items-center justify-between">
-              <div class="flex items-center gap-4">
-                <div [class]="mov.status === 'STOCK' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-amber-500/20 text-amber-500'" class="p-2 rounded-lg">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                    <path *ngIf="mov.status === 'STOCK'" d="M12 19V5M5 12l7 7 7-7"/>
-                    <path *ngIf="mov.status === 'USED'" d="M12 5v14M5 12l7-7 7 7"/>
-                  </svg>
-                </div>
-                <div>
-                  <h4 class="text-xs font-bold text-zinc-300 uppercase leading-tight">{{ mov.part.brand }} - {{ mov.part.reference }}</h4>
-                  <p class="text-[10px] text-zinc-500 uppercase tracking-tighter">Cant: {{ mov.quantity }} • Ref: {{ mov.part.reference }}</p>
-                </div>
+    <div class="space-y-4">
+      @if (searched || allMovements.length > 0) {
+        <h3 class="text-xl font-black text-white uppercase italic">{{ searched ? 'Resultados' : 'Todos los Movimientos' }}</h3>
+      }
+      
+      <div class="space-y-3">
+        @for (mov of movements; track mov.id) {
+          <div class="bg-[#1a1a1a] border border-zinc-800 rounded-xl p-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div [class]="mov.status === 'STOCK' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-amber-500/20 text-amber-500'" class="p-2 rounded-lg">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <path *ngIf="mov.status === 'STOCK'" d="M12 19V5M5 12l7 7 7-7"/>
+                  <path *ngIf="mov.status === 'USED'" d="M12 5v14M5 12l7-7 7 7"/>
+                </svg>
               </div>
-              <div class="text-right">
-                <p class="text-[10px] font-bold text-zinc-400 uppercase italic">{{ mov.createdAt | date:'dd/MM/yy' }}</p>
-                <span [class]="mov.status === 'STOCK' ? 'text-emerald-500' : 'text-amber-500'" class="text-[8px] font-black uppercase bg-black px-2 py-0.5 rounded-full">
-                  {{ mov.status === 'STOCK' ? 'ENTRADA' : 'SALIDA' }}
-                </span>
+              <div>
+                <h4 class="text-xs font-bold text-zinc-300 uppercase leading-tight">{{ mov.part.brand }} - {{ mov.part.reference }}</h4>
+                <p class="text-[10px] text-zinc-500 uppercase tracking-tighter">{{ mov.vehiclePlate || 'Ajuste Manual' }} • Cant: {{ mov.quantity }}</p>
               </div>
             </div>
-          } @empty {
-            <div class="py-20 text-center border-2 border-dashed border-zinc-800 rounded-3xl">
-              <p class="text-zinc-600 italic text-sm">No hay registros para la matrícula: {{ plate }}</p>
+            <div class="text-right">
+              <p class="text-[10px] font-bold text-zinc-400 uppercase italic">{{ mov.createdAt | date:'dd/MM/yy' }}</p>
+              <span [class]="mov.status === 'STOCK' ? 'text-emerald-500' : 'text-amber-500'" class="text-[8px] font-black uppercase bg-black px-2 py-0.5 rounded-full">
+                {{ mov.status === 'STOCK' ? 'ENTRADA' : 'SALIDA' }}
+              </span>
             </div>
-          }
-        </div>
+          </div>
+        } @empty {
+          <div class="py-20 text-center border-2 border-dashed border-zinc-800 rounded-3xl">
+            <p class="text-zinc-600 italic text-sm">{{ searched ? 'No hay registros para la matrícula: ' + plate : 'No hay movimientos registrados' }}</p>
+          </div>
+        }
       </div>
-    }
+    </div>
   </div>
 
   <app-navigation></app-navigation>

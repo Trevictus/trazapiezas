@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrl: './navbar.scss'
 })
 export class NavbarComponent {
-  constructor(private router: Router) {}
+  constructor(public router: Router) {}
 
   logout() {
     localStorage.removeItem('token');

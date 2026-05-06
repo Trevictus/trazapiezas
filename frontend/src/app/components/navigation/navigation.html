@@ -26,12 +26,13 @@
 
     <!-- Movimientos -->
     <button (click)="router.navigate(['/history'])" 
-      class="flex flex-col items-center gap-1 px-4 py-1 rounded-lg">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-400">
+      [class.bg-zinc-800]="router.url === '/history'"
+      class="flex flex-col items-center gap-1 px-4 py-1 rounded-lg transition-colors">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-400" [class.text-white]="router.url === '/history'">
         <path d="M7 16l-4-4m0 0l4-4m-4 4h18" />
         <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
       </svg>
-      <span class="text-[10px] font-bold uppercase tracking-tighter text-zinc-400">Movimientos</span>
+      <span class="text-[10px] font-bold uppercase tracking-tighter text-zinc-400" [class.text-white]="router.url === '/history'">Movimientos</span>
     </button>
 
     <!-- Perfil -->
