@@ -4,9 +4,16 @@
     <button (click)="router.navigate(['/dashboard'])" class="cursor-pointer hover:opacity-80 transition-opacity">
       <h1 class="text-xl font-black tracking-tighter text-white uppercase italic"><img src="/assets/logo0.2-trans.png" alt="TRAZAPIEZAS" class="h-8 w-auto object-contain">ALMACÉN</h1>
     </button>
-    <button (click)="router.navigate(['/profile'])" class="text-zinc-400 cursor-pointer">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </button>
+    <div class="flex gap-3 items-center">
+      <button (click)="router.navigate(['/profile'])" class="text-zinc-400 cursor-pointer hover:opacity-80 transition-opacity">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </button>
+      <button (click)="logout()" class="text-[#d97707] cursor-pointer hover:opacity-80 transition-opacity">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+      </button>
+    </div>
   </header>
 
   <div class="max-w-2xl mx-auto p-4 space-y-6">
@@ -37,7 +44,7 @@
             <div>
               <p class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">REF: {{ part.reference }}</p>
               <h3 class="text-lg font-black text-white uppercase italic leading-tight">{{ part.brand }}</h3>
-              <span class="text-[9px] font-black px-2 py-0.5 bg-zinc-900 text-sky-500 rounded border border-sky-900/30 uppercase mt-1 inline-block">
+              <span class="text-[9px] font-black px-2 py-0.5 bg-zinc-900 text-[#045dd1] rounded border border-[#045dd1]/30 uppercase mt-1 inline-block">
                 {{ part.category }}
               </span>
             </div>
@@ -45,7 +52,7 @@
             <!-- Ajuste rápido de stock -->
             <div class="flex items-center bg-zinc-900 rounded-lg border border-zinc-800 p-1">
               <button (click)="adjustStock(part, -1)" class="w-8 h-8 flex items-center justify-center text-zinc-500 font-bold">-</button>
-              <span [ngClass]="part.stock < 5 ? 'text-amber-600' : 'text-sky-500'" class="px-3 text-sm font-black">{{ part.stock }}</span>
+              <span [ngClass]="part.stock < 5 ? 'text-amber-600' : 'text-[#045dd1]'" class="px-3 text-sm font-black">{{ part.stock }}</span>
               <button (click)="adjustStock(part, 1)" class="w-8 h-8 flex items-center justify-center text-zinc-500 font-bold">+</button>
             </div>
           </div>
@@ -54,7 +61,7 @@
 
           <div class="flex gap-2 border-t border-zinc-800/50 pt-4">
             <button (click)="router.navigate(['/register-movement', part.id])" 
-              class="flex-1 bg-sky-600 text-white font-black py-3 rounded-xl text-[10px] uppercase italic tracking-tighter">
+              class="flex-1 bg-[#045dd1] text-white font-black py-3 rounded-xl rounded-tl-none text-[10px] uppercase italic tracking-tighter">
               INSTALAR EN COCHE
             </button>
             <button (click)="deletePart(part)" class="px-4 bg-zinc-900 text-zinc-600 rounded-xl border border-zinc-800">
@@ -69,7 +76,7 @@
   <!-- Botón Flotante para Añadir -->
   <div class="fixed bottom-24 right-6 z-40">
     <button (click)="router.navigate(['/add-part'])" 
-      class="bg-sky-600 text-white p-4 rounded-2xl shadow-2xl border-2 border-white/10">
+      class="bg-[#045dd1] text-white p-4 rounded-2xl rounded-tl-none shadow-2xl border-2 border-white/10">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
     </button>
   </div>

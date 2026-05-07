@@ -68,7 +68,7 @@ export class ToastComponent {
       case 'error':
         return `${baseClasses} bg-red-500/10 border-red-500/30 text-red-200`;
       case 'info':
-        return `${baseClasses} bg-sky-500/10 border-sky-500/30 text-sky-200`;
+        return `${baseClasses} bg-[#045dd1]/10 border-[#045dd1]/30 text-[#045dd1]/80`;
       default:
         return baseClasses;
     }

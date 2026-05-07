@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavigationComponent } from '../../components/navigation/navigation';
 import { PartsService } from '../../services/parts';
+import { AuthService } from '../../services/auth';
 import { Router } from '@angular/router';
 
 @Component({
@@ -20,7 +21,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private partsService: PartsService, 
     public router: Router, 
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -59,5 +61,10 @@ export class DashboardComponent implements OnInit {
 
   goToHistory(): void {
     this.router.navigate(['/history']);
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

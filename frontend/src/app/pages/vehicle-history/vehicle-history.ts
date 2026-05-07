@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavigationComponent } from '../../components/navigation/navigation';
 import { PartsService } from '../../services/parts';
+import { AuthService } from '../../services/auth';
 import { debounceTime, Subject } from 'rxjs';
 
 @Component({
@@ -27,7 +28,8 @@ export class VehicleHistoryComponent implements OnInit {
   constructor(
     private partsService: PartsService,
     private route: ActivatedRoute,
-    public router: Router
+    public router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -86,5 +88,10 @@ export class VehicleHistoryComponent implements OnInit {
 
   search(): void {
     this.searchSubject.next(this.plate);
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

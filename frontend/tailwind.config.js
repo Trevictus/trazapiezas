@@ -6,9 +6,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Aquí hay que añadir los colores de Figma para tenerlos siempre a mano
-        'industrial-blue': '#007bff',
-        'safety-orange': '#ff8c00',
+        'industrial-blue': '#045dd1',
+        'safety-orange': '#d97707',
         'taller-green': '#28a745',
       }
     },

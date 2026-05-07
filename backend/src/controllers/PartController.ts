@@ -38,11 +38,11 @@ export class PartController {
     }
 
     static async create(req: Request, res: Response) {
-        const { reference, brand, category, description, purchasePrice } = req.body;
+        const { reference, brand, category, description, purchasePrice, stock } = req.body;
         const partRepository = AppDataSource.getRepository(Part);
         try {
             const part = new Part();
-            Object.assign(part, { reference, brand, category, description, purchasePrice, stock: 0 });
+            Object.assign(part, { reference, brand, category, description, purchasePrice, stock: stock || 0 });
             await partRepository.save(part);
             return res.status(201).json({ message: "Pieza creada", part });
         } catch (error) {

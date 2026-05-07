@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavigationComponent } from '../../components/navigation/navigation';
 import { PartsService } from '../../services/parts';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-parts-list',
@@ -21,7 +22,8 @@ export class PartsListComponent implements OnInit {
     private partsService: PartsService,
     public router: Router,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -80,5 +82,10 @@ export class PartsListComponent implements OnInit {
 
   clearFilter(): void {
     this.router.navigate(['/inventory']);
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
