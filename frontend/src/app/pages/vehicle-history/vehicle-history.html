@@ -50,6 +50,7 @@
               <div>
                 <h4 class="text-xs font-bold text-zinc-300 uppercase leading-tight">{{ mov.part.brand }} - {{ mov.part.reference }}</h4>
                 <p class="text-[10px] text-zinc-500 uppercase tracking-tighter">{{ mov.vehiclePlate || 'Ajuste Manual' }} • Cant: {{ mov.quantity }}</p>
+                <p class="text-[9px] font-black uppercase text-[#045dd1] mt-1">Operario: {{ mov.user?.username }}</p>
               </div>
             </div>
             <div class="text-right">
