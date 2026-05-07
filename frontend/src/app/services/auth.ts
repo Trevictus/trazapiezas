@@ -28,4 +28,16 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
   }
+
+  getUsers(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/users`);
+  }
+
+  registerUser(username: string, password: string, role: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, { username, password, role });
+  }
+
+  updateUserPassword(userId: number, newPassword: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/users/${userId}/password`, { password: newPassword });
+  }
 }

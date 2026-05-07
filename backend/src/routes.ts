@@ -8,7 +8,9 @@ const router = Router();
 
 // Auth
 router.post("/auth/login", AuthController.login);
-router.post("/auth/register", AuthController.register);
+router.post("/auth/register", checkToken, checkRole(["ADMIN"]), AuthController.register);
+router.get("/auth/users", checkToken, checkRole(["ADMIN"]), AuthController.getAllUsers);
+router.put("/auth/users/:id/password", checkToken, checkRole(["ADMIN"]), AuthController.updatePassword);
 
 // Parts
 router.get("/parts/stats", checkToken, PartController.getStats);

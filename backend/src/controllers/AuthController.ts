@@ -10,7 +10,7 @@ export class AuthController {
         const userRepository = AppDataSource.getRepository(User);
 
         try {
-            // Evitar mecánicos duplicados
+            // Evitar usuarios duplicados
             const existingUser = await userRepository.findOneBy({ username });
             if (existingUser) {
                 return res.status(400).json({ message: "El nombre de usuario ya existe" });
@@ -19,10 +19,10 @@ export class AuthController {
             const user = new User();
             user.username = username;
             user.password = password; 
-            user.role = role;
+            user.role = role || "MECHANIC";
 
             await userRepository.save(user);
-            return res.status(201).json({ message: "Usuario creado correctamente" });
+            return res.status(201).json({ message: "Usuario creado correctamente", user: { id: user.id, username: user.username, role: user.role } });
         } catch (error) {
             return res.status(500).json({ message: "Error al registrar usuario", error });
         }
@@ -48,6 +48,41 @@ export class AuthController {
             return res.json({ token, user: { id: user.id, username: user.username, role: user.role } });
         } catch (error) {
             return res.status(500).json({ message: "Error en el login", error });
+        }
+    }
+
+    static async getAllUsers(req: Request, res: Response) {
+        const userRepository = AppDataSource.getRepository(User);
+
+        try {
+            const users = await userRepository.find({
+                select: ["id", "username", "role"]
+            });
+            return res.json({ users });
+        } catch (error) {
+            return res.status(500).json({ message: "Error al obtener usuarios", error });
+        }
+    }
+
+    static async updatePassword(req: Request, res: Response) {
+        const id = String(req.params.id);
+        const { password } = req.body;
+        const userRepository = AppDataSource.getRepository(User);
+
+        try {
+            const userId = parseInt(id, 10);
+            const user = await userRepository.findOneBy({ id: userId });
+            if (!user) {
+                return res.status(404).json({ message: "Usuario no encontrado" });
+            }
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+            user.password = hashedPassword;
+            await userRepository.save(user);
+
+            return res.json({ message: "Contraseña actualizada correctamente" });
+        } catch (error) {
+            return res.status(500).json({ message: "Error al actualizar contraseña", error });
         }
     }
 }

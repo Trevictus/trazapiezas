@@ -36,6 +36,10 @@
       <button (click)="logout()" class="w-full bg-zinc-900 text-[#d97707] font-black py-4 rounded-2xl rounded-tl-none uppercase italic text-lg border border-zinc-800 hover:border-[#d97707]/30 transition-colors">
         Cerrar Sesión Segura
       </button>
+
+      <button *ngIf="user?.role === 'ADMIN'" (click)="router.navigate(['/staff'])" class="w-full bg-zinc-900 text-[#045dd1] font-black py-4 rounded-2xl rounded-tl-none uppercase italic text-lg border border-[#045dd1]/30 hover:border-[#045dd1]/60 transition-colors">
+        + Gestionar Personal
+      </button>
     </div>
   </div>
 

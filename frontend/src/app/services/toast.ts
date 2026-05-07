@@ -36,6 +36,10 @@ export class ToastService {
     this.show(message, 'info', duration);
   }
 
+  showToast(message: string, type: 'success' | 'error' | 'info' = 'info', duration: number = 3000): void {
+    this.show(message, type, duration);
+  }
+
   remove(id: string): void {
     this.toasts.update(toasts => toasts.filter(t => t.id !== id));
   }

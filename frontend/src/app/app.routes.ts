@@ -6,6 +6,7 @@ import { AddPartComponent } from './pages/add-part/add-part';
 import { VehicleHistoryComponent } from './pages/vehicle-history/vehicle-history';
 import { RegisterMovementComponent } from './pages/register-movement/register-movement';
 import { ProfileComponent } from './pages/profile/profile';
+import { StaffManagementComponent } from './pages/staff-management/staff-management';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'inventory', component: PartsListComponent, canActivate: [authGuard] },
   { path: 'history', component: VehicleHistoryComponent, canActivate: [authGuard] },
   { path: 'register-movement/:id', component: RegisterMovementComponent, canActivate: [authGuard] },
-  { path: 'profile', component: ProfileComponent, canActivate: [authGuard] }
+  { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
+  { path: 'staff', component: StaffManagementComponent, canActivate: [authGuard] }
 ];

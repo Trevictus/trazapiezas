@@ -7,11 +7,11 @@ import { ToastService } from '../../services/toast';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="fixed bottom-6 right-6 z-50 space-y-3">
+    <div class="fixed top-6 right-6 z-50 space-y-3">
       @for (toast of toastService.toasts(); track toast.id) {
         <div 
           [ngClass]="getToastClasses(toast.type)"
-          class="flex items-center gap-3 px-5 py-4 rounded-xl border backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4 duration-300"
+          class="flex items-center gap-3 px-5 py-4 rounded-xl border backdrop-blur-sm animate-in fade-in slide-in-from-top-4 duration-300"
         >
           <div [ngClass]="getIconClasses(toast.type)">
             @if (toast.type === 'success') {
@@ -36,9 +36,9 @@ import { ToastService } from '../../services/toast';
     </div>
   `,
   styles: [`
-    @keyframes slide-in-from-bottom-4 {
+    @keyframes slide-in-from-top-4 {
       from {
-        transform: translateY(16px);
+        transform: translateY(-16px);
       }
       to {
         transform: translateY(0);
@@ -53,7 +53,7 @@ import { ToastService } from '../../services/toast';
       }
     }
     .animate-in {
-      animation: slide-in-from-bottom-4 0.3s ease-out, fade-in 0.3s ease-out;
+      animation: slide-in-from-top-4 0.3s ease-out, fade-in 0.3s ease-out;
     }
   `]
 })
@@ -81,7 +81,7 @@ export class ToastComponent {
       case 'error':
         return 'text-red-400 flex-shrink-0';
       case 'info':
-        return 'text-sky-400 flex-shrink-0';
+        return 'text-[#045dd1] flex-shrink-0';
       default:
         return 'text-zinc-400 flex-shrink-0';
     }

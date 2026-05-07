@@ -1,0 +1,127 @@
+<header class="flex justify-between items-center p-6 border-b border-zinc-800 bg-zinc-950 sticky top-0 z-40">
+  <button (click)="router.navigate(['/dashboard'])" class="cursor-pointer">
+    <img src="/assets/logo0.2-trans.png" alt="TRAZAPIEZAS" class="h-8">
+  </button>
+  <div class="flex gap-3 items-center">
+    <button (click)="router.navigate(['/profile'])" class="text-zinc-400 cursor-pointer hover:opacity-80">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+    </button>
+    <button (click)="logout()" class="text-[#d97707] cursor-pointer hover:opacity-80">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+      </svg>
+    </button>
+  </div>
+</header>
+
+<div class="min-h-screen bg-zinc-950 text-white p-6 pb-24">
+  <div class="max-w-5xl mx-auto space-y-8">
+    <!-- NUEVO OPERARIO -->
+    <section class="bg-zinc-900 rounded-2xl p-8 border border-zinc-800">
+      <h2 class="text-2xl font-black italic uppercase mb-6 text-[#045dd1]">NUEVO OPERARIO</h2>
+      <form (ngSubmit)="createUser()" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold mb-2">Username</label>
+          <input
+            type="text"
+            [(ngModel)]="newUser.username"
+            name="username"
+            placeholder="Nombre de usuario"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg rounded-tl-none px-4 py-3 text-white outline-none focus:border-[#045dd1]"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-2">Contraseña</label>
+          <input
+            type="password"
+            [(ngModel)]="newUser.password"
+            name="password"
+            placeholder="Contraseña inicial"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg rounded-tl-none px-4 py-3 text-white outline-none focus:border-[#045dd1]"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-2">Rol</label>
+          <select
+            [(ngModel)]="newUser.role"
+            name="role"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg rounded-tl-none px-4 py-3 text-white outline-none focus:border-[#045dd1]"
+          >
+            <option value="MECHANIC">MECHANIC</option>
+            <option value="ADMIN">ADMIN</option>
+          </select>
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-[#045dd1] hover:bg-[#0355b0] text-white font-bold py-3 rounded-xl rounded-tl-none transition"
+        >
+          + CREAR OPERARIO
+        </button>
+      </form>
+    </section>
+
+    <!-- PLANTILLA -->
+    <section>
+      <h2 class="text-2xl font-black italic uppercase mb-6 text-[#045dd1]">PLANTILLA</h2>
+      
+      <div *ngIf="loading" class="text-center text-zinc-400">Cargando usuarios...</div>
+
+      <div *ngIf="!loading && users.length === 0" class="text-center text-zinc-400">
+        No hay operarios registrados
+      </div>
+
+      <div *ngIf="!loading && users.length > 0" class="grid gap-4">
+        <div
+          *ngFor="let user of users"
+          class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 flex items-center justify-between"
+        >
+          <div class="flex items-center gap-4 flex-1">
+            <div class="w-12 h-12 bg-[#045dd1] rounded-full flex items-center justify-center font-black text-white">
+              {{ user.username.substring(0, 2).toUpperCase() }}
+            </div>
+            <div>
+              <p class="font-semibold text-white">{{ user.username }}</p>
+              <p class="text-xs text-zinc-400 font-mono">ID: {{ user.id }}</p>
+              <p class="text-xs text-[#045dd1]">{{ user.role }}</p>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <button
+              *ngIf="editingPassword.userId !== user.id"
+              (click)="startEditPassword(user.id)"
+              class="px-4 py-2 bg-[#045dd1] hover:bg-[#0355b0] text-white rounded-lg rounded-tl-none text-sm font-bold transition"
+            >
+              CAMBIAR CLAVE
+            </button>
+
+            <div *ngIf="editingPassword.userId === user.id" class="flex gap-2">
+              <input
+                type="password"
+                [(ngModel)]="editingPassword.newPassword"
+                placeholder="Nueva clave"
+                class="bg-zinc-800 border border-zinc-700 rounded-lg rounded-tl-none px-3 py-2 text-white text-sm outline-none focus:border-[#045dd1]"
+              />
+              <button
+                (click)="updatePassword()"
+                class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg rounded-tl-none text-sm font-bold transition"
+              >
+                OK
+              </button>
+              <button
+                (click)="cancelEditPassword()"
+                class="px-3 py-2 bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg rounded-tl-none text-sm font-bold transition"
+              >
+                X
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<app-navigation></app-navigation>
