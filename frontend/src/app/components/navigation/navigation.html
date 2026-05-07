@@ -36,12 +36,14 @@
     </button>
 
     <!-- Perfil -->
-    <button class="flex flex-col items-center gap-1 px-4 py-1 rounded-lg">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-400">
+    <button (click)="router.navigate(['/profile'])" 
+      [class.bg-zinc-800]="router.url === '/profile'"
+      class="flex flex-col items-center gap-1 px-4 py-1 rounded-lg transition-colors">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-400" [class.text-white]="router.url === '/profile'">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
         <circle cx="12" cy="7" r="4" />
       </svg>
-      <span class="text-[10px] font-bold uppercase tracking-tighter text-zinc-400">Perfil</span>
+      <span class="text-[10px] font-bold uppercase tracking-tighter text-zinc-400" [class.text-white]="router.url === '/profile'">Perfil</span>
     </button>
   </div>
 </div>

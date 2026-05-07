@@ -45,7 +45,7 @@ export class AuthController {
                 { expiresIn: "24h" }
             );
 
-            return res.json({ token, role: user.role });
+            return res.json({ token, user: { id: user.id, username: user.username, role: user.role } });
         } catch (error) {
             return res.status(500).json({ message: "Error en el login", error });
         }
