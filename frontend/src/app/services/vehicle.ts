@@ -1,33 +1,45 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 export interface Vehicle {
   plate: string;
   brand: string;
   model: string;
-  color?: string; // Opcional para evitar errores de tipado
+  vin?: string;
+  engineCode?: string;
+  year?: number;
+  color?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class VehicleService {
-  private mockedVehicles: Vehicle[] = [
-    { plate: '1234ABC', brand: 'AUDI', model: 'A3' }
-  ];
+  private apiUrl = 'http://localhost:3000/api';
+
+  constructor(private http: HttpClient) {}
 
   checkVehicleInTallerGP(plate: string): Observable<Vehicle> {
-    const vehicle = this.mockedVehicles.find(v => v.plate === plate.toUpperCase());
-    return vehicle ? of(vehicle) : throwError(() => new Error('NOT_FOUND'));
+    return this.http.get<Vehicle>(`${this.apiUrl}/external/vehicle/${plate.toUpperCase()}`).pipe(
+      catchError(error => {
+        console.error('Error checking vehicle in TallerGP:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   registerQuickVehicle(plate: string): Observable<Vehicle> {
     const newVehicle: Vehicle = { 
       plate: plate.toUpperCase(), 
       brand: 'GENERIC', 
-      model: 'NUEVO' 
+      model: 'NUEVO',
+      year: new Date().getFullYear()
     };
-    this.mockedVehicles.push(newVehicle);
-    return of(newVehicle);
+    return new Observable(observer => {
+      observer.next(newVehicle);
+      observer.complete();
+    });
   }
 }

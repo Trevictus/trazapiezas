@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Movement = void 0;
 const typeorm_1 = require("typeorm");
 const Part_1 = require("./Part");
+const User_1 = require("./User");
 let Movement = class Movement {
 };
 exports.Movement = Movement;
@@ -20,11 +21,20 @@ __decorate([
     __metadata("design:type", Number)
 ], Movement.prototype, "id", void 0);
 __decorate([
+    (0, typeorm_1.ManyToOne)(() => Part_1.Part, (part) => part.movements),
+    __metadata("design:type", Part_1.Part)
+], Movement.prototype, "part", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => User_1.User) // relación para saber quién hizo el movimiento
+    ,
+    __metadata("design:type", User_1.User)
+], Movement.prototype, "user", void 0);
+__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Movement.prototype, "quantity", void 0);
 __decorate([
-    (0, typeorm_1.Column)("decimal", { precision: 10, scale: 2 }),
+    (0, typeorm_1.Column)({ type: "decimal", precision: 10, scale: 2, nullable: true }),
     __metadata("design:type", Number)
 ], Movement.prototype, "purchasePrice", void 0);
 __decorate([
@@ -32,21 +42,22 @@ __decorate([
     __metadata("design:type", String)
 ], Movement.prototype, "vehiclePlate", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        type: "enum",
-        enum: ["PENDING", "USED", "STOCK", "RETURNED"],
-        default: "STOCK"
-    }),
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], Movement.prototype, "vin", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], Movement.prototype, "engineCode", void 0);
+__decorate([
+    (0, typeorm_1.Column)() // STOCK (Entrada) o USED (Salida/Instalación)
+    ,
     __metadata("design:type", String)
 ], Movement.prototype, "status", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], Movement.prototype, "createdAt", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => Part_1.Part, (part) => part.movements),
-    __metadata("design:type", Part_1.Part)
-], Movement.prototype, "part", void 0);
 exports.Movement = Movement = __decorate([
-    (0, typeorm_1.Entity)("movements")
+    (0, typeorm_1.Entity)()
 ], Movement);

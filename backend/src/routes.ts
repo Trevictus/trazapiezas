@@ -25,4 +25,7 @@ router.get("/movements/latest", checkToken, MovementController.getLatest);
 router.post("/movements", checkToken, MovementController.create);
 router.get("/movements/vehicle/:plate", checkToken, MovementController.getByPlate);
 
+// External APIs
+router.get("/external/vehicle/:plate", checkToken, MovementController.getVehicleFromTallerGP);
+
 export default router;

@@ -23,6 +23,7 @@ export class RegisterMovementComponent implements OnInit {
   
   vehicleData: Vehicle | null = null;
   showNotFoundWarning: boolean = false;
+  isSearching: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -70,10 +71,17 @@ export class RegisterMovementComponent implements OnInit {
 
     this.showNotFoundWarning = false;
     this.vehicleData = null;
+    this.isSearching = true;
 
     this.vehicleService.checkVehicleInTallerGP(this.plate).subscribe({
-      next: (data: Vehicle) => this.vehicleData = data,
-      error: () => this.showNotFoundWarning = true
+      next: (data: Vehicle) => {
+        this.vehicleData = data;
+        this.isSearching = false;
+      },
+      error: () => {
+        this.showNotFoundWarning = true;
+        this.isSearching = false;
+      }
     });
   }
 
@@ -96,7 +104,9 @@ export class RegisterMovementComponent implements OnInit {
       quantity: this.quantity,
       vehiclePlate: this.plate.toUpperCase(),
       status: 'USED',
-      userId: this.currentUser?.id
+      userId: this.currentUser?.id,
+      vin: this.vehicleData?.vin || null,
+      engineCode: this.vehicleData?.engineCode || null
     };
 
     this.partsService.createMovement(payload).subscribe({

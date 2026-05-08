@@ -22,6 +22,12 @@ export class Movement {
     @Column({ nullable: true })
     vehiclePlate: string;
 
+    @Column({ nullable: true })
+    vin: string;
+
+    @Column({ nullable: true })
+    engineCode: string;
+
     @Column() // STOCK (Entrada) o USED (Salida/Instalación)
     status: string;
 
