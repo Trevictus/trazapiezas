@@ -34,7 +34,15 @@
     <!-- Resultados (Estilo "Últimos Movimientos") -->
     <div class="space-y-4">
       @if (searched || allMovements.length > 0) {
-        <h3 class="text-xl font-black text-white uppercase italic">{{ searched ? 'Resultados' : 'Todos los Movimientos' }}</h3>
+        <div class="flex justify-between items-center">
+          <h3 class="text-xl font-black text-white uppercase italic">{{ searched ? 'Resultados' : 'Todos los Movimientos' }}</h3>
+          @if (movements.length > 0) {
+            <button (click)="exportToPDF()" class="bg-[#045dd1] text-white font-black px-4 py-2 rounded-lg rounded-tl-none uppercase italic text-sm flex items-center gap-2 hover:opacity-90 transition-opacity">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Exportar PDF
+            </button>
+          }
+        </div>
       }
       
       <div class="space-y-3">
