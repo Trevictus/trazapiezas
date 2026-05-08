@@ -121,38 +121,35 @@ export class VehicleHistoryComponent implements OnInit {
     const pageHeight = doc.internal.pageSize.getHeight();
     let yPosition = 15;
 
-    doc.setFillColor(9, 9, 11);
+    doc.setFillColor(255, 255, 255);
     doc.rect(0, 0, pageWidth, pageHeight, 'F');
 
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(24);
-    doc.setFont('helvetica', 'bold');
-    doc.text('TRAZAPIEZAS', 20, yPosition);
+    doc.addImage('/assets/logo0.2-trans.png', 'PNG', 10, 8, 30, 15);
 
     doc.setFontSize(10);
-    doc.setTextColor(200, 200, 200);
+    doc.setTextColor(80, 80, 80);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Informe de Trazabilidad - ${new Date().toLocaleDateString('es-ES')}`, 20, yPosition + 8);
-    doc.text('CAZAPIEZAS S.L.', 20, yPosition + 13);
+    doc.text(`Informe de Trazabilidad - ${new Date().toLocaleDateString('es-ES')}`, 45, yPosition);
+    doc.text('CAZAPIEZAS S.L.', 45, yPosition + 5);
 
     doc.setDrawColor(4, 93, 209);
     doc.setLineWidth(0.5);
-    doc.line(20, yPosition + 17, pageWidth - 20, yPosition + 17);
+    doc.line(10, yPosition + 20, pageWidth - 10, yPosition + 20);
 
     yPosition += 25;
 
-    doc.setFillColor(20, 20, 20);
-    doc.rect(20, yPosition, pageWidth - 40, 35, 'F');
+    doc.setFillColor(240, 240, 240);
+    doc.rect(10, yPosition, pageWidth - 20, 35, 'F');
     doc.setDrawColor(4, 93, 209);
-    doc.rect(20, yPosition, pageWidth - 40, 35);
+    doc.rect(10, yPosition, pageWidth - 20, 35);
 
     doc.setFontSize(10);
     doc.setTextColor(4, 93, 209);
     doc.setFont('helvetica', 'bold');
-    doc.text('FICHA TÉCNICA', 25, yPosition + 6);
+    doc.text('FICHA TÉCNICA', 15, yPosition + 6);
 
     doc.setFontSize(9);
-    doc.setTextColor(200, 200, 200);
+    doc.setTextColor(0, 0, 0);
     doc.setFont('helvetica', 'normal');
 
     const vehicleDataText = [
@@ -163,7 +160,7 @@ export class VehicleHistoryComponent implements OnInit {
     let dataY = yPosition + 12;
     vehicleDataText.forEach(row => {
       row.forEach((text, index) => {
-        doc.text(text, 25 + (index * 60), dataY);
+        doc.text(text, 15 + (index * 80), dataY);
       });
       dataY += 6;
     });
@@ -173,14 +170,14 @@ export class VehicleHistoryComponent implements OnInit {
     doc.setFontSize(11);
     doc.setTextColor(4, 93, 209);
     doc.setFont('helvetica', 'bold');
-    doc.text('MOVIMIENTOS DEL VEHÍCULO', 20, yPosition);
+    doc.text('MOVIMIENTOS DEL VEHÍCULO', 10, yPosition);
 
     yPosition += 8;
 
     const tableData = this.movements.map(mov => [
       new Date(mov.createdAt).toLocaleDateString('es-ES'),
       mov.user?.username || 'Sistema',
-      `${mov.part.brand} - ${mov.part.reference}`,
+      `${mov.part.brand} - ${mov.part.reference} (${mov.part.description || 'S/D'})`,
       mov.quantity.toString(),
       mov.status === 'STOCK' ? 'ENTRADA' : 'SALIDA'
     ]);
@@ -198,22 +195,22 @@ export class VehicleHistoryComponent implements OnInit {
         cellPadding: 3
       },
       bodyStyles: {
-        fillColor: [25, 25, 25],
-        textColor: [200, 200, 200],
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
         fontSize: 8,
         cellPadding: 3
       },
       alternateRowStyles: {
-        fillColor: [35, 35, 35]
+        fillColor: [245, 245, 245]
       },
       columnStyles: {
         0: { cellWidth: 25 },
         1: { cellWidth: 30 },
-        2: { cellWidth: 70 },
+        2: { cellWidth: 85 },
         3: { cellWidth: 20, halign: 'center' },
         4: { cellWidth: 25, halign: 'center' }
       },
-      margin: { left: 20, right: 20 },
+      margin: { left: 10, right: 10 },
       didDrawPage: (data) => {
         const pageSize = doc.internal.pageSize;
         const pageHeight = pageSize.getHeight();
@@ -221,14 +218,14 @@ export class VehicleHistoryComponent implements OnInit {
         
         doc.setDrawColor(4, 93, 209);
         doc.setLineWidth(0.5);
-        doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+        doc.rect(8, 35, pageWidth - 16, pageHeight - 45);
 
         doc.setFontSize(7);
-        doc.setTextColor(100, 100, 100);
+        doc.setTextColor(120, 120, 120);
         doc.text(
           `TRAZAPIEZAS © 2026 | Página ${data.pageNumber}`,
           pageWidth / 2,
-          pageHeight - 8,
+          pageHeight - 5,
           { align: 'center' }
         );
       }

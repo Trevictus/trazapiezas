@@ -33,9 +33,9 @@ export class VehicleService {
   registerQuickVehicle(plate: string): Observable<Vehicle> {
     const newVehicle: Vehicle = { 
       plate: plate.toUpperCase(), 
-      brand: 'GENERIC', 
-      model: 'NUEVO',
-      year: new Date().getFullYear()
+      brand: 'S/D', 
+      model: 'IDENTIFICACIÓN MANUAL',
+      year: undefined
     };
     return new Observable(observer => {
       observer.next(newVehicle);

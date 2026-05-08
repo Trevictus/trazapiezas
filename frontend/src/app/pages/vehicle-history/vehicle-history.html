@@ -20,12 +20,12 @@
     <section class="space-y-3">
       <h3 class="text-lg font-black text-white uppercase italic">Matrícula</h3>
       <div class="flex gap-2">
-        <div class="flex-1 bg-[#1a1a1a] rounded-xl flex items-center px-4 border border-zinc-800">
+        <div class="flex-1 bg-[#1a1a1a] rounded-xl rounded-tl-none flex items-center px-4 border border-zinc-800">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-500 mr-3">
             <path d="M3 9c0-1 1-2 2-2h3l2-5h2l2 5h3c1 0 2 1 2 2v8c0 1-1 2-2 2H5c-1 0-2-1-2-2V9z"/><circle cx="12" cy="14" r="1.5" fill="currentColor"/>
           </svg>
           <input type="text" [(ngModel)]="plate" (keyup)="onPlateChange(plate)" (keyup.enter)="search()" placeholder="1234 ABC" 
-            class="bg-transparent border-none outline-none text-white font-bold w-full uppercase py-4">
+            class="bg-transparent border-none outline-none text-white font-bold w-full uppercase py-4 rounded-tl-none">
         </div>
         <button (click)="search()" class="bg-[#045dd1] text-white font-black px-8 py-4 rounded-xl rounded-tl-none uppercase italic">Buscar</button>
       </div>

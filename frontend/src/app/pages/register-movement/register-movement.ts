@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,7 +31,8 @@ export class RegisterMovementComponent implements OnInit {
     private vehicleService: VehicleService,
     private partsService: PartsService,
     private authService: AuthService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -77,19 +78,27 @@ export class RegisterMovementComponent implements OnInit {
       next: (data: Vehicle) => {
         this.vehicleData = data;
         this.isSearching = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.showNotFoundWarning = true;
         this.isSearching = false;
+        this.cdr.detectChanges();
       }
     });
   }
 
   quickRegister(): void {
-    this.vehicleService.registerQuickVehicle(this.plate).subscribe((newV: Vehicle) => {
-      this.vehicleData = newV;
-      this.showNotFoundWarning = false;
-      this.toastService.success('Vehículo registrado correctamente');
+    this.vehicleService.registerQuickVehicle(this.plate).subscribe({
+      next: (newV: Vehicle) => {
+        this.vehicleData = newV;
+        this.showNotFoundWarning = false;
+        this.toastService.success('Vehículo registrado correctamente');
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.cdr.detectChanges();
+      }
     });
   }
 
