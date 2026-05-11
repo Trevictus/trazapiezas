@@ -124,7 +124,7 @@ export class VehicleHistoryComponent implements OnInit {
     doc.setFillColor(255, 255, 255);
     doc.rect(0, 0, pageWidth, pageHeight, 'F');
 
-    doc.addImage('/assets/logo0.2-trans.png', 'PNG', 10, 8, 30, 15);
+    doc.addImage('/assets/LOGO-TRAZAPIEZAS-DEFINITIVO.png', 'PNG', 10, 8, 30, 15);
 
     doc.setFontSize(10);
     doc.setTextColor(80, 80, 80);

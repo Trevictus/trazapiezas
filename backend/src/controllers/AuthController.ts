@@ -80,9 +80,32 @@ export class AuthController {
             user.password = hashedPassword;
             await userRepository.save(user);
 
-            return res.json({ message: "Contraseña actualizada correctamente" });
+            return res.status(200).json({ message: "Updated" });
         } catch (error) {
             return res.status(500).json({ message: "Error al actualizar contraseña", error });
+        }
+    }
+
+    static async deleteUser(req: Request, res: Response) {
+        const id = String(req.params.id);
+        const userRepository = AppDataSource.getRepository(User);
+
+        try {
+            const userId = parseInt(id, 10);
+            const adminUserId = (req as any).user?.userId;
+            if (adminUserId === userId) {
+                return res.status(403).json({ message: "No puedes eliminar tu propia cuenta" });
+            }
+
+            const user = await userRepository.findOneBy({ id: userId });
+            if (!user) {
+                return res.status(404).json({ message: "Usuario no encontrado" });
+            }
+
+            await userRepository.remove(user);
+            return res.status(200).json({ message: "Success" });
+        } catch (error) {
+            return res.status(500).json({ message: "Error al eliminar usuario", error });
         }
     }
 }

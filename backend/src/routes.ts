@@ -11,6 +11,7 @@ router.post("/auth/login", AuthController.login);
 router.post("/auth/register", checkToken, checkRole(["ADMIN"]), AuthController.register);
 router.get("/auth/users", checkToken, checkRole(["ADMIN"]), AuthController.getAllUsers);
 router.put("/auth/users/:id/password", checkToken, checkRole(["ADMIN"]), AuthController.updatePassword);
+router.delete("/auth/users/:id", checkToken, checkRole(["ADMIN"]), AuthController.deleteUser);
 
 // Parts
 router.get("/parts/stats", checkToken, PartController.getStats);

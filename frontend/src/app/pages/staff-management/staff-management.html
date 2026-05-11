@@ -1,6 +1,6 @@
 <header class="flex justify-between items-center p-6 border-b border-zinc-800 bg-zinc-950 sticky top-0 z-40">
   <button (click)="router.navigate(['/dashboard'])" class="cursor-pointer">
-    <img src="/assets/logo0.2-trans.png" alt="TRAZAPIEZAS" class="h-8">
+    <img src="/assets/LOGO-TRAZAPIEZAS-DEFINITIVO.png" alt="TRAZAPIEZAS" class="h-8">
   </button>
   <div class="flex gap-3 items-center">
     <button (click)="router.navigate(['/profile'])" class="text-zinc-400 cursor-pointer hover:opacity-80">
@@ -66,15 +66,42 @@
     <section>
       <h2 class="text-2xl font-black italic uppercase mb-6 text-[#045dd1]">PLANTILLA</h2>
       
+      <div class="flex gap-2 mb-6 flex-wrap">
+        <button
+          (click)="filterRole = null"
+          [class.bg-[#045dd1]]="filterRole === null"
+          [class.bg-zinc-800]="filterRole !== null"
+          class="px-4 py-2 font-bold text-white rounded-lg rounded-tl-none text-sm transition hover:opacity-90"
+        >
+          ALL
+        </button>
+        <button
+          (click)="filterRole = 'ADMIN'"
+          [class.bg-[#045dd1]]="filterRole === 'ADMIN'"
+          [class.bg-zinc-800]="filterRole !== 'ADMIN'"
+          class="px-4 py-2 font-bold text-white rounded-lg rounded-tl-none text-sm transition hover:opacity-90"
+        >
+          ADMINS
+        </button>
+        <button
+          (click)="filterRole = 'MECHANIC'"
+          [class.bg-[#045dd1]]="filterRole === 'MECHANIC'"
+          [class.bg-zinc-800]="filterRole !== 'MECHANIC'"
+          class="px-4 py-2 font-bold text-white rounded-lg rounded-tl-none text-sm transition hover:opacity-90"
+        >
+          MECHANICS
+        </button>
+      </div>
+      
       <div *ngIf="loading" class="text-center text-zinc-400">Cargando usuarios...</div>
 
-      <div *ngIf="!loading && users.length === 0" class="text-center text-zinc-400">
+      <div *ngIf="!loading && filteredUsers.length === 0" class="text-center text-zinc-400">
         No hay operarios registrados
       </div>
 
-      <div *ngIf="!loading && users.length > 0" class="grid gap-4">
+      <div *ngIf="!loading && filteredUsers.length > 0" class="grid gap-4">
         <div
-          *ngFor="let user of users"
+          *ngFor="let user of filteredUsers"
           class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 flex items-center justify-between"
         >
           <div class="flex items-center gap-4 flex-1">
@@ -88,34 +115,62 @@
             </div>
           </div>
 
-          <div class="flex gap-2">
+          <div class="flex flex-col gap-2 flex-shrink-0">
             <button
-              *ngIf="editingPassword.userId !== user.id"
+              *ngIf="editingPassword.userId !== user.id && !deletingUser.confirming"
               (click)="startEditPassword(user.id)"
-              class="px-4 py-2 bg-[#045dd1] hover:bg-[#0355b0] text-white rounded-lg rounded-tl-none text-sm font-bold transition"
+              class="flex-1 min-w-max px-4 py-2 bg-[#045dd1] hover:bg-[#0355b0] text-white rounded-lg rounded-tl-none text-sm font-bold font-mono transition"
             >
               CAMBIAR CLAVE
             </button>
 
-            <div *ngIf="editingPassword.userId === user.id" class="flex gap-2">
+            <button
+              *ngIf="editingPassword.userId !== user.id && !deletingUser.confirming && currentUserId !== user.id"
+              (click)="startDeleteUser(user.id)"
+              class="flex-1 min-w-max px-4 py-2 bg-zinc-700 hover:bg-red-700/50 text-red-500 hover:text-red-400 rounded-lg rounded-tl-none text-sm font-bold font-mono transition border border-zinc-600 hover:border-red-600"
+            >
+              ELIMINAR
+            </button>
+
+            <div *ngIf="editingPassword.userId === user.id" class="flex flex-col gap-2 flex-shrink-0 w-full">
               <input
                 type="password"
                 [(ngModel)]="editingPassword.newPassword"
                 placeholder="Nueva clave"
-                class="bg-zinc-800 border border-zinc-700 rounded-lg rounded-tl-none px-3 py-2 text-white text-sm outline-none focus:border-[#045dd1]"
+                class="w-full bg-zinc-800 border border-zinc-700 rounded-lg rounded-tl-none px-3 py-2 text-white text-sm outline-none focus:border-[#045dd1] font-mono"
               />
-              <button
-                (click)="updatePassword()"
-                class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg rounded-tl-none text-sm font-bold transition"
-              >
-                OK
-              </button>
-              <button
-                (click)="cancelEditPassword()"
-                class="px-3 py-2 bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg rounded-tl-none text-sm font-bold transition"
-              >
-                X
-              </button>
+              <div class="flex gap-2">
+                <button
+                  (click)="updatePassword()"
+                  class="flex-1 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg rounded-tl-none text-sm font-bold font-mono transition"
+                >
+                  OK
+                </button>
+                <button
+                  (click)="cancelEditPassword()"
+                  class="flex-1 px-3 py-2 bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg rounded-tl-none text-sm font-bold font-mono transition"
+                >
+                  X
+                </button>
+              </div>
+            </div>
+
+            <div *ngIf="deletingUser.confirming && deletingUser.userId === user.id" class="flex flex-col gap-2 flex-shrink-0 w-full">
+              <span class="text-xs text-red-500 font-mono">¿Confirmar eliminación?</span>
+              <div class="flex gap-2">
+                <button
+                  (click)="confirmDeleteUser()"
+                  class="flex-1 px-3 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg rounded-tl-none text-sm font-bold font-mono transition"
+                >
+                  SÍ
+                </button>
+                <button
+                  (click)="cancelDeleteUser()"
+                  class="flex-1 px-3 py-2 bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg rounded-tl-none text-sm font-bold font-mono transition"
+                >
+                  NO
+                </button>
+              </div>
             </div>
           </div>
         </div>

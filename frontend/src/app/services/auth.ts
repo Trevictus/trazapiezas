@@ -40,4 +40,8 @@ export class AuthService {
   updateUserPassword(userId: number, newPassword: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/users/${userId}/password`, { password: newPassword });
   }
+
+  deleteUser(userId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/users/${userId}`);
+  }
 }

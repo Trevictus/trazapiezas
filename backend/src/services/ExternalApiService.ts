@@ -36,15 +36,25 @@ export class ExternalApiService {
   private static readonly TALLERGP_API_BASE = "https://api.tallergp.com/v1";
   private static readonly TALLERGP_API_KEY = process.env.TALLERGP_API_KEY || "";
 
+  private static cleanPlate(plate: string): string {
+    const cleaned = plate.toUpperCase().trim();
+    const match = cleaned.match(/^(\d+)([A-Z]+)$/);
+    if (match) {
+      return `${match[1]}-${match[2]}`;
+    }
+    return cleaned;
+  }
+
   static async getVehicleByPlate(plate: string): Promise<ExternalVehicleData> {
-    const normalizedPlate = plate.toUpperCase().trim();
+    const normalizedPlate = this.cleanPlate(plate);
     
     if (this.TALLERGP_API_KEY) {
       return this.fetchFromRealAPI(normalizedPlate);
     }
     
-    if (MOCK_VEHICLES[normalizedPlate]) {
-      return Promise.resolve(MOCK_VEHICLES[normalizedPlate]);
+    const mockKey = normalizedPlate.replace("-", "");
+    if (MOCK_VEHICLES[mockKey]) {
+      return Promise.resolve(MOCK_VEHICLES[mockKey]);
     }
 
     return Promise.reject(

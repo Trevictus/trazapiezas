@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -17,6 +17,11 @@ interface EditingPassword {
   newPassword: string;
 }
 
+interface DeletingUser {
+  userId: number | null;
+  confirming: boolean;
+}
+
 @Component({
   selector: 'app-staff-management',
   standalone: true,
@@ -28,6 +33,9 @@ export class StaffManagementComponent implements OnInit {
   users: User[] = [];
   loading = false;
   editingPassword: EditingPassword = { userId: null, newPassword: '' };
+  deletingUser: DeletingUser = { userId: null, confirming: false };
+  currentUserId: number | null = null;
+  filterRole: string | null = null;
 
   newUser = {
     username: '',
@@ -38,8 +46,16 @@ export class StaffManagementComponent implements OnInit {
   constructor(
     public router: Router,
     private authService: AuthService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private cdr: ChangeDetectorRef
   ) {}
+
+  get filteredUsers(): User[] {
+    if (this.filterRole === null) {
+      return this.users;
+    }
+    return this.users.filter(u => u.role === this.filterRole);
+  }
 
   ngOnInit(): void {
     const token = localStorage.getItem('token');
@@ -47,6 +63,8 @@ export class StaffManagementComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
+    const user = this.authService.getCurrentUser();
+    this.currentUserId = user?.id || null;
     this.loadUsers();
   }
 
@@ -99,11 +117,38 @@ export class StaffManagementComponent implements OnInit {
     if (this.editingPassword.userId !== null) {
       this.authService.updateUserPassword(this.editingPassword.userId, this.editingPassword.newPassword).subscribe({
         next: () => {
-          this.toastService.showToast('Contraseña actualizada', 'success');
           this.editingPassword = { userId: null, newPassword: '' };
+          this.cdr.detectChanges();
+          this.toastService.showToast('Contraseña actualizada', 'success');
         },
-        error: () => {
-          this.toastService.showToast('Error al actualizar contraseña', 'error');
+        error: (err) => {
+          this.editingPassword = { userId: null, newPassword: '' };
+          this.cdr.detectChanges();
+          this.toastService.showToast(err.error?.message || 'Error al actualizar contraseña', 'error');
+        }
+      });
+    }
+  }
+
+  startDeleteUser(userId: number): void {
+    this.deletingUser = { userId, confirming: true };
+  }
+
+  cancelDeleteUser(): void {
+    this.deletingUser = { userId: null, confirming: false };
+  }
+
+  confirmDeleteUser(): void {
+    if (this.deletingUser.userId !== null) {
+      this.authService.deleteUser(this.deletingUser.userId).subscribe({
+        next: () => {
+          this.toastService.showToast('Operario eliminado', 'success');
+          this.deletingUser = { userId: null, confirming: false };
+          this.loadUsers();
+        },
+        error: (err) => {
+          this.toastService.showToast(err.error?.message || 'Error al eliminar operario', 'error');
+          this.deletingUser = { userId: null, confirming: false };
         }
       });
     }
