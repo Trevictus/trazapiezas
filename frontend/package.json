@@ -20,6 +20,7 @@
     "@angular/service-worker": "^21.2.11",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.7",
+    "qrcode": "^1.5.4",
     "rxjs": "~7.8.0",
     "tailwindcss": "3.4",
     "tslib": "^2.3.0"
@@ -28,6 +29,7 @@
     "@angular/build": "^21.2.8",
     "@angular/cli": "^21.2.8",
     "@angular/compiler-cli": "^21.2.0",
+    "@types/qrcode": "^1.5.6",
     "autoprefixer": "^10.5.0",
     "jsdom": "^28.0.0",
     "postcss": "^8.5.13",
