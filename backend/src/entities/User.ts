@@ -19,6 +19,9 @@ export class User {
     })
     role!: string;
 
+    @Column({ default: true })
+    isActive!: boolean;
+
     // Esto se ejecuta justo antes de guardar en la DB
     @BeforeInsert()
     async hashPassword() {

@@ -66,6 +66,8 @@ class AuthController {
             const user = await userRepository.findOneBy({ username });
             if (!user)
                 return res.status(404).json({ message: "Usuario no encontrado" });
+            if (!user.isActive)
+                return res.status(403).json({ message: "Cuenta desactivada. Contacte con el administrador." });
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid)
                 return res.status(401).json({ message: "Contraseña incorrecta" });
@@ -80,7 +82,7 @@ class AuthController {
         const userRepository = data_source_1.AppDataSource.getRepository(User_1.User);
         try {
             const users = await userRepository.find({
-                select: ["id", "username", "role"]
+                select: ["id", "username", "role", "isActive"]
             });
             return res.json({ users });
         }
@@ -101,10 +103,51 @@ class AuthController {
             const hashedPassword = await bcrypt.hash(password, 10);
             user.password = hashedPassword;
             await userRepository.save(user);
-            return res.json({ message: "Contraseña actualizada correctamente" });
+            return res.status(200).json({ message: "Password updated" });
         }
         catch (error) {
             return res.status(500).json({ message: "Error al actualizar contraseña", error });
+        }
+    }
+    static async deleteUser(req, res) {
+        const id = String(req.params.id);
+        const userRepository = data_source_1.AppDataSource.getRepository(User_1.User);
+        try {
+            const userId = parseInt(id, 10);
+            const adminUserId = req.user?.userId;
+            if (adminUserId === userId) {
+                return res.status(403).json({ message: "No puedes eliminar tu propia cuenta" });
+            }
+            const user = await userRepository.findOneBy({ id: userId });
+            if (!user) {
+                return res.status(404).json({ message: "Usuario no encontrado" });
+            }
+            await userRepository.remove(user);
+            return res.status(200).json({ message: "Usuario eliminado" });
+        }
+        catch (error) {
+            return res.status(500).json({ message: "Error al eliminar usuario", error });
+        }
+    }
+    static async toggleUserStatus(req, res) {
+        const id = String(req.params.id);
+        const userRepository = data_source_1.AppDataSource.getRepository(User_1.User);
+        try {
+            const userId = parseInt(id, 10);
+            const adminUserId = req.user?.userId;
+            if (adminUserId === userId) {
+                return res.status(403).json({ message: "No puedes cambiar tu propio estado" });
+            }
+            const user = await userRepository.findOneBy({ id: userId });
+            if (!user) {
+                return res.status(404).json({ message: "Usuario no encontrado" });
+            }
+            user.isActive = !user.isActive;
+            await userRepository.save(user);
+            return res.status(200).json({ isActive: user.isActive });
+        }
+        catch (error) {
+            return res.status(500).json({ message: "Error al cambiar estado del usuario", error });
         }
     }
 }

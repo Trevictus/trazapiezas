@@ -11,6 +11,8 @@ router.post("/auth/login", AuthController_1.AuthController.login);
 router.post("/auth/register", authMiddleware_1.checkToken, (0, authMiddleware_1.checkRole)(["ADMIN"]), AuthController_1.AuthController.register);
 router.get("/auth/users", authMiddleware_1.checkToken, (0, authMiddleware_1.checkRole)(["ADMIN"]), AuthController_1.AuthController.getAllUsers);
 router.put("/auth/users/:id/password", authMiddleware_1.checkToken, (0, authMiddleware_1.checkRole)(["ADMIN"]), AuthController_1.AuthController.updatePassword);
+router.delete("/auth/users/:id", authMiddleware_1.checkToken, (0, authMiddleware_1.checkRole)(["ADMIN"]), AuthController_1.AuthController.deleteUser);
+router.patch("/auth/users/:id/status", authMiddleware_1.checkToken, (0, authMiddleware_1.checkRole)(["ADMIN"]), AuthController_1.AuthController.toggleUserStatus);
 // Parts
 router.get("/parts/stats", authMiddleware_1.checkToken, PartController_1.PartController.getStats);
 router.get("/parts", authMiddleware_1.checkToken, PartController_1.PartController.getAll);

@@ -36,6 +36,8 @@ export class AuthController {
             const user = await userRepository.findOneBy({ username });
             if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
 
+            if (!user.isActive) return res.status(403).json({ message: "Cuenta desactivada. Contacte con el administrador." });
+
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) return res.status(401).json({ message: "Contraseña incorrecta" });
 
@@ -56,7 +58,7 @@ export class AuthController {
 
         try {
             const users = await userRepository.find({
-                select: ["id", "username", "role"]
+                select: ["id", "username", "role", "isActive"]
             });
             return res.json({ users });
         } catch (error) {
@@ -106,6 +108,30 @@ export class AuthController {
             return res.status(200).json({ message: "Usuario eliminado" });
         } catch (error) {
             return res.status(500).json({ message: "Error al eliminar usuario", error });
+        }
+    }
+
+    static async toggleUserStatus(req: Request, res: Response) {
+        const id = String(req.params.id);
+        const userRepository = AppDataSource.getRepository(User);
+
+        try {
+            const userId = parseInt(id, 10);
+            const adminUserId = (req as any).user?.userId;
+            if (adminUserId === userId) {
+                return res.status(403).json({ message: "No puedes cambiar tu propio estado" });
+            }
+
+            const user = await userRepository.findOneBy({ id: userId });
+            if (!user) {
+                return res.status(404).json({ message: "Usuario no encontrado" });
+            }
+
+            user.isActive = !user.isActive;
+            await userRepository.save(user);
+            return res.status(200).json({ isActive: user.isActive });
+        } catch (error) {
+            return res.status(500).json({ message: "Error al cambiar estado del usuario", error });
         }
     }
 }

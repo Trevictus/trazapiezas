@@ -29,13 +29,28 @@ const MOCK_VEHICLES = {
     }
 };
 class ExternalApiService {
-    static async getVehicleByPlate(plate) {
-        const normalizedPlate = plate.toUpperCase().trim();
-        if (this.TALLERGP_API_KEY) {
-            return this.fetchFromRealAPI(normalizedPlate);
+    static cleanPlate(plate) {
+        const cleaned = plate.toUpperCase().trim();
+        if (cleaned.includes("-")) {
+            return cleaned;
         }
-        if (MOCK_VEHICLES[normalizedPlate]) {
-            return Promise.resolve(MOCK_VEHICLES[normalizedPlate]);
+        const match = cleaned.match(/^(\d+)([A-Z]+)$/);
+        if (match) {
+            return `${match[1]}-${match[2]}`;
+        }
+        return cleaned;
+    }
+    static normalizeForAPIQuery(plate) {
+        return plate.replace("-", "");
+    }
+    static async getVehicleByPlate(plate) {
+        const normalizedPlate = this.cleanPlate(plate);
+        const apiQueryPlate = this.normalizeForAPIQuery(normalizedPlate);
+        if (this.TALLERGP_API_KEY) {
+            return this.fetchFromRealAPI(apiQueryPlate);
+        }
+        if (MOCK_VEHICLES[apiQueryPlate]) {
+            return Promise.resolve(MOCK_VEHICLES[apiQueryPlate]);
         }
         return Promise.reject(new Error(`Vehículo ${normalizedPlate} no encontrado en base de datos local`));
     }
@@ -48,6 +63,7 @@ class ExternalApiService {
                 },
                 timeout: 5000
             });
+            console.log(`[TallerGP] Respuesta para matrícula ${plate}:`, response.data);
             return {
                 brand: response.data.brand || response.data.make,
                 model: response.data.model,
@@ -57,7 +73,7 @@ class ExternalApiService {
             };
         }
         catch (error) {
-            console.error(`Error fetching vehicle data for plate ${plate}:`, error);
+            console.error(`[TallerGP] Error fetching vehicle data for plate ${plate}:`, error);
             throw error;
         }
     }

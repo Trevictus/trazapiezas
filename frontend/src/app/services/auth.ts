@@ -44,4 +44,8 @@ export class AuthService {
   deleteUser(userId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/users/${userId}`);
   }
+
+  toggleUserStatus(userId: number): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/users/${userId}/status`, {});
+  }
 }

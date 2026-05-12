@@ -10,6 +10,7 @@ interface User {
   id: number;
   username: string;
   role: string;
+  isActive: boolean;
 }
 
 interface EditingPassword {
@@ -35,7 +36,7 @@ export class StaffManagementComponent implements OnInit {
   editingPassword: EditingPassword = { userId: null, newPassword: '' };
   deletingUser: DeletingUser = { userId: null, confirming: false };
   currentUserId: number | null = null;
-  filterRole: string | null = null;
+  activeFilter: 'TODOS' | 'ADMINS' | 'MECÁNICOS' | 'BAJA' = 'TODOS';
 
   newUser = {
     username: '',
@@ -51,10 +52,23 @@ export class StaffManagementComponent implements OnInit {
   ) {}
 
   get filteredUsers(): User[] {
-    if (this.filterRole === null) {
-      return this.users;
+    if (this.activeFilter === 'BAJA') {
+      return this.users.filter(u => u.isActive === false);
     }
-    return this.users.filter(u => u.role === this.filterRole);
+    
+    if (this.activeFilter === 'TODOS') {
+      return this.users.filter(u => u.isActive === true);
+    }
+    
+    if (this.activeFilter === 'MECÁNICOS') {
+      return this.users.filter(u => u.isActive === true && u.role === 'MECHANIC');
+    }
+    
+    if (this.activeFilter === 'ADMINS') {
+      return this.users.filter(u => u.isActive === true && u.role === 'ADMIN');
+    }
+    
+    return this.users.filter(u => u.isActive === true);
   }
 
   ngOnInit(): void {
@@ -157,5 +171,21 @@ export class StaffManagementComponent implements OnInit {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  toggleStatus(userId: number): void {
+    this.authService.toggleUserStatus(userId).subscribe({
+      next: (res: any) => {
+        const user = this.users.find(u => u.id === userId);
+        if (user) {
+          user.isActive = res.isActive;
+          this.cdr.detectChanges();
+          this.toastService.showToast(`Estado actualizado`, 'success');
+        }
+      },
+      error: (err) => {
+        this.toastService.showToast(err.error?.message || 'Error al cambiar estado', 'error');
+      }
+    });
   }
 }
