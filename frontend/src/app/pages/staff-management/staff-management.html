@@ -113,15 +113,8 @@
             <button
               *ngIf="editingPassword.userId !== user.id && !deletingUser.confirming && currentUserId !== user.id"
               (click)="toggleStatus(user.id)"
-              [class.bg-red-700]="user.isActive"
-              [class.bg-emerald-700]="!user.isActive"
-              [class.hover:bg-red-800]="user.isActive"
-              [class.hover:bg-emerald-800]="!user.isActive"
-              [class.text-red-400]="user.isActive"
-              [class.text-emerald-400]="!user.isActive"
-              class="w-full sm:w-32 px-4 py-2 text-white rounded-lg rounded-tl-none text-sm font-bold font-mono transition border"
-              [class.border-red-600]="user.isActive"
-              [class.border-emerald-600]="!user.isActive"
+              [ngStyle]="getStatusButtonStyle(user.isActive)"
+              class="w-full sm:w-32 px-4 py-2 text-white rounded-lg rounded-tl-none text-sm font-bold font-mono transition border hover:opacity-80"
             >
               {{ user.isActive ? 'DAR DE BAJA' : 'DAR DE ALTA' }}
             </button>

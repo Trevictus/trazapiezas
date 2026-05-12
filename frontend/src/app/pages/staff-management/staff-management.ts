@@ -188,4 +188,11 @@ export class StaffManagementComponent implements OnInit {
       }
     });
   }
+
+  getStatusButtonStyle(isActive: boolean): { [key: string]: string } {
+    return {
+      'background-color': isActive ? '#d96a11' : '#10b967',
+      'border-color': isActive ? '#c85a0a' : '#0a9653'
+    };
+  }
 }
