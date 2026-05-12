@@ -1,1 +1,31 @@
+.filter-select {
+  background-color: #27272a;
+  color: #a1a1a1;
+  border-color: #3f3f46;
+  padding-right: 2.5rem;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23a1a1a1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+
+  &:focus {
+    border-color: #045dd1;
+    color: white;
+  }
+
+  &:hover {
+    border-color: #045dd1;
+  }
+
+  option {
+    background-color: #27272a;
+    color: #a1a1a1;
+
+    &:checked {
+      background-color: #045dd1;
+      color: white;
+    }
+  }
+}
 
