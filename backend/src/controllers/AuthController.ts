@@ -80,7 +80,7 @@ export class AuthController {
             user.password = hashedPassword;
             await userRepository.save(user);
 
-            return res.status(200).json({ message: "Updated" });
+            return res.status(200).json({ message: "Password updated" });
         } catch (error) {
             return res.status(500).json({ message: "Error al actualizar contraseña", error });
         }
@@ -103,7 +103,7 @@ export class AuthController {
             }
 
             await userRepository.remove(user);
-            return res.status(200).json({ message: "Success" });
+            return res.status(200).json({ message: "Usuario eliminado" });
         } catch (error) {
             return res.status(500).json({ message: "Error al eliminar usuario", error });
         }

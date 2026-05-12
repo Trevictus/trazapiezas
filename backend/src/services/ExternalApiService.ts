@@ -38,6 +38,9 @@ export class ExternalApiService {
 
   private static cleanPlate(plate: string): string {
     const cleaned = plate.toUpperCase().trim();
+    if (cleaned.includes("-")) {
+      return cleaned;
+    }
     const match = cleaned.match(/^(\d+)([A-Z]+)$/);
     if (match) {
       return `${match[1]}-${match[2]}`;
@@ -45,16 +48,20 @@ export class ExternalApiService {
     return cleaned;
   }
 
+  private static normalizeForAPIQuery(plate: string): string {
+    return plate.replace("-", "");
+  }
+
   static async getVehicleByPlate(plate: string): Promise<ExternalVehicleData> {
     const normalizedPlate = this.cleanPlate(plate);
+    const apiQueryPlate = this.normalizeForAPIQuery(normalizedPlate);
     
     if (this.TALLERGP_API_KEY) {
-      return this.fetchFromRealAPI(normalizedPlate);
+      return this.fetchFromRealAPI(apiQueryPlate);
     }
     
-    const mockKey = normalizedPlate.replace("-", "");
-    if (MOCK_VEHICLES[mockKey]) {
-      return Promise.resolve(MOCK_VEHICLES[mockKey]);
+    if (MOCK_VEHICLES[apiQueryPlate]) {
+      return Promise.resolve(MOCK_VEHICLES[apiQueryPlate]);
     }
 
     return Promise.reject(
@@ -77,6 +84,8 @@ export class ExternalApiService {
         }
       );
 
+      console.log(`[TallerGP] Respuesta para matrícula ${plate}:`, response.data);
+
       return {
         brand: response.data.brand || response.data.make,
         model: response.data.model,
@@ -85,7 +94,7 @@ export class ExternalApiService {
         year: response.data.year || new Date().getFullYear()
       };
     } catch (error) {
-      console.error(`Error fetching vehicle data for plate ${plate}:`, error);
+      console.error(`[TallerGP] Error fetching vehicle data for plate ${plate}:`, error);
       throw error;
     }
   }
