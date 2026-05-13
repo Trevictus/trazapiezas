@@ -2,6 +2,7 @@ import { Router } from "express";
 import { PartController } from "./controllers/PartController";
 import { AuthController } from "./controllers/AuthController";
 import { MovementController } from "./controllers/MovementController";
+import { ShelfController } from "./controllers/ShelfController";
 import { checkToken, checkRole } from "./middleware/authMiddleware";
 
 const router = Router();
@@ -13,6 +14,13 @@ router.get("/auth/users", checkToken, checkRole(["ADMIN"]), AuthController.getAl
 router.put("/auth/users/:id/password", checkToken, checkRole(["ADMIN"]), AuthController.updatePassword);
 router.delete("/auth/users/:id", checkToken, checkRole(["ADMIN"]), AuthController.deleteUser);
 router.patch("/auth/users/:id/status", checkToken, checkRole(["ADMIN"]), AuthController.toggleUserStatus);
+
+// Shelves
+router.get("/shelves", checkToken, ShelfController.getAll);
+router.get("/shelves/:id", checkToken, ShelfController.getById);
+router.post("/shelves", checkToken, checkRole(["ADMIN"]), ShelfController.create);
+router.put("/shelves/:id", checkToken, checkRole(["ADMIN"]), ShelfController.update);
+router.delete("/shelves/:id", checkToken, checkRole(["ADMIN"]), ShelfController.delete);
 
 // Parts
 router.get("/parts/stats", checkToken, PartController.getStats);

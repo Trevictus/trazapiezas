@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "typeorm";
 import { Movement } from "./Movement";
+import { Shelf } from "./Shelf";
 
 @Entity("parts")
 export class Part {
@@ -23,6 +24,12 @@ export class Part {
 
     @Column({ default: 0 })
     stock!: number;
+
+    @Column({ nullable: true })
+    shelfId?: string | null;
+
+    @ManyToOne(() => Shelf, shelf => shelf.parts)
+    shelf?: Shelf;
 
     @OneToMany(() => Movement, (movement) => movement.part)
     movements!: Movement[];

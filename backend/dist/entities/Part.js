@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Part = void 0;
 const typeorm_1 = require("typeorm");
 const Movement_1 = require("./Movement");
+const Shelf_1 = require("./Shelf");
 let Part = class Part {
 };
 exports.Part = Part;
@@ -43,6 +44,14 @@ __decorate([
     (0, typeorm_1.Column)({ default: 0 }),
     __metadata("design:type", Number)
 ], Part.prototype, "stock", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Object)
+], Part.prototype, "shelfId", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => Shelf_1.Shelf, shelf => shelf.parts),
+    __metadata("design:type", Shelf_1.Shelf)
+], Part.prototype, "shelf", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => Movement_1.Movement, (movement) => movement.part),
     __metadata("design:type", Array)

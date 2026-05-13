@@ -1,0 +1,76 @@
+<header class="flex justify-between items-center p-6 border-b border-zinc-800 bg-zinc-950 sticky top-0 z-40">
+  <button (click)="goBack()" class="text-zinc-400 cursor-pointer hover:opacity-80">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+  <div class="flex gap-3 items-center">
+    <button (click)="logout()" class="text-[#d97707] cursor-pointer hover:opacity-80">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+      </svg>
+    </button>
+  </div>
+</header>
+
+<div class="min-h-screen bg-zinc-950 text-white p-6 pb-24">
+  <div class="max-w-4xl mx-auto">
+    <!-- ENCABEZADO -->
+    <div *ngIf="!loading && shelf" class="mb-8">
+      <h1 class="text-5xl font-black italic uppercase text-[#045dd1] mb-2">{{ shelf.name }}</h1>
+      <p class="text-zinc-400 text-lg">{{ shelf.description }}</p>
+    </div>
+
+    <div *ngIf="loading" class="text-center text-zinc-400">
+      <p>Cargando estantería...</p>
+    </div>
+
+    <!-- BUSCADOR -->
+    <div *ngIf="!loading && shelf" class="mb-8">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (input)="onSearchChange()"
+        placeholder="Buscar pieza (referencia, marca, categoría)..."
+        class="w-full bg-zinc-800 border border-zinc-700 rounded-lg rounded-tl-none px-4 py-4 text-white outline-none focus:border-[#045dd1] placeholder-zinc-500"
+      />
+    </div>
+
+    <!-- LISTADO DE PIEZAS -->
+    <div *ngIf="!loading && shelf" class="space-y-4">
+      <h2 class="text-2xl font-black italic uppercase text-[#045dd1] mb-6">PIEZAS ({{ filteredParts.length }})</h2>
+
+      <div *ngIf="filteredParts.length === 0" class="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 text-center">
+        <p class="text-zinc-400">No hay piezas en esta estantería</p>
+      </div>
+
+      <div *ngIf="filteredParts.length > 0" class="grid gap-4">
+        <div
+          *ngFor="let part of filteredParts"
+          class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 hover:border-[#045dd1] transition"
+        >
+          <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div>
+              <p class="text-xs text-zinc-400 font-mono mb-1">REFERENCIA</p>
+              <p class="text-lg font-bold text-white">{{ part.reference }}</p>
+            </div>
+            <div>
+              <p class="text-xs text-zinc-400 font-mono mb-1">MARCA</p>
+              <p class="text-lg font-bold text-white">{{ part.brand }}</p>
+            </div>
+            <div>
+              <p class="text-xs text-zinc-400 font-mono mb-1">CATEGORÍA</p>
+              <p class="text-lg font-bold text-[#045dd1]">{{ part.category }}</p>
+            </div>
+            <div>
+              <p class="text-xs text-zinc-400 font-mono mb-1">STOCK</p>
+              <p class="text-lg font-bold" [class]="part.stock > 0 ? 'text-green-400' : 'text-red-400'">
+                {{ part.stock }} unidades
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,6 +4,7 @@ const express_1 = require("express");
 const PartController_1 = require("./controllers/PartController");
 const AuthController_1 = require("./controllers/AuthController");
 const MovementController_1 = require("./controllers/MovementController");
+const ShelfController_1 = require("./controllers/ShelfController");
 const authMiddleware_1 = require("./middleware/authMiddleware");
 const router = (0, express_1.Router)();
 // Auth
@@ -13,6 +14,12 @@ router.get("/auth/users", authMiddleware_1.checkToken, (0, authMiddleware_1.chec
 router.put("/auth/users/:id/password", authMiddleware_1.checkToken, (0, authMiddleware_1.checkRole)(["ADMIN"]), AuthController_1.AuthController.updatePassword);
 router.delete("/auth/users/:id", authMiddleware_1.checkToken, (0, authMiddleware_1.checkRole)(["ADMIN"]), AuthController_1.AuthController.deleteUser);
 router.patch("/auth/users/:id/status", authMiddleware_1.checkToken, (0, authMiddleware_1.checkRole)(["ADMIN"]), AuthController_1.AuthController.toggleUserStatus);
+// Shelves
+router.get("/shelves", authMiddleware_1.checkToken, ShelfController_1.ShelfController.getAll);
+router.get("/shelves/:id", authMiddleware_1.checkToken, ShelfController_1.ShelfController.getById);
+router.post("/shelves", authMiddleware_1.checkToken, (0, authMiddleware_1.checkRole)(["ADMIN"]), ShelfController_1.ShelfController.create);
+router.put("/shelves/:id", authMiddleware_1.checkToken, (0, authMiddleware_1.checkRole)(["ADMIN"]), ShelfController_1.ShelfController.update);
+router.delete("/shelves/:id", authMiddleware_1.checkToken, (0, authMiddleware_1.checkRole)(["ADMIN"]), ShelfController_1.ShelfController.delete);
 // Parts
 router.get("/parts/stats", authMiddleware_1.checkToken, PartController_1.PartController.getStats);
 router.get("/parts", authMiddleware_1.checkToken, PartController_1.PartController.getAll);

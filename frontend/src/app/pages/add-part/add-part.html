@@ -54,6 +54,18 @@
           class="w-full bg-zinc-950 border border-zinc-800 rounded-lg rounded-tl-none p-3 text-white focus:border-industrial-blue outline-none"></textarea>
       </div>
 
+      <!-- Estantería (solo para ADMIN) -->
+      <div *ngIf="userRole === 'ADMIN'">
+        <label class="block text-xs font-bold text-zinc-400 uppercase mb-2">Estantería</label>
+        <select [(ngModel)]="newPart.shelfId" name="shelf"
+          class="w-full bg-zinc-950 border border-zinc-800 rounded-lg rounded-tl-none p-3 text-white focus:border-industrial-blue outline-none">
+          <option value="">Seleccionar estantería (opcional)</option>
+          <option *ngFor="let shelf of shelves" [value]="shelf.id">
+            {{ shelf.name }}
+          </option>
+        </select>
+      </div>
+
       <!-- Stock y Precio -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>

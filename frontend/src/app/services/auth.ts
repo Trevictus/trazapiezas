@@ -24,6 +24,11 @@ export class AuthService {
     return user ? JSON.parse(user) : null;
   }
 
+  getUserRole(): string {
+    const user = this.getCurrentUser();
+    return user?.role || 'MECHANIC';
+  }
+
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

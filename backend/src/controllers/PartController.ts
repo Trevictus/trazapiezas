@@ -38,11 +38,11 @@ export class PartController {
     }
 
     static async create(req: Request, res: Response) {
-        const { reference, brand, category, description, purchasePrice, stock } = req.body;
+        const { reference, brand, category, description, purchasePrice, stock, shelfId } = req.body;
         const partRepository = AppDataSource.getRepository(Part);
         try {
             const part = new Part();
-            Object.assign(part, { reference, brand, category, description, purchasePrice, stock: stock || 0 });
+            Object.assign(part, { reference, brand, category, description, purchasePrice, stock: stock || 0, shelfId });
             await partRepository.save(part);
             return res.status(201).json({ message: "Pieza creada", part });
         } catch (error) {
@@ -52,7 +52,7 @@ export class PartController {
 
     static async update(req: Request, res: Response) {
         const { id } = req.params;
-        const { stock, ...rest } = req.body;
+        const { stock, shelfId, ...rest } = req.body;
         const partRepository = AppDataSource.getRepository(Part);
         const movementRepository = AppDataSource.getRepository(Movement);
         try {
@@ -60,6 +60,7 @@ export class PartController {
             if (!part) return res.status(404).json({ message: "No encontrada" });
             const oldStock = part.stock;
             Object.assign(part, rest);
+            if (shelfId !== undefined) part.shelfId = shelfId;
             if (stock !== undefined && stock !== oldStock) {
                 const diff = stock - oldStock;
                 part.stock = stock;
