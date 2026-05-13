@@ -1,0 +1,170 @@
+<div class="min-h-screen bg-zinc-950 text-white p-6 pb-24">
+  <div class="max-w-5xl mx-auto space-y-8">
+    <!-- NUEVO OPERARIO -->
+    <section class="bg-zinc-900 rounded-2xl p-8 border border-zinc-800">
+      <h2 class="text-2xl font-black italic uppercase mb-6 text-[#045dd1]">NUEVO OPERARIO</h2>
+      <form (ngSubmit)="createUser()" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold mb-2">Username</label>
+          <input
+            type="text"
+            [(ngModel)]="newUser.username"
+            name="username"
+            placeholder="Nombre de usuario"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg rounded-tl-none px-4 py-3 text-white outline-none focus:border-[#045dd1]"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-2">Contraseña</label>
+          <input
+            type="password"
+            [(ngModel)]="newUser.password"
+            name="password"
+            placeholder="Contraseña inicial"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg rounded-tl-none px-4 py-3 text-white outline-none focus:border-[#045dd1]"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-2">Rol</label>
+          <select
+            [(ngModel)]="newUser.role"
+            name="role"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg rounded-tl-none px-4 py-3 text-white outline-none focus:border-[#045dd1]"
+          >
+            <option value="MECHANIC">MECHANIC</option>
+            <option value="ADMIN">ADMIN</option>
+          </select>
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-[#045dd1] hover:bg-[#0355b0] text-white font-bold py-3 rounded-xl rounded-tl-none transition"
+        >
+          + CREAR OPERARIO
+        </button>
+      </form>
+    </section>
+
+    <!-- PLANTILLA -->
+    <section>
+      <h2 class="text-2xl font-black italic uppercase mb-6 text-[#045dd1]">PLANTILLA</h2>
+
+      <div class="mb-6">
+        <select
+          [(ngModel)]="activeFilter"
+          name="filterSelect"
+          class="filter-select px-4 py-2 font-bold rounded-lg rounded-tl-none text-sm transition w-auto min-w-max border outline-none hover:opacity-90"
+        >
+          <option value="TODOS">TODOS</option>
+          <option value="ADMINS">ADMINS</option>
+          <option value="MECÁNICOS">MECÁNICOS</option>
+          <option value="BAJA">DE BAJA</option>
+        </select>
+      </div>
+
+      @if (loading) {
+        <div class="text-center text-zinc-400">Cargando usuarios...</div>
+      }
+
+      @if (!loading && filteredUsers.length === 0) {
+        <div class="text-center text-zinc-400">No hay operarios registrados</div>
+      }
+
+      @if (!loading && filteredUsers.length > 0) {
+        <div class="grid gap-4">
+          @for (user of filteredUsers; track user) {
+            <div
+              class="bg-zinc-900 border border-zinc-800 gap-4 rounded-2xl p-6 flex flex-col sm:flex-row items-center sm:items-center justify-between"
+            >
+              <div class="flex items-center gap-4 flex-1">
+                <div
+                  class="w-10 h-10 rounded-full bg-[#045dd1] flex items-center justify-center flex-shrink-0 font-mono text-xs uppercase text-white font-bold"
+                >
+                  {{ user.username.substring(0, 2).toUpperCase() }}
+                </div>
+                <div>
+                  <p class="font-semibold text-white">{{ user.username }}</p>
+                  <p class="text-xs text-zinc-400 font-mono">ID: {{ user.id }}</p>
+                  <p class="text-xs text-[#045dd1]">
+                    {{
+                      user.role === 'MECHANIC'
+                        ? 'MECÁNICO'
+                        : user.role === 'ADMIN'
+                          ? 'ADMINISTRADOR'
+                          : user.role
+                    }}
+                  </p>
+                </div>
+              </div>
+              <div class="flex flex-col gap-2 flex-shrink-0 w-full sm:w-auto">
+                @if (editingPassword.userId !== user.id && !deletingUser.confirming) {
+                  <button
+                    (click)="startEditPassword(user.id)"
+                    class="w-full sm:w-32 px-4 py-2 bg-[#045dd1] hover:bg-[#0355b0] text-white rounded-lg rounded-tl-none text-sm font-bold font-mono transition flex-nowrap"
+                  >
+                    CAMBIAR CLAVE
+                  </button>
+                }
+                @if (
+                  editingPassword.userId !== user.id &&
+                  !deletingUser.confirming &&
+                  currentUserId !== user.id
+                ) {
+                  <button
+                    (click)="toggleStatus(user.id)"
+                    [ngStyle]="getStatusButtonStyle(user.isActive)"
+                    class="w-full sm:w-32 px-4 py-2 text-white rounded-lg rounded-tl-none text-sm font-bold font-mono transition border hover:opacity-80"
+                  >
+                    {{ user.isActive ? 'DAR DE BAJA' : 'DAR DE ALTA' }}
+                  </button>
+                }
+                @if (editingPassword.userId === user.id) {
+                  <div class="flex flex-col gap-2 flex-shrink-0 w-full">
+                    <input
+                      type="password"
+                      [(ngModel)]="editingPassword.newPassword"
+                      placeholder="Nueva clave"
+                      class="w-full bg-zinc-800 border border-zinc-700 rounded-lg rounded-tl-none px-3 py-2 text-white text-sm outline-none focus:border-[#045dd1] font-mono"
+                    />
+                    <div class="flex gap-2 flex-nowrap">
+                      <button
+                        (click)="updatePassword()"
+                        class="flex-1 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg rounded-tl-none text-sm font-bold font-mono transition"
+                      >
+                        OK
+                      </button>
+                      <button
+                        (click)="cancelEditPassword()"
+                        class="flex-1 px-3 py-2 bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg rounded-tl-none text-sm font-bold font-mono transition"
+                      >
+                        X
+                      </button>
+                    </div>
+                  </div>
+                }
+                @if (deletingUser.confirming && deletingUser.userId === user.id) {
+                  <div class="flex flex-col gap-2 flex-shrink-0 w-full">
+                    <span class="text-xs text-red-500 font-mono">¿Confirmar eliminación?</span>
+                    <div class="flex gap-2 flex-nowrap">
+                      <button
+                        (click)="confirmDeleteUser()"
+                        class="flex-1 px-3 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg rounded-tl-none text-sm font-bold font-mono transition"
+                      >
+                        SÍ
+                      </button>
+                      <button
+                        (click)="cancelDeleteUser()"
+                        class="flex-1 px-3 py-2 bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg rounded-tl-none text-sm font-bold font-mono transition"
+                      >
+                        NO
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</div>

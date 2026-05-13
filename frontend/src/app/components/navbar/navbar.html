@@ -1,24 +1,50 @@
-<nav class="border-b border-zinc-800 bg-zinc-900 px-4 py-3 shadow-md">
-  <div class="flex items-center justify-between">
-    <!-- Logo e Identidad -->
-    <button (click)="router.navigate(['/dashboard'])" class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-      <img src="/assets/LOGO-TRAZAPIEZAS-DEFINITIVO.png" alt="TRAZAPIEZAS" class="h-8 w-auto object-contain">
+<header
+  class="flex justify-between items-center p-6 border-b border-zinc-800 bg-zinc-950 sticky top-0 z-40"
+>
+  <button
+    (click)="router.navigate(['/dashboard'])"
+    class="cursor-pointer hover:opacity-80 transition-opacity"
+  >
+    <h1
+      class="text-xl font-black tracking-tighter text-white uppercase italic flex items-center justify-start gap-3"
+    >
+      <img src="/assets/logo.png" alt="TRAZAPIEZAS" class="h-12 w-auto object-contain" />
+      <span class="pt-1"> {{ pageTitle }}</span>
+    </h1>
+  </button>
+  <div class="flex gap-3 items-center">
+    <button
+      (click)="router.navigate(['/profile'])"
+      class="text-zinc-400 cursor-pointer hover:opacity-80 transition-opacity"
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
     </button>
-
-    <!-- Menú de Acciones (Mobile Friendly) -->
-    <div class="flex items-center gap-4">
-      <button class="text-zinc-400 hover:text-industrial-blue">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-      </button>
-      
-      <!-- Avatar/Cerrar sesión -->
-      <button (click)="logout()" class="rounded-full bg-zinc-800 p-2 text-safety-orange">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-        </svg>
-      </button>
-    </div>
+    <button
+      (click)="logout()"
+      class="text-[#d97707] cursor-pointer hover:opacity-80 transition-opacity"
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+        <polyline points="16 17 21 12 16 7" />
+        <line x1="21" y1="12" x2="9" y2="12" />
+      </svg>
+    </button>
   </div>
-</nav>
+</header>

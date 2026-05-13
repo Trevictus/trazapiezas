@@ -8,24 +8,23 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './login.html',
-  styleUrl: './login.scss'
+  templateUrl: './login.html'
 })
 export class LoginComponent {
   loginData = { username: '', password: '' };
 
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
     private toastService: ToastService,
     private router: Router
-  ) {}
+  ) { }
 
   onLogin() {
     this.authService.login(this.loginData).subscribe({
       next: (response) => {
         localStorage.setItem('token', response.token);
         this.toastService.success('Sesión iniciada correctamente');
-        this.router.navigate(['/dashboard']); 
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.toastService.error('Credenciales incorrectas para el taller');

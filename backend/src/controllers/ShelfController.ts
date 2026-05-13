@@ -86,7 +86,7 @@ export class ShelfController {
             await partRepository.update({ shelfId: id as string }, { shelfId: null as any });
 
             await shelfRepository.remove(shelf);
-            return res.json({ message: "Estantería eliminada" });
+            return res.status(200).json({ message: "Shelf deleted" });
         } catch (error) {
             return res.status(500).json({ message: "Error al eliminar estantería", error });
         }
