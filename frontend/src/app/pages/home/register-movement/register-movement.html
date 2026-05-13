@@ -27,7 +27,7 @@
           <input
             type="text"
             [(ngModel)]="plate"
-            placeholder="1234 ABC"
+            placeholder="1234ABC"
             class="bg-transparent border-none outline-none text-white font-bold py-4 px-4 uppercase w-full rounded-tl-none"
           />
         </div>
@@ -40,7 +40,7 @@
         </button>
       </div>
       @if (plate && !isValidPlate()) {
-        <p class="text-[12px] text-red-400 font-bold">Formato: 1234 ABC</p>
+        <p class="text-[12px] text-red-400 font-bold">Formato: 1234ABC</p>
       }
     </div>
   </div>

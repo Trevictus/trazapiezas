@@ -68,7 +68,7 @@ export class RegisterMovementComponent implements OnInit {
 
   searchPlate(): void {
     if (!this.isValidPlate()) {
-      this.toastService.error('Formato de matrícula inválido. Usa: 1234 ABC');
+      this.toastService.error('Formato de matrícula inválido. Usa: 1234ABC');
       return;
     }
 
