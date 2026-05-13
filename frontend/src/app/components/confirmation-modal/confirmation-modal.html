@@ -1,0 +1,45 @@
+@if (confirmationService.dialogs().length > 0) {
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    @for (dialog of confirmationService.dialogs(); track $index) {
+      <div class="bg-white rounded-lg shadow-lg max-w-sm w-full mx-4 animate-in fade-in">
+        <div class="p-6">
+          @if (dialog.title) {
+            <h2
+              class="text-lg font-semibold mb-2"
+              [ngClass]="{
+                'text-gray-900': dialog.severity === 'info',
+                'text-yellow-700': dialog.severity === 'warning',
+                'text-red-700': dialog.severity === 'error',
+              }"
+            >
+              {{ dialog.title }}
+            </h2>
+          }
+          <p class="text-gray-600 mb-6">
+            {{ dialog.message }}
+          </p>
+
+          <div class="flex gap-3 justify-end">
+            <button
+              (click)="dialog.onCancel()"
+              class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+            >
+              {{ dialog.cancelText }}
+            </button>
+            <button
+              (click)="dialog.onConfirm()"
+              [ngClass]="{
+                'bg-blue-600 hover:bg-blue-700 text-white': dialog.severity === 'info',
+                'bg-yellow-500 hover:bg-yellow-600 text-white': dialog.severity === 'warning',
+                'bg-red-600 hover:bg-red-700 text-white': dialog.severity === 'error',
+              }"
+              class="px-4 py-2 rounded-lg transition-colors"
+            >
+              {{ dialog.confirmText }}
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}

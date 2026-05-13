@@ -10,6 +10,6 @@ export const globalErrorHandler = (err: any, req: Request, res: Response, next: 
     // Devolvemos un JSON estandarizado
     res.status(statusCode).json({
         status: "error",
-        message: err.message || "Error interno del servidor"
+        message: err.error?.message || "Error interno del servidor"
     });
 };

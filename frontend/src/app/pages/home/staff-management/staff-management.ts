@@ -88,8 +88,8 @@ export class StaffManagementComponent implements OnInit {
         this.users = res.users;
         this.loading = false;
       },
-      error: () => {
-        this.toastService.showToast('Error al cargar usuarios', 'error');
+      error: (err) => {
+        this.toastService.showToast(err.error?.message || 'Error al cargar usuarios', 'error');
         this.loading = false;
       }
     });

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,7 +31,8 @@ export class VehicleHistoryComponent implements OnInit {
     private partsService: PartsService,
     private route: ActivatedRoute,
     public router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -60,10 +61,12 @@ export class VehicleHistoryComponent implements OnInit {
       next: (data) => {
         this.allMovements = data;
         this.movements = data;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al cargar movimientos:', err);
         this.movements = [];
+        this.cdr.detectChanges();
       }
     });
   }
@@ -81,12 +84,14 @@ export class VehicleHistoryComponent implements OnInit {
         this.movements = data;
         this.searched = true;
         this.extractVehicleData(data);
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al buscar matrícula:', err);
         this.movements = [];
         this.searched = true;
         this.vehicleData = null;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -103,6 +108,7 @@ export class VehicleHistoryComponent implements OnInit {
         vin: 'No registrado',
         engineCode: 'No registrado'
       };
+      this.cdr.detectChanges();
     }
   }
 
@@ -123,55 +129,61 @@ export class VehicleHistoryComponent implements OnInit {
     doc.setFillColor(255, 255, 255);
     doc.rect(0, 0, pageWidth, pageHeight, 'F');
 
-    doc.addImage('/assets/logo.png', 'PNG', 10, 8, 30, 15);
+    doc.addImage('/assets/logo.png', 'PNG', 10, 8, 45, 15);
 
     doc.setFontSize(10);
     doc.setTextColor(80, 80, 80);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Informe de Trazabilidad - ${new Date().toLocaleDateString('es-ES')}`, 45, yPosition);
-    doc.text('CAZAPIEZAS S.L.', 45, yPosition + 5);
+    doc.text(`Informe de Trazabilidad - ${new Date().toLocaleDateString('es-ES')}`, 60, yPosition);
+    doc.text('CAZAPIEZAS S.L.', 60, yPosition + 5);
 
     doc.setDrawColor(4, 93, 209);
     doc.setLineWidth(0.5);
-    doc.line(10, yPosition + 20, pageWidth - 10, yPosition + 20);
 
-    yPosition += 25;
+    if (this.vehicleData) {
+      yPosition += 25;
 
-    doc.setFillColor(240, 240, 240);
-    doc.rect(10, yPosition, pageWidth - 20, 35, 'F');
-    doc.setDrawColor(4, 93, 209);
-    doc.rect(10, yPosition, pageWidth - 20, 35);
+      doc.setFillColor(240, 240, 240);
+      doc.rect(10, yPosition, pageWidth - 20, 28, 'F');
+      doc.setDrawColor(4, 93, 209);
+      doc.rect(10, yPosition, pageWidth - 20, 28);
 
-    doc.setFontSize(10);
-    doc.setTextColor(4, 93, 209);
-    doc.setFont('helvetica', 'bold');
-    doc.text('FICHA TÉCNICA', 15, yPosition + 6);
+      doc.setFontSize(10);
+      doc.setTextColor(4, 93, 209);
+      doc.setFont('helvetica', 'bold');
+      doc.text('FICHA TÉCNICA', 15, yPosition + 6);
 
-    doc.setFontSize(9);
-    doc.setTextColor(0, 0, 0);
-    doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(0, 0, 0);
+      doc.setFont('helvetica', 'normal');
 
-    const vehicleDataText = [
-      [`MATRÍCULA: ${this.vehicleData?.plate || this.plate}`, `VIN: ${this.vehicleData?.vin || 'N/A'}`],
-      [`CÓDIGO MOTOR: ${this.vehicleData?.engineCode || 'N/A'}`]
-    ];
+      const vehicleDataText = [
+        [`MATRÍCULA: ${this.vehicleData?.plate || this.plate || 'N/A'}`],
+        [`VIN: ${this.vehicleData?.vin || 'N/A'}`],
+        [`CÓDIGO MOTOR: ${this.vehicleData?.engineCode || 'N/A'}`]
+      ];
 
-    let dataY = yPosition + 12;
-    vehicleDataText.forEach(row => {
-      row.forEach((text, index) => {
-        doc.text(text, 15 + (index * 80), dataY);
+      let dataY = yPosition + 12;
+      vehicleDataText.forEach((row, rowIndex) => {
+        row.forEach((text, index) => {
+          doc.text(text, 15 + (index * 80), dataY);
+        });
+        if (rowIndex !== vehicleDataText.length - 1)
+          dataY += 6;
       });
-      dataY += 6;
-    });
 
-    yPosition += 42;
+      yPosition += 38;
+
+    } else {
+      yPosition += 20;
+    }
 
     doc.setFontSize(11);
     doc.setTextColor(4, 93, 209);
     doc.setFont('helvetica', 'bold');
-    doc.text('MOVIMIENTOS DEL VEHÍCULO', 10, yPosition);
+    doc.text(this.vehicleData ? 'MOVIMIENTOS DEL VEHÍCULO' : 'TODOS LOS MOVIMIENTOS', 10, yPosition);
 
-    yPosition += 8;
+    yPosition += 3;
 
     const tableData = this.movements.map(mov => [
       new Date(mov.createdAt).toLocaleDateString('es-ES'),
@@ -217,7 +229,6 @@ export class VehicleHistoryComponent implements OnInit {
 
         doc.setDrawColor(4, 93, 209);
         doc.setLineWidth(0.5);
-        doc.rect(8, 35, pageWidth - 16, pageHeight - 45);
 
         doc.setFontSize(7);
         doc.setTextColor(120, 120, 120);

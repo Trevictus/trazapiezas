@@ -99,6 +99,7 @@ export class RegisterMovementComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: () => {
+        this.toastService.error('Error al registrar vehículo');
         this.cdr.detectChanges();
       }
     });
@@ -127,7 +128,7 @@ export class RegisterMovementComponent implements OnInit {
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        this.toastService.error('Error al registrar el movimiento');
+        this.toastService.error(err.error?.message || 'Error al registrar el movimiento');
       }
     });
   }

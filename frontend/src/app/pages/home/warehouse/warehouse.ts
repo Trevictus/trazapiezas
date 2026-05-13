@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { WarehouseService } from '../../../services/warehouse';
 import { AuthService } from '../../../services/auth';
 import { ToastService } from '../../../services/toast';
+import { ConfirmationService } from '../../../services/confirmation';
 import * as QRCode from 'qrcode';
 import { jsPDF } from 'jspdf';
 import { Shelf } from '../../../models/shelf';
@@ -37,6 +38,7 @@ export class WarehouseComponent implements OnInit {
     private authService: AuthService,
     private toastService: ToastService,
     private cdr: ChangeDetectorRef,
+    private confirmationService: ConfirmationService,
   ) { }
 
   ngOnInit() {
@@ -53,7 +55,7 @@ export class WarehouseComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        this.toastService.show('Error al cargar estanterías', 'error');
+        this.toastService.show(err.error?.message || 'Error al cargar estanterías', 'error');
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -124,18 +126,28 @@ export class WarehouseComponent implements OnInit {
   }
 
   deleteShelf(id: string) {
-    if (confirm('¿Eliminar esta estantería?')) {
-      this.warehouseService.deleteShelf(id).subscribe({
-        next: () => {
-          this.shelves = this.shelves.filter((s) => s.id !== id);
-          this.toastService.show('Estantería eliminada', 'success');
-          this.cdr.detectChanges();
-        },
-        error: (err) => {
-          this.toastService.show('Error al eliminar estantería', 'error');
-        },
-      });
-    }
+    this.confirmationService.confirm(
+      '¿Eliminar esta estantería?',
+      {
+        title: 'Eliminar estantería',
+        confirmText: 'Eliminar',
+        cancelText: 'Cancelar',
+        severity: 'error'
+      }
+    ).then(confirmed => {
+      if (confirmed) {
+        this.warehouseService.deleteShelf(id).subscribe({
+          next: () => {
+            this.shelves = this.shelves.filter((s) => s.id !== id);
+            this.toastService.show('Estantería eliminada', 'success');
+            this.cdr.detectChanges();
+          },
+          error: (err) => {
+            this.toastService.show(err.error?.message || 'Error al eliminar estantería', 'error');
+          },
+        });
+      }
+    });
   }
 
   logout() {

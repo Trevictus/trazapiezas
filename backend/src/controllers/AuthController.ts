@@ -18,7 +18,7 @@ export class AuthController {
 
             const user = new User();
             user.username = username;
-            user.password = password; 
+            user.password = password;
             user.role = role || "MECHANIC";
 
             await userRepository.save(user);

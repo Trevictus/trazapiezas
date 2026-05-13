@@ -34,12 +34,21 @@ export class PartController {
 
     static async getAll(req: Request, res: Response) {
         const partRepository = AppDataSource.getRepository(Part);
-        return res.json(await partRepository.find());
+        return res.json(await partRepository.find({ where: { active: true } }));
     }
 
     static async create(req: Request, res: Response) {
         const { reference, brand, category, description, purchasePrice, stock, shelfId } = req.body;
         const partRepository = AppDataSource.getRepository(Part);
+        const existing = await partRepository.findOneBy({ reference });
+        if (existing && !existing.active) {
+            existing.active = true;
+            Object.assign(existing, { brand, category, description, purchasePrice, stock: stock || 0, shelfId });
+            await partRepository.save(existing);
+            return res.status(200).json({ message: "Pieza reactivada", part: existing });
+        } else if (existing) {
+            return res.status(400).json({ message: "Ya existe una pieza con esa referencia", part: existing });
+        }
         try {
             const part = new Part();
             Object.assign(part, { reference, brand, category, description, purchasePrice, stock: stock || 0, shelfId });
@@ -65,12 +74,12 @@ export class PartController {
                 const diff = stock - oldStock;
                 part.stock = stock;
                 const movement = new Movement();
-                Object.assign(movement, { 
-                    part, 
-                    quantity: Math.abs(diff), 
-                    status: diff > 0 ? "STOCK" : "USED", 
-                    purchasePrice: part.purchasePrice, 
-                    vehiclePlate: "AJUSTE-MANUAL" 
+                Object.assign(movement, {
+                    part,
+                    quantity: Math.abs(diff),
+                    status: diff > 0 ? "STOCK" : "USED",
+                    purchasePrice: part.purchasePrice,
+                    vehiclePlate: "AJUSTE-MANUAL"
                 });
                 await movementRepository.save(movement);
             }
@@ -83,7 +92,7 @@ export class PartController {
 
     static async delete(req: Request, res: Response) {
         const partRepository = AppDataSource.getRepository(Part);
-        const result = await partRepository.delete(req.params.id);
+        const result = await partRepository.update({ id: Number(req.params.id) }, { active: false });
         if (result.affected === 0) return res.status(404).json({ message: "No encontrada" });
         return res.json({ message: "Eliminada" });
     }

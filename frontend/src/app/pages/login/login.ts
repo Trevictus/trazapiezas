@@ -27,7 +27,7 @@ export class LoginComponent {
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        this.toastService.error('Credenciales incorrectas para el taller');
+        this.toastService.error(err.error?.message || 'Credenciales incorrectas para el taller');
       }
     });
   }

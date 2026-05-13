@@ -6,6 +6,7 @@ import { PartsService } from '../../../services/parts';
 import { WarehouseService } from '../../../services/warehouse';
 import { AuthService } from '../../../services/auth';
 import { Shelf } from '../../../models/shelf';
+import { ToastService } from '../../../services/toast';
 
 @Component({
   selector: 'app-add-part',
@@ -32,6 +33,7 @@ export class AddPartComponent implements OnInit {
     private warehouseService: WarehouseService,
     public router: Router,
     private authService: AuthService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class AddPartComponent implements OnInit {
         this.shelves = data;
       },
       error: (err) => {
-        console.error('Error al cargar estanterías:', err);
+        this.toastService.show(err.error?.message || 'Error al cargar estanterías', 'error');
       },
     });
   }
@@ -60,12 +62,11 @@ export class AddPartComponent implements OnInit {
 
     this.partsService.createPart(partData).subscribe({
       next: () => {
-        alert('Pieza registrada en el taller correctamente');
+        this.toastService.show('Pieza registrada en el taller correctamente', 'success');
         this.router.navigate(['/inventory']);
       },
       error: (err) => {
-        console.error('Error al crear:', err);
-        alert('Hubo un fallo al guardar la pieza');
+        this.toastService.show(err.error?.message || 'Hubo un fallo al guardar la pieza', 'error');
       },
     });
   }

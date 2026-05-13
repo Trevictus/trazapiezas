@@ -16,6 +16,9 @@ export class Part {
     @Column()
     category!: string;
 
+    @Column({ default: true })
+    active!: boolean;
+
     @Column("text")
     description!: string;
 

@@ -3,9 +3,7 @@
   <section class="space-y-3">
     <h3 class="text-lg font-black text-white uppercase italic">Matrícula</h3>
     <div class="flex gap-2">
-      <div
-        class="flex-1 bg-[#1a1a1a] rounded-xl rounded-tl-none flex items-center px-4 border border-zinc-800"
-      >
+      <div class="flex-1 bg-[#1a1a1a] rounded-xl flex items-center px-4 border border-zinc-800">
         <svg
           width="20"
           height="20"
@@ -38,7 +36,7 @@
 
   <!-- Resultados (Estilo "Últimos Movimientos") -->
   <div class="space-y-4">
-    @if (searched || allMovements.length > 0) {
+    @if (allMovements.length > 0) {
       <div class="flex justify-between items-center">
         <h3 class="text-xl font-black text-white uppercase italic">
           {{ searched ? 'Resultados' : 'Todos los Movimientos' }}

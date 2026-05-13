@@ -40,7 +40,7 @@ export class ShelfDetailComponent implements OnInit {
     private warehouseService: WarehouseService,
     private authService: AuthService,
     private toastService: ToastService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -58,7 +58,7 @@ export class ShelfDetailComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        this.toastService.show('Error al cargar la estantería', 'error');
+        this.toastService.show(err.error?.message || 'Error al cargar la estantería', 'error');
         this.loading = false;
       },
     });

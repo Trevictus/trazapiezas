@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PartsService } from '../../../services/parts';
 import { AuthService } from '../../../services/auth';
+import { ConfirmationService } from '../../../services/confirmation';
 import { Part } from '../../../models/part';
+import { ToastService } from '../../../services/toast';
 
 @Component({
   selector: 'app-parts-list',
@@ -22,7 +24,9 @@ export class PartsListComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastService: ToastService,
+    private confirmationService: ConfirmationService
   ) { }
 
   ngOnInit(): void {
@@ -38,7 +42,7 @@ export class PartsListComponent implements OnInit {
         this.parts = data;
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error al cargar piezas', err)
+      error: (err) => this.toastService.show(err.error?.message || 'Error al cargar piezas', 'error')
     });
   }
 
@@ -63,20 +67,34 @@ export class PartsListComponent implements OnInit {
 
     this.partsService.updatePart(part.id, updatedPart).subscribe({
       next: () => {
+        this.toastService.show('Stock actualizado', 'success');
         part.stock = newStock;
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error al actualizar stock', err)
+      error: (err) => this.toastService.show(err.error?.message || 'Error al actualizar stock', 'error')
     });
   }
 
   deletePart(part: Part): void {
-    if (confirm(`¿Estás seguro de eliminar ${part.brand}?`)) {
-      this.partsService.deletePart(part.id).subscribe({
-        next: () => this.loadParts(),
-        error: (err) => console.error('Error al eliminar', err)
-      });
-    }
+    this.confirmationService.confirm(
+      `¿Estás seguro de eliminar ${part.brand}?`,
+      {
+        title: 'Eliminar pieza',
+        confirmText: 'Eliminar',
+        cancelText: 'Cancelar',
+        severity: 'error'
+      }
+    ).then(confirmed => {
+      if (confirmed) {
+        this.partsService.deletePart(part.id).subscribe({
+          next: () => {
+            this.toastService.show('Pieza eliminada', 'success');
+            this.loadParts();
+          },
+          error: (err) => this.toastService.show(err.error?.message || 'Error al eliminar pieza', 'error')
+        });
+      }
+    });
   }
 
   clearFilter(): void {
