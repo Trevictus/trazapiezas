@@ -1,5 +1,5 @@
-<div class="max-w-2xl mx-auto p-4 space-y-6">
-  <h2 class="text-3xl font-light uppercase leading-tight">Movimiento de<br /><b>Piezas</b></h2>
+<div class="max-w-md mx-auto p-6 space-y-4">
+  <h2 class="text-2xl text-white font-bold uppercase leading-tight">Registrar movimiento</h2>
 
   <!-- Header Info Figma -->
   <div class="grid grid-cols-2 gap-4">
@@ -16,8 +16,8 @@
   </div>
 
   <!-- Buscador de Matrícula -->
-  <div class="space-y-3">
-    <h3 class="text-lg font-black uppercase italic">Matrícula</h3>
+  <div class="space-y-2">
+    <h3 class="text-lg text-white font-bold uppercase italic">Matrícula</h3>
     <div class="space-y-2">
       <div class="flex gap-2">
         <div
@@ -34,7 +34,7 @@
         <button
           (click)="searchPlate()"
           [disabled]="!isValidPlate()"
-          class="bg-[#045dd1] disabled:bg-zinc-800 text-white font-black px-6 rounded-xl rounded-tl-none uppercase italic"
+          class="bg-[#045dd1] disabled:bg-zinc-800 text-white text-white font-bold px-6 rounded-xl rounded-tl-none uppercase italic"
         >
           Buscar
         </button>
@@ -46,8 +46,8 @@
   </div>
 
   <!-- Campo de Cantidad -->
-  <div class="space-y-3">
-    <h3 class="text-lg font-black uppercase italic">Cantidad</h3>
+  <div class="space-y-2">
+    <h3 class="text-lg text-white font-bold uppercase italic">Cantidad</h3>
     <div class="flex gap-2 items-center">
       <button
         (click)="decrementQuantity()"
@@ -85,7 +85,7 @@
         Matrícula no registrada en TallerGP. Verifícala o crea el vehículo.
         <button
           (click)="quickRegister()"
-          class="block mt-2 font-black underline uppercase text-sky-400"
+          class="block mt-2 text-white font-bold underline uppercase text-sky-400"
         >
           + Dar de alta vehículo
         </button>
@@ -107,16 +107,16 @@
     <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
       <!-- Header de Ficha -->
       <div class="bg-gradient-to-r from-zinc-800 to-zinc-900 px-4 py-3 border-b border-zinc-700">
-        <p class="text-[10px] font-black text-sky-500 uppercase tracking-widest">Ficha Técnica</p>
+        <p class="text-[10px] text-white font-bold text-sky-500 uppercase tracking-widest">Ficha Técnica</p>
       </div>
 
       <!-- Contenido principal -->
-      <div class="p-4 space-y-3">
+      <div class="p-4 space-y-2">
         <!-- Modelo y Marca -->
         <div class="flex justify-between items-start">
           <div>
-            <p class="text-[9px] font-black text-sky-500 uppercase tracking-widest">Vehículo</p>
-            <p class="text-sm font-black text-white uppercase mt-1">
+            <p class="text-[9px] text-white font-bold text-sky-500 uppercase tracking-widest">Vehículo</p>
+            <p class="text-sm text-white font-bold text-white uppercase mt-1">
               {{ vehicleData.brand }} {{ vehicleData.model }}
             </p>
           </div>
@@ -136,7 +136,7 @@
         <!-- Bastidor (VIN) -->
         @if (vehicleData.vin) {
           <div class="border-t border-zinc-800 pt-3">
-            <p class="text-[9px] font-black text-sky-500 uppercase tracking-widest">
+            <p class="text-[9px] text-white font-bold text-sky-500 uppercase tracking-widest">
               Bastidor (VIN)
             </p>
             <p class="text-xs font-mono text-zinc-300 mt-1 break-all">{{ vehicleData.vin }}</p>
@@ -146,7 +146,7 @@
         <!-- Código de Motor -->
         @if (vehicleData.engineCode) {
           <div class="border-t border-zinc-800 pt-3">
-            <p class="text-[9px] font-black text-sky-500 uppercase tracking-widest">Código Motor</p>
+            <p class="text-[9px] text-white font-bold text-sky-500 uppercase tracking-widest">Código Motor</p>
             <p class="text-xs font-mono text-zinc-300 mt-1">{{ vehicleData.engineCode }}</p>
           </div>
         }
@@ -154,7 +154,7 @@
         <!-- Año -->
         @if (vehicleData.year) {
           <div class="border-t border-zinc-800 pt-3">
-            <p class="text-[9px] font-black text-sky-500 uppercase tracking-widest">Año</p>
+            <p class="text-[9px] text-white font-bold text-sky-500 uppercase tracking-widest">Año</p>
             <p class="text-xs font-mono text-zinc-300 mt-1">{{ vehicleData.year }}</p>
           </div>
         }
@@ -165,7 +165,7 @@
   <button
     [disabled]="!isFormValid()"
     (click)="confirmMovement()"
-    class="w-full bg-[#045dd1] disabled:bg-zinc-800 disabled:cursor-not-allowed text-white py-5 rounded-2xl rounded-tl-none font-black text-xl uppercase italic transition-all"
+    class="w-full bg-[#045dd1] disabled:bg-zinc-800 disabled:cursor-not-allowed text-white py-5 rounded-2xl rounded-tl-none text-white font-bold text-xl uppercase italic transition-all"
   >
     Confirmar
   </button>

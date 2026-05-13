@@ -42,7 +42,11 @@ export class PartsListComponent implements OnInit {
         this.parts = data;
         this.cdr.detectChanges();
       },
-      error: (err) => this.toastService.show(err.error?.message || 'Error al cargar piezas', 'error')
+      error: (err) => {
+        this.parts = [];
+        this.toastService.show(err.error?.message || 'Error al cargar piezas', 'error');
+        this.cdr.detectChanges();
+      }
     });
   }
 

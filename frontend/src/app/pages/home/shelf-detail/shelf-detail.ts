@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -40,6 +40,7 @@ export class ShelfDetailComponent implements OnInit {
     private warehouseService: WarehouseService,
     private authService: AuthService,
     private toastService: ToastService,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   ngOnInit() {
@@ -56,10 +57,12 @@ export class ShelfDetailComponent implements OnInit {
         this.shelf = data;
         this.filteredParts = data.parts || [];
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.toastService.show(err.error?.message || 'Error al cargar la estantería', 'error');
         this.loading = false;
+        this.cdr.detectChanges();
       },
     });
   }

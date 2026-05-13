@@ -3,17 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Vehicle } from '../models/vehicle';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VehicleService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = `${environment.apiUrl}/external`;
 
   constructor(private http: HttpClient) { }
 
   checkVehicleInTallerGP(plate: string): Observable<Vehicle> {
-    return this.http.get<Vehicle>(`${this.apiUrl}/external/vehicle/${plate.toUpperCase()}`).pipe(
+    return this.http.get<Vehicle>(`${this.apiUrl}/vehicle/${plate.toUpperCase()}`).pipe(
       catchError(error => {
         console.error('Error checking vehicle in TallerGP:', error);
         return throwError(() => error);

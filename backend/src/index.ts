@@ -40,7 +40,7 @@ app.use("/api", routes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // 4. Gestión global de errores (Siempre al FINAL)
-app.use(globalErrorHandler); 
+app.use(globalErrorHandler);
 
 // 5. Inicializar DB y arrancar
 AppDataSource.initialize()
@@ -48,7 +48,7 @@ AppDataSource.initialize()
         console.log("✅ Conexión exitosa a PostgreSQL");
         await seedAdmin();
         app.listen(3000, () => {
-            console.log("🚀 Servidor en http://localhost:3000");
+            console.log("🚀 Servidor en puerto 3000");
         });
     })
     .catch((error) => console.log("❌ Error:", error));

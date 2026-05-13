@@ -33,7 +33,7 @@ const MOCK_VEHICLES: { [key: string]: ExternalVehicleData } = {
 };
 
 export class ExternalApiService {
-  private static readonly TALLERGP_API_BASE = "https://api.tallergp.com/v1";
+  private static readonly TALLERGP_API_BASE = "https://api.tallergp.com";
   private static readonly TALLERGP_API_KEY = process.env.TALLERGP_API_KEY || "";
 
   private static cleanPlate(plate: string): string {
@@ -55,11 +55,11 @@ export class ExternalApiService {
   static async getVehicleByPlate(plate: string): Promise<ExternalVehicleData> {
     const normalizedPlate = this.cleanPlate(plate);
     const apiQueryPlate = this.normalizeForAPIQuery(normalizedPlate);
-    
+
     if (this.TALLERGP_API_KEY) {
       return this.fetchFromRealAPI(apiQueryPlate);
     }
-    
+
     if (MOCK_VEHICLES[apiQueryPlate]) {
       return Promise.resolve(MOCK_VEHICLES[apiQueryPlate]);
     }
@@ -73,8 +73,9 @@ export class ExternalApiService {
     plate: string
   ): Promise<ExternalVehicleData> {
     try {
+      const plateWithDash = plate.includes("-") ? plate : `${plate.slice(0, 4)}-${plate.slice(4)}`;
       const response = await axios.get(
-        `${this.TALLERGP_API_BASE}/vehicle/${plate}`,
+        `${this.TALLERGP_API_BASE}/vehicles?plate=${plateWithDash}`,
         {
           headers: {
             Authorization: `Bearer ${this.TALLERGP_API_KEY}`,
@@ -85,13 +86,18 @@ export class ExternalApiService {
       );
 
       console.log(`[TallerGP] Respuesta para matrícula ${plate}:`, response.data);
+      const vehicleData = response.data.data[0];
+
+      if (!vehicleData) {
+        throw new Error(`Vehículo ${plate} no encontrado en TallerGP`);
+      }
 
       return {
-        brand: response.data.brand || response.data.make,
-        model: response.data.model,
-        vin: response.data.vin || response.data.chassis,
-        engineCode: response.data.engineCode || response.data.engine_code,
-        year: response.data.year || new Date().getFullYear()
+        brand: vehicleData.brand || vehicleData.make,
+        model: vehicleData.model,
+        vin: vehicleData.vin || vehicleData.chassis,
+        engineCode: vehicleData.engineCode || vehicleData.engine_code,
+        year: vehicleData.year || new Date().getFullYear()
       };
     } catch (error) {
       console.error(`[TallerGP] Error fetching vehicle data for plate ${plate}:`, error);

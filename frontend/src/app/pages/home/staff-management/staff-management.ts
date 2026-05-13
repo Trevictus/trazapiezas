@@ -87,10 +87,12 @@ export class StaffManagementComponent implements OnInit {
       next: (res) => {
         this.users = res.users;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.toastService.showToast(err.error?.message || 'Error al cargar usuarios', 'error');
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }

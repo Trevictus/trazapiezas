@@ -4,35 +4,36 @@ import { Observable } from 'rxjs';
 
 import { Part } from '../models/part';
 import { Movement } from '../models/movement';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PartsService {
-  private apiUrl = 'http://localhost:3000/api/parts';
-  private movementsUrl = 'http://localhost:3000/api/movements';
+  private partsUrl = `${environment.apiUrl}/parts`;
+  private movementsUrl = `${environment.apiUrl}/movements`;
 
   constructor(private http: HttpClient) { }
 
   // Gestión de Piezas
   getParts(): Observable<Part[]> {
-    return this.http.get<Part[]>(this.apiUrl);
+    return this.http.get<Part[]>(this.partsUrl);
   }
 
   getPartById(id: number): Observable<Part> {
-    return this.http.get<Part>(`${this.apiUrl}/${id}`);
+    return this.http.get<Part>(`${this.partsUrl}/${id}`);
   }
 
   createPart(partData: Omit<Part, 'id'>): Observable<Part> {
-    return this.http.post<Part>(this.apiUrl, partData);
+    return this.http.post<Part>(this.partsUrl, partData);
   }
 
   updatePart(id: number, partData: Part): Observable<Part> {
-    return this.http.put<Part>(`${this.apiUrl}/${id}`, partData);
+    return this.http.put<Part>(`${this.partsUrl}/${id}`, partData);
   }
 
   deletePart(id: number): Observable<Part> {
-    return this.http.delete<Part>(`${this.apiUrl}/${id}`);
+    return this.http.delete<Part>(`${this.partsUrl}/${id}`);
   }
 
   // Estadísticas y Movimientos
@@ -45,7 +46,7 @@ export class PartsService {
       totalParts: number;
       lowStock: number;
       movementsToday: number;
-    }>(`${this.apiUrl}/stats`);
+    }>(`${this.partsUrl}/stats`);
   }
 
   getLatestMovements(): Observable<Movement[]> {
