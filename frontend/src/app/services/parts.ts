@@ -2,50 +2,61 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { Part } from '../models/part';
+import { Movement } from '../models/movement';
+
 @Injectable({
   providedIn: 'root'
 })
 export class PartsService {
   private apiUrl = 'http://localhost:3000/api/parts';
-  private movementsUrl = 'http://localhost:3000/api/movements'; 
+  private movementsUrl = 'http://localhost:3000/api/movements';
 
   constructor(private http: HttpClient) { }
 
   // Gestión de Piezas
-  getParts(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  getParts(): Observable<Part[]> {
+    return this.http.get<Part[]>(this.apiUrl);
   }
 
-  getPartById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  getPartById(id: number): Observable<Part> {
+    return this.http.get<Part>(`${this.apiUrl}/${id}`);
   }
 
-  createPart(partData: any): Observable<any> {
-    return this.http.post(this.apiUrl, partData);
+  createPart(partData: Omit<Part, 'id'>): Observable<Part> {
+    return this.http.post<Part>(this.apiUrl, partData);
   }
 
-  updatePart(id: number, partData: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, partData);
+  updatePart(id: number, partData: Part): Observable<Part> {
+    return this.http.put<Part>(`${this.apiUrl}/${id}`, partData);
   }
 
-  deletePart(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  deletePart(id: number): Observable<Part> {
+    return this.http.delete<Part>(`${this.apiUrl}/${id}`);
   }
 
   // Estadísticas y Movimientos
-  getStats(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/stats`);
+  getStats(): Observable<{
+    totalParts: number;
+    lowStock: number;
+    movementsToday: number;
+  }> {
+    return this.http.get<{
+      totalParts: number;
+      lowStock: number;
+      movementsToday: number;
+    }>(`${this.apiUrl}/stats`);
   }
 
-  getLatestMovements(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.movementsUrl}/latest`);
+  getLatestMovements(): Observable<Movement[]> {
+    return this.http.get<Movement[]>(`${this.movementsUrl}/latest`);
   }
 
-  getMovementsByPlate(plate: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.movementsUrl}/vehicle/${plate}`);
+  getMovementsByPlate(plate: string): Observable<Movement[]> {
+    return this.http.get<Movement[]>(`${this.movementsUrl}/vehicle/${plate}`);
   }
 
-  createMovement(movementData: any): Observable<any> {
-    return this.http.post(this.movementsUrl, movementData);
+  createMovement(movementData: Omit<Movement, 'id' | 'createdAt' | 'part' | 'user'>): Observable<Movement> {
+    return this.http.post<Movement>(this.movementsUrl, movementData);
   }
 }

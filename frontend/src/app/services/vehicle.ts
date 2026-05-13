@@ -2,16 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
-export interface Vehicle {
-  plate: string;
-  brand: string;
-  model: string;
-  vin?: string;
-  engineCode?: string;
-  year?: number;
-  color?: string;
-}
+import { Vehicle } from '../models/vehicle';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +10,7 @@ export interface Vehicle {
 export class VehicleService {
   private apiUrl = 'http://localhost:3000/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   checkVehicleInTallerGP(plate: string): Observable<Vehicle> {
     return this.http.get<Vehicle>(`${this.apiUrl}/external/vehicle/${plate.toUpperCase()}`).pipe(
@@ -31,9 +22,9 @@ export class VehicleService {
   }
 
   registerQuickVehicle(plate: string): Observable<Vehicle> {
-    const newVehicle: Vehicle = { 
-      plate: plate.toUpperCase(), 
-      brand: 'S/D', 
+    const newVehicle: Vehicle = {
+      plate: plate.toUpperCase(),
+      brand: 'S/D',
       model: 'IDENTIFICACIÓN MANUAL',
       year: undefined
     };

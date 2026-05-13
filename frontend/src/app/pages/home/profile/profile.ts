@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth';
+import { User } from '../../../models/user';
 
 @Component({
   selector: 'app-profile',
@@ -9,7 +10,7 @@ import { AuthService } from '../../../services/auth';
   templateUrl: './profile.html'
 })
 export class ProfileComponent implements OnInit {
-  user: any = null;
+  user: User | null = null;
 
   constructor(
     public router: Router,

@@ -7,13 +7,7 @@ import { AuthService } from '../../../services/auth';
 import { ToastService } from '../../../services/toast';
 import * as QRCode from 'qrcode';
 import { jsPDF } from 'jspdf';
-
-interface Shelf {
-  id: string;
-  name: string;
-  description: string;
-  parts: any[];
-}
+import { Shelf } from '../../../models/shelf';
 
 interface GeneratingQR {
   shelfId: string | null;

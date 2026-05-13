@@ -2,10 +2,13 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { VehicleService, Vehicle } from '../../../services/vehicle';
+import { VehicleService } from '../../../services/vehicle';
 import { PartsService } from '../../../services/parts';
 import { AuthService } from '../../../services/auth';
 import { ToastService } from '../../../services/toast';
+import { Vehicle } from '../../../models/vehicle';
+import { Part } from '../../../models/part';
+import { User } from '../../../models/user';
 
 @Component({
   selector: 'app-register-movement',
@@ -15,8 +18,8 @@ import { ToastService } from '../../../services/toast';
 })
 export class RegisterMovementComponent implements OnInit {
   movementId: string = 'TRX' + Math.floor(Math.random() * 100000).toString().padStart(5, '0');
-  currentUser: any = null;
-  part: any = null;
+  currentUser: User | null = null;
+  part: Part | null = null;
   plate: string = '';
   quantity: number = 1;
 
@@ -106,6 +109,7 @@ export class RegisterMovementComponent implements OnInit {
       this.toastService.error('Por favor completa todos los campos correctamente');
       return;
     }
+    if (!this.part) return
 
     const payload = {
       partId: this.part.id,
@@ -115,7 +119,7 @@ export class RegisterMovementComponent implements OnInit {
       userId: this.currentUser?.id,
       vin: this.vehicleData?.vin || null,
       engineCode: this.vehicleData?.engineCode || null
-    };
+    } as const;
 
     this.partsService.createMovement(payload).subscribe({
       next: () => {

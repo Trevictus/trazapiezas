@@ -7,6 +7,8 @@ import { AuthService } from '../../../services/auth';
 import { debounceTime, Subject } from 'rxjs';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { Movement } from '../../../models/movement';
+import { Vehicle } from '../../../models/vehicle';
 
 @Component({
   selector: 'app-vehicle-history',
@@ -19,10 +21,10 @@ import autoTable from 'jspdf-autotable';
 })
 export class VehicleHistoryComponent implements OnInit {
   plate: string = '';
-  movements: any[] = [];
+  movements: Movement[] = [];
   searched: boolean = false;
-  allMovements: any[] = [];
-  vehicleData: any = null;
+  allMovements: Movement[] = [];
+  vehicleData: Vehicle | null = null;
   private searchSubject = new Subject<string>();
 
   constructor(
@@ -59,7 +61,7 @@ export class VehicleHistoryComponent implements OnInit {
         this.allMovements = data;
         this.movements = data;
       },
-      error: (err: any) => {
+      error: (err) => {
         console.error('Error al cargar movimientos:', err);
         this.movements = [];
       }
@@ -80,7 +82,7 @@ export class VehicleHistoryComponent implements OnInit {
         this.searched = true;
         this.extractVehicleData(data);
       },
-      error: (err: any) => {
+      error: (err) => {
         console.error('Error al buscar matrícula:', err);
         this.movements = [];
         this.searched = true;
@@ -89,7 +91,7 @@ export class VehicleHistoryComponent implements OnInit {
     });
   }
 
-  extractVehicleData(movements: any[]): void {
+  extractVehicleData(movements: Movement[]): void {
     if (movements.length > 0) {
       const firstMovement = movements.find(m => m.vin || m.engineCode);
       this.vehicleData = firstMovement ? {

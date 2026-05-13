@@ -40,7 +40,13 @@ export class MovementController {
 
       const movement = new Movement();
       movement.part = part;
-      movement.user = user;
+      movement.user = {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+        isActive: user.isActive
+      } as User; // Solo guardamos la info necesaria del usuario para evitar exponer datos sensibles
+
       movement.quantity = quantity;
       movement.vehiclePlate = vehiclePlate ? vehiclePlate.toUpperCase().trim() : null;
       movement.status = status;

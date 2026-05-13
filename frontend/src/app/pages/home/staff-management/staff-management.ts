@@ -84,7 +84,7 @@ export class StaffManagementComponent implements OnInit {
   loadUsers(): void {
     this.loading = true;
     this.authService.getUsers().subscribe({
-      next: (res: any) => {
+      next: (res) => {
         this.users = res.users;
         this.loading = false;
       },
@@ -174,7 +174,7 @@ export class StaffManagementComponent implements OnInit {
 
   toggleStatus(userId: number): void {
     this.authService.toggleUserStatus(userId).subscribe({
-      next: (res: any) => {
+      next: (res) => {
         const user = this.users.find(u => u.id === userId);
         if (user) {
           user.isActive = res.isActive;

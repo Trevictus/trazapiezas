@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { PartsService } from '../../../services/parts';
 import { WarehouseService } from '../../../services/warehouse';
 import { AuthService } from '../../../services/auth';
+import { Shelf } from '../../../models/shelf';
 
 @Component({
   selector: 'app-add-part',
@@ -13,7 +14,7 @@ import { AuthService } from '../../../services/auth';
   templateUrl: './add-part.html',
 })
 export class AddPartComponent implements OnInit {
-  shelves: any[] = [];
+  shelves: Shelf[] = [];
   userRole: string = '';
 
   newPart = {
@@ -31,7 +32,7 @@ export class AddPartComponent implements OnInit {
     private warehouseService: WarehouseService,
     public router: Router,
     private authService: AuthService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.userRole = this.authService.getUserRole();

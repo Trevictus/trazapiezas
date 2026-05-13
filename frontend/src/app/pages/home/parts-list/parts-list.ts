@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PartsService } from '../../../services/parts';
 import { AuthService } from '../../../services/auth';
+import { Part } from '../../../models/part';
 
 @Component({
   selector: 'app-parts-list',
@@ -12,7 +13,7 @@ import { AuthService } from '../../../services/auth';
   templateUrl: './parts-list.html'
 })
 export class PartsListComponent implements OnInit {
-  parts: any[] = [];
+  parts: Part[] = [];
   searchTerm: string = '';
   filterLowStock: boolean = false;
 
@@ -22,7 +23,7 @@ export class PartsListComponent implements OnInit {
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -37,12 +38,12 @@ export class PartsListComponent implements OnInit {
         this.parts = data;
         this.cdr.detectChanges();
       },
-      error: (err: any) => console.error('Error al cargar piezas', err)
+      error: (err) => console.error('Error al cargar piezas', err)
     });
   }
 
   get filteredParts() {
-    let filtered = this.parts.filter(part => 
+    let filtered = this.parts.filter(part =>
       part.brand.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       part.reference.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
@@ -54,7 +55,7 @@ export class PartsListComponent implements OnInit {
     return filtered;
   }
 
-  adjustStock(part: any, amount: number): void {
+  adjustStock(part: Part, amount: number): void {
     const newStock = part.stock + amount;
     if (newStock < 0) return;
 
@@ -65,15 +66,15 @@ export class PartsListComponent implements OnInit {
         part.stock = newStock;
         this.cdr.detectChanges();
       },
-      error: (err: any) => console.error('Error al actualizar stock', err)
+      error: (err) => console.error('Error al actualizar stock', err)
     });
   }
 
-  deletePart(part: any): void {
+  deletePart(part: Part): void {
     if (confirm(`¿Estás seguro de eliminar ${part.brand}?`)) {
       this.partsService.deletePart(part.id).subscribe({
         next: () => this.loadParts(),
-        error: (err: any) => console.error('Error al eliminar', err)
+        error: (err) => console.error('Error al eliminar', err)
       });
     }
   }

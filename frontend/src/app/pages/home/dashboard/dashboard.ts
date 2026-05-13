@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { PartsService } from '../../../services/parts';
 import { AuthService } from '../../../services/auth';
 import { Router } from '@angular/router';
+import { Movement } from '../../../models/movement';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +15,7 @@ import { Router } from '@angular/router';
 export class DashboardComponent implements OnInit {
   stats = { totalParts: 0, lowStock: 0, movementsToday: 0 };
   plateSearch: string = '';
-  recentMovements: any[] = [];
+  recentMovements: Movement[] = [];
 
   constructor(
     private partsService: PartsService,
