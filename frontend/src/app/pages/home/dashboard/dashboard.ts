@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
   stats = { totalParts: 0, lowStock: 0, movementsToday: 0 };
   plateSearch: string = '';
   recentMovements: Movement[] = [];
+  currentUserRole: 'ADMIN' | 'MECHANIC' = 'MECHANIC';
 
   constructor(
     private partsService: PartsService,
@@ -25,6 +26,7 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.currentUserRole = this.authService.getUserRole() as 'ADMIN' | 'MECHANIC';
     this.loadData();
   }
 

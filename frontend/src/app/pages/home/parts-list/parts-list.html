@@ -79,23 +79,28 @@
 
           <!-- Ajuste rápido de stock -->
           <div class="flex items-center bg-zinc-900 rounded-lg border border-zinc-800 p-1">
-            <button
-              (click)="adjustStock(part, -1)"
-              class="w-8 h-8 flex items-center justify-center text-zinc-500 font-bold"
-            >
-              -
-            </button>
+            @if (currentUserRole === 'ADMIN') {
+              <button
+                [disabled]="part.stock <= 0"
+                (click)="adjustStock(part, -1)"
+                class="w-8 h-8 flex items-center justify-center text-zinc-500 font-bold"
+              >
+                -
+              </button>
+            }
             <span
               [ngClass]="part.stock < 5 ? 'text-amber-600' : 'text-[#045dd1]'"
               class="px-3 text-sm font-black"
               >{{ part.stock }}</span
             >
-            <button
-              (click)="adjustStock(part, 1)"
-              class="w-8 h-8 flex items-center justify-center text-zinc-500 font-bold"
-            >
-              +
-            </button>
+            @if (currentUserRole === 'ADMIN') {
+              <button
+                (click)="adjustStock(part, 1)"
+                class="w-8 h-8 flex items-center justify-center text-zinc-500 font-bold"
+              >
+                +
+              </button>
+            }
           </div>
         </div>
 
@@ -113,23 +118,25 @@
               INSTALAR EN COCHE
             }
           </button>
-          <button
-            (click)="deletePart(part)"
-            class="px-4 text-red-600 rounded-lg rounded-tl-none border border-red-800 text-[10px] font-bold uppercase tracking-tighter"
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
+          @if (currentUserRole === 'ADMIN') {
+            <button
+              (click)="deletePart(part)"
+              class="px-4 text-red-600 rounded-lg rounded-tl-none border border-red-800 text-[10px] font-bold uppercase tracking-tighter"
             >
-              <path
-                d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"
-              />
-            </svg>
-          </button>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"
+                />
+              </svg>
+            </button>
+          }
         </div>
       </div>
     }
@@ -137,21 +144,23 @@
 </div>
 
 <!-- Botón Flotante para Añadir -->
-<div class="fixed bottom-24 right-6 z-40">
-  <button
-    (click)="router.navigate(['/add-part'])"
-    class="bg-[#045dd1] text-white p-4 rounded-2xl rounded-tl-none shadow-2xl flex items-center gap-2 font-black uppercase italic text-xs tracking-tighter border-2 border-white/10"
-  >
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="3"
+@if (currentUserRole === 'ADMIN') {
+  <div class="fixed bottom-24 right-6 z-40">
+    <button
+      (click)="router.navigate(['/add-part'])"
+      class="bg-[#045dd1] text-white p-4 rounded-2xl rounded-tl-none shadow-2xl flex items-center gap-2 font-black uppercase italic text-xs tracking-tighter border-2 border-white/10"
     >
-      <path d="M12 5v14M5 12h14" />
-    </svg>
-    Añadir Pieza
-  </button>
-</div>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+      >
+        <path d="M12 5v14M5 12h14" />
+      </svg>
+      Añadir Pieza
+    </button>
+  </div>
+}

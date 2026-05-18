@@ -69,48 +69,50 @@
   </section>
 
   <!-- Botones de Operación (Botón Almacén eliminado) -->
-  <section class="grid grid-cols-2 gap-4">
-    <button
-      class="bg-[#1a1a1a] border border-emerald-900/50 rounded-2xl p-6 flex flex-col items-center gap-3"
-      (click)="goToStockEntry()"
-    >
-      <div class="bg-emerald-500/20 p-2 rounded-full text-emerald-500">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="3"
-        >
-          <path d="M12 5v14M5 12h14" />
-        </svg>
-      </div>
-      <span class="text-[10px] font-black text-emerald-500 uppercase leading-tight text-center"
-        >Entrada<br />de Stock</span
+  @if (currentUserRole === 'ADMIN') {
+    <section class="grid grid-cols-2 gap-4">
+      <button
+        class="bg-[#1a1a1a] border border-emerald-900/50 rounded-2xl p-6 flex flex-col items-center gap-3"
+        (click)="goToStockEntry()"
       >
-    </button>
-    <button
-      class="bg-[#1a1a1a] border border-amber-900/50 rounded-2xl p-6 flex flex-col items-center gap-3"
-      (click)="goToStockExit()"
-    >
-      <div class="bg-amber-500/20 p-2 rounded-full text-amber-500">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="3"
+        <div class="bg-emerald-500/20 p-2 rounded-full text-emerald-500">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+          >
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </div>
+        <span class="text-[10px] font-black text-emerald-500 uppercase leading-tight text-center"
+          >Entrada<br />de Stock</span
         >
-          <path d="M5 12h14" />
-        </svg>
-      </div>
-      <span class="text-[10px] font-black text-amber-500 uppercase leading-tight text-center"
-        >Salida<br />de Stock</span
+      </button>
+      <button
+        class="bg-[#1a1a1a] border border-amber-900/50 rounded-2xl p-6 flex flex-col items-center gap-3"
+        (click)="goToStockExit()"
       >
-    </button>
-  </section>
+        <div class="bg-amber-500/20 p-2 rounded-full text-amber-500">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+          >
+            <path d="M5 12h14" />
+          </svg>
+        </div>
+        <span class="text-[10px] font-black text-amber-500 uppercase leading-tight text-center"
+          >Salida<br />de Stock</span
+        >
+      </button>
+    </section>
+  }
 
   <!-- Últimos Movimientos Reales -->
   <section class="space-y-4">

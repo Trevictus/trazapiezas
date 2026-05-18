@@ -54,34 +54,32 @@
       >
     </button>
 
-    <!-- Warehouse (Solo ADMIN) -->
-    @if (userRole === 'ADMIN') {
-      <button
-        (click)="router.navigate(['/warehouse'])"
-        [class.bg-zinc-800]="router.url === '/warehouse'"
-        class="flex flex-col items-center gap-0.5 px-1 py-1 rounded-lg transition-colors flex-1 justify-center"
+    <!-- Estanterías -->
+    <button
+      (click)="router.navigate(['/warehouse'])"
+      [class.bg-zinc-800]="router.url === '/warehouse'"
+      class="flex flex-col items-center gap-0.5 px-1 py-1 rounded-lg transition-colors flex-1 justify-center"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        class="text-zinc-400"
+        [class.text-white]="router.url === '/warehouse'"
       >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          class="text-zinc-400"
-          [class.text-white]="router.url === '/warehouse'"
-        >
-          <path
-            d="M3 12h18M3 12l1-7h16l1 7M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7M9 5v2M15 5v2M8 15h8"
-          />
-        </svg>
-        <span
-          class="text-[9px] font-bold uppercase leading-tight text-zinc-400"
-          [class.text-white]="router.url === '/warehouse'"
-          >Estanterías</span
-        >
-      </button>
-    }
+        <path
+          d="M3 12h18M3 12l1-7h16l1 7M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7M9 5v2M15 5v2M8 15h8"
+        />
+      </svg>
+      <span
+        class="text-[9px] font-bold uppercase leading-tight text-zinc-400"
+        [class.text-white]="router.url === '/warehouse'"
+        >Estanterías</span
+      >
+    </button>
 
     <!-- Movimientos -->
     <button

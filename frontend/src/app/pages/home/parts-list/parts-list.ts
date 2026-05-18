@@ -19,6 +19,7 @@ export class PartsListComponent implements OnInit {
   searchTerm: string = '';
   filterLowStock: boolean = false;
   movementMode: 'USED' | 'STOCK' = 'USED';
+  currentUserRole: 'ADMIN' | 'MECHANIC' = 'MECHANIC';
 
   constructor(
     private partsService: PartsService,
@@ -31,6 +32,7 @@ export class PartsListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.currentUserRole = this.authService.getUserRole() as 'ADMIN' | 'MECHANIC';
     this.route.queryParams.subscribe(params => {
       this.filterLowStock = params['filter'] === 'lowstock';
       this.movementMode = params['mode'] === 'STOCK' ? 'STOCK' : 'USED';
