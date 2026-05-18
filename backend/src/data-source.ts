@@ -1,6 +1,10 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import * as dotenv from "dotenv";
+import { User } from "./entities/User";
+import { Part } from "./entities/Part";
+import { Movement } from "./entities/Movement";
+import { Shelf } from "./entities/Shelf";
 
 dotenv.config(); 
 
@@ -15,7 +19,7 @@ export const AppDataSource = new DataSource(
             synchronize: true, // Mantenlo en true para tu entrega de DAW (autocrea tablas)
             logging: true,
             // Crucial para producción: lee tanto los archivos .ts de desarrollo como los .js compilados en dist
-            entities: [__dirname + "/entities/*.ts", __dirname + "/entities/*.js"],
+            entities: [User, Part, Movement, Shelf],
           }
         : {
             type: "postgres",
