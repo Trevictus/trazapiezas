@@ -18,6 +18,7 @@ export class PartsListComponent implements OnInit {
   parts: Part[] = [];
   searchTerm: string = '';
   filterLowStock: boolean = false;
+  movementMode: 'USED' | 'STOCK' = 'USED';
 
   constructor(
     private partsService: PartsService,
@@ -32,6 +33,7 @@ export class PartsListComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.filterLowStock = params['filter'] === 'lowstock';
+      this.movementMode = params['mode'] === 'STOCK' ? 'STOCK' : 'USED';
       this.loadParts();
     });
   }
@@ -104,6 +106,20 @@ export class PartsListComponent implements OnInit {
 
   clearFilter(): void {
     this.router.navigate(['/inventory']);
+  }
+
+  goToUsedMode(): void {
+    this.router.navigate(['/inventory'], {
+      queryParams: {
+        ...(this.filterLowStock ? { filter: 'lowstock' } : {})
+      }
+    });
+  }
+
+  goToMovement(part: Part): void {
+    this.router.navigate(['/register-movement', part.id], {
+      queryParams: { mode: this.movementMode }
+    });
   }
 
   logout(): void {

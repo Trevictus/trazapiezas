@@ -33,6 +33,7 @@ export class ShelfDetailComponent implements OnInit {
   searchQuery = '';
   loading = false;
   shelfId: string = '';
+  currentUserRole: 'ADMIN' | 'MECHANIC' = 'MECHANIC';
 
   constructor(
     private route: ActivatedRoute,
@@ -44,6 +45,7 @@ export class ShelfDetailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.currentUserRole = this.authService.getUserRole() as 'ADMIN' | 'MECHANIC';
     this.route.params.subscribe((params) => {
       this.shelfId = params['id'];
       this.loadShelf();
@@ -87,6 +89,21 @@ export class ShelfDetailComponent implements OnInit {
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  get isAdmin(): boolean {
+    return this.currentUserRole === 'ADMIN';
+  }
+
+  goRegisterMovement(partId: number, mode: 'USED' | 'STOCK') {
+    if (mode === 'STOCK' && !this.isAdmin) {
+      this.toastService.error('Solo administradores pueden registrar entradas');
+      return;
+    }
+
+    this.router.navigate(['/register-movement', partId], {
+      queryParams: { mode },
+    });
   }
 
   goBack() {

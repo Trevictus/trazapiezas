@@ -1,4 +1,31 @@
 <div class="max-w-2xl mx-auto p-4 space-y-6">
+  @if (movementMode === 'STOCK') {
+    <div
+      class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 flex justify-between items-center"
+    >
+      <div class="flex items-center gap-3">
+        <div class="bg-emerald-500/20 p-2 rounded-full text-emerald-500">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+          >
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </div>
+        <p class="text-sm font-bold text-emerald-200">Modo entrada de stock activo</p>
+      </div>
+      <button
+        (click)="goToUsedMode()"
+        class="text-emerald-300 hover:text-emerald-200 font-bold text-xs uppercase"
+      >
+        Ir a salida
+      </button>
+    </div>
+  }
   <!-- Banner de Filtro Activo -->
   @if (filterLowStock) {
     <div
@@ -76,10 +103,15 @@
 
         <div class="flex gap-2 border-t border-zinc-800/50 pt-4">
           <button
-            (click)="router.navigate(['/register-movement', part.id])"
+            (click)="goToMovement(part)"
             class="flex-1 bg-[#045dd1] text-white font-black py-3 rounded-lg rounded-tl-none text-[10px] uppercase italic tracking-tighter"
           >
-            INSTALAR EN COCHE
+            @if (movementMode === 'STOCK') {
+              ENTRADA DE STOCK
+            }
+            @if (movementMode !== 'STOCK') {
+              INSTALAR EN COCHE
+            }
           </button>
           <button
             (click)="deletePart(part)"
@@ -108,7 +140,7 @@
 <div class="fixed bottom-24 right-6 z-40">
   <button
     (click)="router.navigate(['/add-part'])"
-    class="bg-[#045dd1] text-white p-4 rounded-2xl rounded-tl-none shadow-2xl border-2 border-white/10"
+    class="bg-[#045dd1] text-white p-4 rounded-2xl rounded-tl-none shadow-2xl flex items-center gap-2 font-black uppercase italic text-xs tracking-tighter border-2 border-white/10"
   >
     <svg
       width="24"
@@ -120,5 +152,6 @@
     >
       <path d="M12 5v14M5 12h14" />
     </svg>
+    Añadir Pieza
   </button>
 </div>

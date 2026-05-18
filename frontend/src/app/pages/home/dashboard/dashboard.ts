@@ -62,6 +62,14 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/history']);
   }
 
+  goToStockEntry(): void {
+    this.router.navigate(['/inventory'], { queryParams: { mode: 'STOCK' } });
+  }
+
+  goToStockExit(): void {
+    this.router.navigate(['/inventory']);
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

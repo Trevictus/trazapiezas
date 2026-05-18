@@ -26,6 +26,7 @@ export class WarehouseComponent implements OnInit {
   loading = false;
   generatingQR: GeneratingQR = { shelfId: null, dataUrl: null };
   userRole: string = '';
+  shelfSearch: string = '';
 
   newShelf = {
     name: '',
@@ -59,6 +60,16 @@ export class WarehouseComponent implements OnInit {
         this.loading = false;
         this.cdr.detectChanges();
       },
+    });
+  }
+
+  get filteredShelves(): Shelf[] {
+    const term = this.shelfSearch.trim().toLowerCase();
+    if (!term) return this.shelves;
+    return this.shelves.filter((shelf) => {
+      const nameMatch = shelf.name?.toLowerCase().includes(term);
+      const descMatch = shelf.description?.toLowerCase().includes(term);
+      return Boolean(nameMatch || descMatch);
     });
   }
 

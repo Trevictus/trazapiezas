@@ -22,6 +22,7 @@ export class RegisterMovementComponent implements OnInit {
   part: Part | null = null;
   plate: string = '';
   quantity: number = 1;
+  movementMode: 'USED' | 'STOCK' = 'USED';
 
   vehicleData: Vehicle | null = null;
   showNotFoundWarning: boolean = false;
@@ -40,6 +41,12 @@ export class RegisterMovementComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
     const partId = this.route.snapshot.params['id'];
+    this.movementMode = this.route.snapshot.queryParamMap.get('mode') === 'STOCK' ? 'STOCK' : 'USED';
+    if (this.movementMode === 'STOCK' && this.currentUser?.role !== 'ADMIN') {
+      this.toastService.error('Solo administradores pueden registrar entradas');
+      this.router.navigate(['/inventory']);
+      return;
+    }
     this.partsService.getPartById(partId).subscribe(p => this.part = p);
   }
 
@@ -53,7 +60,9 @@ export class RegisterMovementComponent implements OnInit {
   }
 
   isFormValid(): boolean {
-    return this.isValidPlate() && this.isValidQuantity() && this.vehicleData !== null;
+    if (!this.isValidQuantity()) return false;
+    if (this.movementMode === 'STOCK') return true;
+    return this.isValidPlate() && this.vehicleData !== null;
   }
 
   decrementQuantity(): void {
@@ -115,11 +124,11 @@ export class RegisterMovementComponent implements OnInit {
     const payload = {
       partId: this.part.id,
       quantity: this.quantity,
-      vehiclePlate: this.plate.toUpperCase(),
-      status: 'USED',
+      vehiclePlate: this.movementMode === 'USED' ? this.plate.toUpperCase() : '',
+      status: this.movementMode,
       userId: this.currentUser?.id,
-      vin: this.vehicleData?.vin || null,
-      engineCode: this.vehicleData?.engineCode || null
+      vin: this.movementMode === 'USED' ? (this.vehicleData?.vin || null) : null,
+      engineCode: this.movementMode === 'USED' ? (this.vehicleData?.engineCode || null) : null
     } as const;
 
     this.partsService.createMovement(payload).subscribe({

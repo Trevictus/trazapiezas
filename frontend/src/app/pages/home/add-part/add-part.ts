@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -33,7 +33,8 @@ export class AddPartComponent implements OnInit {
     private warehouseService: WarehouseService,
     public router: Router,
     private authService: AuthService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -47,6 +48,7 @@ export class AddPartComponent implements OnInit {
     this.warehouseService.getShelves().subscribe({
       next: (data) => {
         this.shelves = data;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.toastService.show(err.error?.message || 'Error al cargar estanterías', 'error');
