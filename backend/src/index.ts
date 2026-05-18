@@ -30,7 +30,7 @@ async function seedAdmin() {
 app.use(cors({
   origin: [
     'http://localhost:4200', 
-    'https://depliegue-front-trazapiezas.vercel.app' // ◄ Tu URL oficial de Vercel sin la barra / final
+    'https://trazapiezas.vercel.app' // ◄ Tu URL oficial de Vercel sin la barra / final
   ],
   credentials: true
 }));
