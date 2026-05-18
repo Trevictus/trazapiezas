@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { Part } from "../entities/Part";
 import { Movement } from "../entities/Movement";
+import { User } from "../entities/User";
 import { LessThan, MoreThanOrEqual } from "typeorm";
 
 export class PartController {
@@ -61,9 +62,8 @@ export class PartController {
 
     static async update(req: Request, res: Response) {
         const { id } = req.params;
-        const { stock, shelfId, ...rest } = req.body;
+        const { stock, shelfId, userId, ...rest } = req.body;
         const partRepository = AppDataSource.getRepository(Part);
-        const movementRepository = AppDataSource.getRepository(Movement);
         try {
             let part = await partRepository.findOneBy({ id: Number(id) });
             if (!part) return res.status(404).json({ message: "No encontrada" });
@@ -74,12 +74,22 @@ export class PartController {
                 const diff = stock - oldStock;
                 part.stock = stock;
                 const movement = new Movement();
+                const movementRepository = AppDataSource.getRepository(Movement);
+                const userRepository = AppDataSource.getRepository(User);
+                const user = await userRepository.findOneBy({ id: userId });
+                if (!user) return res.status(404).json({ message: "Usuario no válido" });
                 Object.assign(movement, {
                     part,
                     quantity: Math.abs(diff),
                     status: diff > 0 ? "STOCK" : "USED",
                     purchasePrice: part.purchasePrice,
-                    vehiclePlate: "AJUSTE-MANUAL"
+                    vehiclePlate: "AJUSTE-MANUAL",
+                    user: {
+                        id: user.id,
+                        username: user.username,
+                        role: user.role,
+                        isActive: user.isActive
+                    } as User
                 });
                 await movementRepository.save(movement);
             }

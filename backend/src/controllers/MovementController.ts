@@ -50,6 +50,7 @@ export class MovementController {
       movement.quantity = quantity;
       movement.vehiclePlate = vehiclePlate ? vehiclePlate.toUpperCase().trim() : null;
       movement.status = status;
+      movement.purchasePrice = part.purchasePrice;
 
       if (status === "USED" && vin) {
         movement.vin = vin;

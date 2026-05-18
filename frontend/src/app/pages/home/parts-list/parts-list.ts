@@ -67,7 +67,7 @@ export class PartsListComponent implements OnInit {
     const newStock = part.stock + amount;
     if (newStock < 0) return;
 
-    const updatedPart = { ...part, stock: newStock };
+    const updatedPart = { ...part, stock: newStock, userId: this.authService.getCurrentUser()?.id || null };
 
     this.partsService.updatePart(part.id, updatedPart).subscribe({
       next: () => {
@@ -93,7 +93,8 @@ export class PartsListComponent implements OnInit {
         this.partsService.deletePart(part.id).subscribe({
           next: () => {
             this.toastService.show('Pieza eliminada', 'success');
-            this.loadParts();
+            this.parts = this.parts.filter(p => p.id !== part.id);
+            this.cdr.detectChanges();
           },
           error: (err) => this.toastService.show(err.error?.message || 'Error al eliminar pieza', 'error')
         });

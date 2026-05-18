@@ -28,7 +28,9 @@ export class PartsService {
     return this.http.post<Part>(this.partsUrl, partData);
   }
 
-  updatePart(id: number, partData: Part): Observable<Part> {
+  updatePart(id: number, partData: (Part & {
+    userId?: number | null;
+  })): Observable<Part> {
     return this.http.put<Part>(`${this.partsUrl}/${id}`, partData);
   }
 

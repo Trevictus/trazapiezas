@@ -73,6 +73,7 @@ export class WarehouseComponent implements OnInit {
         this.toastService.show('Estantería creada correctamente', 'success');
         this.shelves = [...this.shelves, newShelf];
         this.newShelf = { name: '', description: '' };
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.toastService.show(err.error?.message || 'Error al crear estantería', 'error');
@@ -101,8 +102,6 @@ export class WarehouseComponent implements OnInit {
 
       const shelfName =
         this.shelves.find((s) => s.id === this.generatingQR.shelfId)?.name || 'BALDA';
-      const pageWidth = 62;
-      const pageHeight = 62;
 
       doc.setFontSize(12);
       doc.setFont('courier', 'bold');
