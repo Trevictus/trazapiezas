@@ -30,6 +30,6 @@ export const AppDataSource = new DataSource(
             database: process.env.DB_NAME || "trazapiezas_db",
             synchronize: true,
             logging: true,
-            entities: [__dirname + "/entities/*.ts"],
+            entities: [User, Part, Movement, Shelf],
           }
 );
