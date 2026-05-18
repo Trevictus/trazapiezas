@@ -27,7 +27,13 @@ async function seedAdmin() {
 }
 
 // 1. Middlewares de configuración (Siempre al principio)
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:4200', 
+    'https://depliegue-front-trazapiezas.vercel.app' // ◄ Tu URL oficial de Vercel sin la barra / final
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 // 2. Ruta de prueba
@@ -42,13 +48,18 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // 4. Gestión global de errores (Siempre al FINAL)
 app.use(globalErrorHandler);
 
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor en puerto ${PORT}`);
+});
+
 // 5. Inicializar DB y arrancar
 AppDataSource.initialize()
     .then(async () => {
         console.log("✅ Conexión exitosa a PostgreSQL");
         await seedAdmin();
-        app.listen(3000, () => {
-            console.log("🚀 Servidor en puerto 3000");
+        app.listen(PORT, () => {
+            console.log(`🚀 Servidor en puerto ${PORT}`);
         });
     })
     .catch((error) => console.log("❌ Error:", error));
