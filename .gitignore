@@ -14,10 +14,4 @@ node_modules/
 dist/
 build/
 
-docs/07-pruebas.md
-docs/08-despliegue.md
-docs/09-manual-usuario.md
 docs/10-conclusiones.md
-
-
-COSAS-PARA-IMPLEMENTAR.md

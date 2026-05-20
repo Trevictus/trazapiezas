@@ -4,11 +4,15 @@
 El proyecto se ha ejecutado bajo una metodología de desarrollo **Scrum-Ban**, utilizando el tablero de proyectos de GitHub para gestionar el ciclo de vida de las tareas. La estructura del repositorio refleja una separación clara entre el backend (API REST) y el frontend (PWA), facilitando el despliegue independiente en Railway y Vercel respectivamente.
 
 ### Evidencias de control de versiones 
+![Historial 1](.\img\Historial_commits_1.png)  
+![Historial 2](.\img\Historial_commits_2.png)
 
 ### Explicación de dificultades en el parón de abril.
 Durante el mes de abril, el desarrollo sufrió una pausa justificada por motivos personales y laborales, lo cual obligó a reajustar el cronograma del tercer sprint para priorizar la estabilidad del backend antes de completar la integración final del frontend en el sprint de mayo. Aún con esto se consiguió recuperar todo el trabajo perdido en esas semanas.
 
 ### Planificación y metodología
+![Mockup Movimiento](.\img\Tablero_scrumban.png)  
+![Mockup Movimiento](.\img\Tablero_scrumban_2.png)
 
 ## 6.2 Decisiones técnicas clave
 * **Backend (Node.js + TypeORM):** Se ha optado por un patrón MVC adaptado a API. La decisión de utilizar **TypeORM** con `synchronize: true` para la entrega DAW permite una iteración rápida y segura. La lógica de negocio está centralizada en los servicios y controladores, garantizando que reglas críticas como la **prohibición de stock negativo** se ejecuten siempre en el servidor.
