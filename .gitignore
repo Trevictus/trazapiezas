@@ -13,3 +13,14 @@ frontend/.env.*.local
 node_modules/
 dist/
 build/
+
+docs/04-guia-estilos.md
+docs/05-diseno.md
+docs/06-desarrollo.md
+docs/07-pruebas.md
+docs/08-despliegue.md
+docs/09-manual-usuario.md
+docs/10-conclusiones.md
+
+
+COSAS-PARA-IMPLEMENTAR.md
