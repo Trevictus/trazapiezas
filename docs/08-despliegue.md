@@ -211,7 +211,7 @@ trazapiezas_db         postgres:15            "docker-entrypoint.s…"   db     
 trazapiezas_frontend   trazapiezas-frontend   "/docker-entrypoint.…"   frontend   Up 30 seconds   0.0.0.0:4200->80/tcp
 ```
 
-![Contenedores en estado running](.\img\contenedores_corriendo.png)  
+![Contenedores en estado running](./img/contenedores_corriendo.png)  
 
 ---
 
@@ -366,8 +366,8 @@ query: SELECT COUNT(1) AS "cnt" FROM "users" "User"
 query: SELECT "User"."id" AS "User_id", "User"."username" AS "User_username", "User"."password" AS "User_password", "User"."role" AS "User_role", "User"."isActive" AS "User_isActive" FROM "users" "User" WHERE (("User"."username" = $1)) LIMIT 1 -- PARAMETERS: ["admin"]
 ```
 
-![Logs](.\img\logs_conexion.png)  
+![Logs](./img/logs_conexion.png)  
 
 
-![Evidencia Frontend en la nube](.\img\panel_vercel.png)  
-![Evidencia Backend y BBDD en la nube](.\img\panel_railway.png)
+![Evidencia Frontend en la nube](./img/panel_vercel.png)  
+![Evidencia Backend y BBDD en la nube](./img/panel_railway.png)

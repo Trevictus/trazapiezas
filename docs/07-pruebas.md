@@ -38,7 +38,7 @@ curl -X POST http://localhost:3000/api/movements \
   }'
 ```
 Resultado esperado: `201 Created` y decremento automático del stock en la entidad `Part`.
-![Ejemplo de respuesta JSON](.\img\ejemplo_respuesta_JSON.png)
+![Ejemplo de respuesta JSON](./img/ejemplo_respuesta_JSON.png)
 
 ### Validación de errores (400)
 Intento de registro con cantidad superior al stock
@@ -56,4 +56,4 @@ Para validar el comportamiento del Service Worker y la PWA:
 
 - Cache Storage: Verificar que los assets estáticos (index.html, JS, CSS) están almacenados en el Service Worker, permitiendo el "App Shell" operativo ante micro-cortes de red.
 
-![Service workers](.\img\service_workers.png)
+![Service workers](./img/service_workers.png)

@@ -32,24 +32,24 @@ Para ilustrar la aplicación del diseño "Industrial Core" y la disposición *Mo
 
 ### 1. Pantalla de Acceso (Login)
 Diseño minimalista para centrar la atención en la entrada de credenciales, destacando el logotipo corporativo y los campos de texto expandidos para facilitar la pulsación táctil.  
-![Mockup Login](.\img\mockup-login.png)
+![Mockup Login](./img/mockup-login.png)
 
 ### 2. Dashboard Principal
 Centro de control con métricas rápidas y el buscador principal de matrículas en la parte superior, permitiendo un acceso directo a la trazabilidad.  
-![Mockup Dashboard](.\img\mockup_dashboard.png)
+![Mockup Dashboard](./img/mockup_dashboard.png)
 
 ### 3. Almacén e Inventario
 Vista del catálogo estructurada en tarjetas individuales. Se prioriza visualmente la Referencia de la pieza y el botón de acción principal ("Instalar en coche").  
-![Mockup Inventario](.\img\mockup_almacen.png)
+![Mockup Inventario](./img/mockup_almacen.png)
 
 ### 4. Estanterías y detalles
 Vista de las estanterías creadas y el catálogo contenido en ellas.  
-![Mockup Estanterías](.\img\mockup_estanteria.png)
+![Mockup Estanterías](./img/mockup_estanteria.png)
 
 ### 5. Registro de Movimiento (Instalación)
 Formulario emergente / modal donde el mecánico introduce la matrícula destino y la cantidad a extraer, diseñado para completarse en menos de tres pulsaciones.  
-![Mockup Movimiento](.\img\mockup_movimientos.png)
+![Mockup Movimiento](./img/mockup_movimientos.png)
 
 ### 6. Perfil y gestión de usuarios
 Vista de información detallada del usuario y vista de la gestión de estos logueado como user ADMIN.
-![Mockup perfil](.\img\mockup_perfil.png)
+![Mockup perfil](./img/mockup_perfil.png)
