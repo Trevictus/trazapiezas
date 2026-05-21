@@ -13,6 +13,3 @@ frontend/.env.*.local
 node_modules/
 dist/
 build/
-
-
-10-conclusiones.md
