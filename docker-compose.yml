@@ -1,5 +1,7 @@
-version: '3.8'
+
+
 services:
+  # Servicio de Base de Datos PostgreSQL 15
   db:
     image: postgres:15
     container_name: trazapiezas_db
@@ -12,6 +14,44 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - trazapiezas-network
+
+  # Servicio de Backend (API REST Express)
+  backend:
+    build: ./backend
+    container_name: trazapiezas_backend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=admin
+      - DB_PASSWORD=temporal123
+      - DB_NAME=trazapiezas_db
+      - JWT_SECRET=_clavea@infranqueable/1098/
+    depends_on:
+      - db
+    networks:
+      - trazapiezas-network
+
+  # Servicio de Frontend (Angular + Nginx)
+  frontend:
+    build: ./frontend
+    container_name: trazapiezas_frontend
+    restart: always
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - trazapiezas-network
 
 volumes:
   postgres_data:
+
+networks:
+  trazapiezas-network:
+    driver: bridge
