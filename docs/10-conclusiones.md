@@ -52,3 +52,54 @@ Para dotar a `Trazapiezas` de una proyección comercial y tecnológica de nivel 
 ### 4. Robustez funcional avanzada
 * **Módulo de gestión de proveedores y alertas de stock mínimo:** Implementación de un sistema de alertas en tiempo real y envío automatizado de correos electrónicos cuando el stock de una pieza crítica caiga por debajo de un umbral mínimo, generando pedidos automáticos de compra en formato PDF.
 * **Módulo de gestión de ubicaciones geolocalizadas dentro del taller:** Evolución del sistema de estanterías actual para permitir un mapeo interactivo en 2D del taller, facilitando al mecánico la navegación visual en una tableta para encontrar el pasillo y altura exactos donde está la pieza.
+
+---
+
+## 10.4 Lecciones aprendidas
+
+Dentro de las lecciones que me llevo a cuestas, las más destacadas son:
+
+### 1. TypeScript y la compilación
+- En el `tsconfig.json`, activé el `strict: true`, haciendo que en la compilación no se me pasase ni una inconsistencia. Por lo tanto en TypeScript estricto no se ejecuta el tipico fallo en el navegador, sino que obliga a que ese error salte en el editor antes de compilar.
+
+- En Angular con `strictTemplates: true` si declaras una variable cómo número y en el HTML le pasas esta a un input que espera un texto se frena la build.
+
+- Las librerías viejas al importarlas a un entorno esctricto, TypeScript se queja porque no encuentra los archivos de definición de tipos.
+
+- Usar `any` es peligroso debido a que si quieres acabar rápido, si cambias el nombre de una propiedad en el backend, el frontend te avisará de que se ha roto demasiado tarde cuando la pantalla se quede en blanco.
+
+Esto me obligó a refactorizar interfaces e investigar `CommonsJS`, pero hizo que si el proyecto compila, el tipado en producción es cien por cien seguro.
+
+### 2. El control de la base de datos y la persistencia
+
+- La impulsividad en caliente de tener que borrar el contenedor y los volúmenes cada vez que se presentaba un fallo grave en la base de datos. Eso en una empresa grande cuesta el despido.
+
+- TypeORM traduce tu código TypeScript a sentencias SQL, pero cuando cambias un estado a isActive: false por error, el backend no te deja loguearte para cambiarlo desde la interfaz. Mediante el acceso a la consola interactiva de `plsql` en PostgreSQL, se puede hablar directamente con los datos.
+
+- Bcrypt genera un hash con las contraseñas y no puedes adivinar que texto contiene este, pero lo que si puedes hacer es mediante un hash ya conocido sobrescribir el anterior para obtener acceso.
+
+Mi mayor miedo era modificar la base de datos en producción mediante sentencias SQL directas en la consola, pero lo perdí aprendiendo que el backend y la base de datos son mi único búnker.
+
+### 3. Presión en las metodologías ágiles
+
+- Normalmente los planes de a futuro suelen fracasar. Los inconvenientes personales y laborales surgen, y esto me ha enseñado la manera en la que reacciono cuando el tiempo se me echa encima.
+
+- El MVP es ahora para mí, no un producto mal programado o a medio hacer, sino un producto que tiene pocas funcionalidades, pero que son totalmente sólidas, estables y aportan valor de megocio. En *Trazapiezas* que no tenga degradado un botón o animaciones no implican que la aplicación no pueda seguir funcionando, pero si falla la validación de stock negativo, el negocio se rompe.
+
+- Scrum también signica adaptabilidad. Congelé el alcance estético en pos de la limpieza de backlog, moví tareas secundarias a futuro y aseguré que la persistencia fuera top.
+
+El parón de abril hizo que me diese cuenta que en este mundo también existen los inconvenientes. Usando metodologías ágiles pude administrar el tiempo, y sacrificar aspectos estéticos asegurando un MVP robusto en la lógica de negocio.
+
+### 4. Seguridad y estados de red
+
+- En local todo era bonito y funcionaba cómo la seda, hasta que lo subí a la nube y todo parecía desmoronarse. CORS, un mecanismo que usan los navegadores para prohibir que un script haga llamadas a una API de diferente si corren en diferentes dominios. Es por eso que tuve que configurar el middleware de CORS en Express para que el backend enviara cabeceras aceptadas  y el navegador no las bloquease.
+
+- Las variables de entorno nunca se suben a GitHub, ya que pueden robar tu clave. El JWT_SCRET del .env.example es un placeholder con una cadena simulada de desarrollo
+
+---
+
+## 10.5 Reflexión final
+
+Desarrollar *Trazapiezas* ha supuesto un punto de inflexión en mi trayectoria como desarrollador. Al iniciar este proyecto, la visión académica tendía a fragmentar el software en asignaturas aisladas. La mayor revelación de este proceso ha sido comprender que el software real no vive en compartimentos estancos, sino que es un organismo donde cada engranaje debe coexistir en perfecta armonía.
+
+*Trazapiezas* no es solo el resultado de haber consolidado los Resultados de Aprendizaje del ciclo, también es la evidencia de mi transición de estudiante que une piezas de código a desarrollador capaz de diseñar, contenerizar, blindar y desplegar soluciones tecnológicas preparadas para el mundo real.
