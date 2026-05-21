@@ -13,22 +13,36 @@ Trazapiezas es una solución Mobile First diseñada para resolver la falta de co
 | **JWT & Bcrypt**        | Autenticación segura y encriptación de contraseñas.             |
 
 ## Instalación y Configuración  
-Sigue estos pasos para levantar el entorno de desarrollo:  
-- **Clonar el repositorio e instalar dependencias:**
+
+Existen dos métodos para levantar el proyecto:
+
+### Método 1: Desarrollo Local (Recomendado)
+
+**1. Instalar y configurar dependencias:**
 ```bash
-npm install
+npm run setup
 ```
-- **Levantar la base de datos (Docker):**
-```bash
-docker-compose up -d
-```
-- **Configurar el entorno:**  
-Crea un archivo .env en la raíz de backend/ con las credenciales de la base de datos y la clave JWT_SECRET.  
-- **Arrancar el servidor:**  
+Este comando:
+- Copia `backend/.env.example` a `backend/.env` si no existe
+- Instala dependencias de la raíz
+- Instala dependencias del backend y frontend en paralelo
+
+**2. Levantar la aplicación:**
 ```bash
 npm run dev
 ```
-La API estará escuchando en http://localhost:3000.
+- Levanta el frontend (http://localhost:4200)
+- Levanta el backend (http://localhost:3000)
+- Levanta la base de datos en Docker
+- Swagger disponible en http://localhost:3000/api-docs
+
+### Método 2: Docker (Despliegue Completo)
+
+```bash
+npm run deploy
+```
+
+Levanta toda la infraestructura (Frontend, Backend y Base de Datos) en contenedores Docker.
 
 ## Características Principales
 

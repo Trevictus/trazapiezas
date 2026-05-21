@@ -2,9 +2,17 @@
   "name": "trazapiezas",
   "version": "0.0.0",
   "scripts": {
-    "db": "docker compose up -d",
+    "deploy": "docker compose up -d",
+    "down": "docker compose down",
+    "db": "docker compose up -d db",
+    "db:down": "docker compose stop db",
     "front": "cd frontend && npm start",
     "back": "cd backend && npm run dev",
+    "install-back": "cd backend && npm install",
+    "install-front": "cd frontend && npm install",
+    "env": "node -e \"const fs=require('fs'); if(!fs.existsSync('backend/.env')) fs.copyFileSync('backend/.env.example','backend/.env')\"",
+    "setup": "npm run env && npm install && npm run deps",
+    "deps": "npm-run-all --parallel install-back install-front",
     "dev": "npm-run-all --parallel db front back"
   },
   "devDependencies": {

@@ -193,9 +193,27 @@ networks:
 ```
 
 ### Comandos de ejecución y despliegue local
-Para construir las imágenes y levantar los servicios en segundo plano, ejecuto:
+
+#### Método 1: Desarrollo Local (Recomendado)
+**1. Instalar y configurar dependencias:**
 ```bash
-docker compose up --build -d
+npm run setup
+```
+Este comando:
+- Copia `backend/.env.example` a `backend/.env` si no existe
+- Instala dependencias de la raíz
+- Instala dependencias del backend y frontend en paralelo
+
+**2. Levantar la aplicación:**
+```bash
+npm run dev
+```
+Levanta el frontend (puerto 4200), backend (puerto 3000) y la base de datos en Docker.
+
+#### Método 2: Docker (Despliegue Completo)
+Para construir las imágenes y levantar todos los servicios en contenedores:
+```bash
+npm run deploy
 ```
 
 Una vez levantado, compruebo el estado de los contenedores mediante el siguiente comando:
