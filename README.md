@@ -12,6 +12,12 @@ Trazapiezas es una solución Mobile First diseñada para resolver la falta de co
 | **Docker & Docker Compose** | Contenerización de la infraestructura y la base de datos. |
 | **JWT & Bcrypt**        | Autenticación segura y encriptación de contraseñas.             |
 
+## Versión de prueba en la nube
+
+En el siguiente link https://trazapiezas.vercel.app/ está desplegada la app, se puede acceder al rol `MECHANIC` mediante las credenciales:
+- Usuario: "Santi"
+- Contraseña: " _santi_tiene_moto"
+
 ## Instalación y Configuración  
 
 Existen dos métodos para levantar el proyecto:
@@ -77,40 +83,3 @@ Filtros de **seguridad** y gestión centralizada de **errores**
 
 - `src/data-source.ts`
 Archivo de configuración para la conexión con **PostgreSQL** mediante TypeORM.
-
-## Plan de Ejecución y Progresos
-
-### Sprint 1: Cimientos y Arquitectura (Semanas 1 y 2)
-**Estado:** Completado
-
-#### Configuración de Infraestructura
-- Despliegue de contenedores mediante Docker para PostgreSQL 15.
-
-#### Modelado de Datos
-- Definición de entidades User, Part y Movement con TypeORM.
-
-#### Sistema de Autenticación
-- Implementación de registro y login con Bcrypt y JWT.
-
-#### Arquitectura Base
-- Estructura de carpetas bajo el patrón Controlador-Entidad.
-
----
-
-### Sprint 2: Blindaje de API e Integración (Semanas 3 y 4)
-**Estado:** Finalizado / Validando
-
-#### Seguridad por Roles
-- Restricción de acciones sensibles mediante el middleware checkRole.
-
-#### Control de Stock
-- Validación en MovementController para impedir stock negativo.
-
-#### Buscador de Trazabilidad
-- Endpoint para recuperar movimientos vinculados a una matrícula.
-
-#### Estandarización
-- Middleware global de errores para asegurar respuestas JSON consistentes.
-
-#### CORS e Integración
-- Configuración de acceso para la PWA y documentación interactiva.
